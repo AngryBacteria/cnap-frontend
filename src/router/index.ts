@@ -6,6 +6,8 @@ import {
   createWebHistory,
 } from 'vue-router';
 import routes from './routes';
+import {getCurrentUser} from 'vuefire';
+import {Notify} from 'quasar';
 
 /*
  * If not building with SSR mode, you can
@@ -32,6 +34,30 @@ export default route(function (/* { store, ssrContext } */) {
       process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
     ),
   });
+
+  Router.beforeEach(async (to) => {
+    // routes with `meta: { requiresAuth: true }` will check for the users, others won't
+    if (to.meta.requiresAuth) {
+      const currentUser = await getCurrentUser()
+      // if the user is not logged in, redirect to the login page
+      if (!currentUser) {
+        Notify.create({
+          message: 'Du musst eingelogged sein um diese Seite zu betreten',
+          color: 'red',
+          position: 'top',
+          icon: 'announcement',
+        })
+        return {
+          path: '/login',
+          query: {
+            // we keep the current path in the query so we can redirect to it after login
+            // with `router.push(route.query.redirect || '/')`
+            redirect: to.fullPath,
+          },
+        }
+      }
+    }
+  })
 
   return Router;
 });
