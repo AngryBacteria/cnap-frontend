@@ -1,5 +1,5 @@
 <template>
-  <q-item
+  <q-item v-if="!permission || hasPermission()"
     clickable
     :to="link"
   >
@@ -18,15 +18,32 @@
 </template>
 
 <script setup lang="ts">
-export interface EssentialLinkProps {
+export interface NavigationItemProps {
   title: string;
   caption?: string;
   link?: string;
   icon?: string;
+  permission?: string;
+  claims?: never
 }
-withDefaults(defineProps<EssentialLinkProps>(), {
+const props = withDefaults(defineProps<NavigationItemProps>(), {
   caption: '',
   link: '#',
   icon: '',
+  permission: undefined,
+  claims: undefined
 });
+
+//Todo make this reactive
+function hasPermission(): boolean {
+  console.log(props.permission, props.claims)
+  if (props.permission){
+    if (props.claims){
+      if (props.claims[props.permission] === true){
+        return true;
+      }
+    }
+  }
+  return false;
+}
 </script>

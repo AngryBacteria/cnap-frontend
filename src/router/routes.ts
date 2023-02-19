@@ -7,12 +7,12 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '/auth',
-        component: () => import('pages/AuthTesting.vue'),
+        component: () => import('pages/Auth/AuthTesting.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: '/login',
-        component: () => import('pages/LoginPage.vue')
+        component: () => import('pages/Auth/LoginPage.vue')
       }
       ],
   },
