@@ -1,12 +1,8 @@
 <template>
-  <q-item v-if="!permission || hasPermission()"
-    clickable
-    :to="link"
-  >
+  <q-item v-if="!permission || visible" clickable :to="link">
     <q-item-section
       v-if="icon"
-      avatar
-    >
+      avatar>
       <q-icon :name="icon" />
     </q-item-section>
 
@@ -18,6 +14,9 @@
 </template>
 
 <script setup lang="ts">
+import {useCurrentUser} from 'vuefire';
+import {ref, watch} from 'vue';
+
 export interface NavigationItemProps {
   title: string;
   caption?: string;
@@ -34,16 +33,19 @@ const props = withDefaults(defineProps<NavigationItemProps>(), {
   claims: undefined
 });
 
-//Todo make this reactive
-function hasPermission(): boolean {
-  console.log(props.permission, props.claims)
-  if (props.permission){
-    if (props.claims){
-      if (props.claims[props.permission] === true){
-        return true;
+const visible = ref(false)
+if (props.permission) {
+  watch(useCurrentUser(), async (newUser) => {
+    if (props.permission){
+      if (newUser){
+        const token = await newUser.getIdTokenResult()
+        if (token.claims[props.permission] === true){
+          visible.value = true
+          return;
+        }
       }
     }
-  }
-  return false;
+    visible.value = false
+  }, {immediate: true})
 }
 </script>

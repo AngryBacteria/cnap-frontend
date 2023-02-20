@@ -1,24 +1,25 @@
 <template>
   <q-page>
-    <div class="q-gutter-lg">
-      <q-input type="email" v-model="email" filled >email</q-input>
-      <q-input type="password" v-model="password" filled >Passwort</q-input>
-      <q-btn @click="loginAnon" color="primary">Login Anon</q-btn>
-      <q-btn @click="loginEmailPw" color="primary" >Login Email/Passwort</q-btn>
-      <q-btn @click="logout" color="secondary">Logout</q-btn>
-    </div>
+    <q-card flat>
+      <div class="q-gutter-lg q-ma-lg q-pa-lg">
+        <q-input type="email" v-model="email" filled >email</q-input>
+        <q-input type="password" v-model="password" filled >Password</q-input>
+        <q-btn @click="login" color="primary" >Login</q-btn>
+        <q-btn @click="logout" color="secondary">Logout</q-btn>
+      </div>
+    </q-card>
   </q-page>
 </template>
 
 <script setup>
 
-import {signInAnonymously, signOut, signInWithEmailAndPassword} from 'firebase/auth';
+import {signOut, signInWithEmailAndPassword} from 'firebase/auth';
 import {useFirebaseAuth} from 'vuefire';
-import {useRoute, useRouter} from 'vue-router';
+import {useRouter} from 'vue-router';
 import {ref} from 'vue';
+import {Notify} from 'quasar';
 
 const router = useRouter()
-const route = useRoute()
 
 const email = ref('')
 const password = ref('')
@@ -35,26 +36,18 @@ const password = ref('')
 //     await router.push(to)
 //   }
 // })
-
-async function loginAnon() {
-  const auth = useFirebaseAuth()
-  if (auth){
-    try {
-      await signInAnonymously(auth);
-      console.log('signed in')
-      await router.push(route.query.redirect === null ? '/' : route.query.redirect)
-    } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(`${errorCode} Error while attempting to Log-in: ${errorMessage}`)
-    }
-  }
-}
-async function loginEmailPw() {
+//Todo correct error reaction
+async function login() {
   const auth = useFirebaseAuth()
   if (auth) {
     try {
       await signInWithEmailAndPassword(auth, email.value, password.value)
+      Notify.create({
+        message: 'Erfolgreich eingelogged',
+        color: 'primary',
+        position: 'top',
+        icon: 'mdi-check',
+      })
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -67,11 +60,17 @@ async function logout() {
     const auth = useFirebaseAuth()
     await signOut(auth);
     console.log('logged out')
+    Notify.create({
+      message: 'Erfolgreich ausgelogged',
+      color: 'primary',
+      position: 'top',
+      icon: 'mdi-check',
+    })
+    await router.push('/')
   } catch (error) {
     console.log(`Error while attempting to Log-Out: ${error}`)
   }
 }
 </script>
-
 <style scoped>
 </style>

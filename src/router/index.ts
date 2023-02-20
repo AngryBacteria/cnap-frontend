@@ -45,7 +45,7 @@ export default route(function (/* { store, ssrContext } */) {
           message: 'Du musst eingelogged sein um diese Seite zu betreten',
           color: 'red',
           position: 'top',
-          icon: 'announcement',
+          icon: 'mdi-close-octagon-outline',
         })
         return {
           path: '/login',

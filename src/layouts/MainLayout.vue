@@ -29,6 +29,7 @@
     <q-drawer
       v-model="leftDrawerOpen"
       style="border-right-color: #34b27b; border-right-style: solid; border-width: 1px">
+      <q-scroll-area :style="refUser ? {'height': 'calc(100% - 120px)', 'margin-top': '120px', 'border-right': '1px solid #ddd'} : {'height': '100%'}">
       <q-list>
         <q-item-label header class="text-weight-bold text-uppercase">
           Testing Area
@@ -78,8 +79,17 @@
           :key="link.title"
           v-bind="link"
         />
-        <q-separator/>
       </q-list>
+      </q-scroll-area>
+
+      <q-img v-if="refUser" class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 120px">
+        <div class="absolute-bottom bg-transparent">
+          <q-avatar size="56px" class="q-mb-sm">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+          </q-avatar>
+          <div class="text-weight-bold">{{refUser.email}}</div>
+        </div>
+      </q-img>
     </q-drawer>
 
     <q-page-container class="my-div">
@@ -93,11 +103,11 @@ import { ref } from 'vue';
 import NavigationItem from 'components/NavigationItem.vue';
 import {useQuasar} from 'quasar';
 import {useSettingsStore} from 'stores/settingsStore';
-import {getCurrentUser} from 'vuefire';
+import {getCurrentUser, useCurrentUser} from 'vuefire';
 
 const user = await getCurrentUser()
 const token = await user?.getIdTokenResult()
-
+const refUser = useCurrentUser()
 const testingLinks = [
   {
     title: 'Auth Testing',
@@ -176,11 +186,9 @@ const lorLinks = [
     link: '/lor/decks'
   }
 ];
-
 const store = useSettingsStore()
 const $q = useQuasar()
 const leftDrawerOpen = ref(false)
-
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
@@ -190,16 +198,12 @@ function toggleLeftDrawer() {
 .my-div
   body.screen--xl &
     margin: 5% 10% 5% 10%
-
   body.screen--lg &
     margin: 5% 10% 5% 10%
-
   body.screen--md &
     margin: 5% 10% 5% 10%
-
   body.screen--sm &
     margin: 5% 5% 5% 5%
-
   body.screen--xs &
     margin: 5% 5% 5% 5%
 </style>
