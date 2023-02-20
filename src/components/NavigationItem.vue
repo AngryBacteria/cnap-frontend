@@ -24,7 +24,7 @@ export interface NavigationItemProps {
   link?: string;
   icon?: string;
   permission?: string;
-  claims?: never
+  claims?: never;
 }
 const props = withDefaults(defineProps<NavigationItemProps>(), {
   caption: '',

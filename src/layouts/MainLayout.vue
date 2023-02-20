@@ -15,7 +15,14 @@
           CNAP
         </q-toolbar-title>
 
-        <q-toggle v-model="store.userPrefDarkMode" > {{$q.dark.mode}} </q-toggle>
+        <q-toggle
+          v-model="store.userPrefDarkMode"
+          checked-icon="mdi-weather-night"
+          unchecked-icon="mdi-white-balance-sunny"
+          size="50px"
+        >
+
+        </q-toggle>
 
       </q-toolbar>
     </q-header>
@@ -86,10 +93,10 @@ import { ref } from 'vue';
 import NavigationItem from 'components/NavigationItem.vue';
 import {useQuasar} from 'quasar';
 import {useSettingsStore} from 'stores/settingsStore';
-import {useCurrentUser} from 'vuefire';
+import {getCurrentUser} from 'vuefire';
 
-const user = await useCurrentUser()
-const token = await user?.value?.getIdTokenResult()
+const user = await getCurrentUser()
+const token = await user?.getIdTokenResult()
 
 const testingLinks = [
   {
