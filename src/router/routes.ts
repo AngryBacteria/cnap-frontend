@@ -8,13 +8,17 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/auth',
         component: () => import('pages/Auth/AuthTesting.vue'),
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true },
       },
       {
         path: '/login',
-        component: () => import('pages/Auth/LoginPage.vue')
-      }
-      ],
+        component: () => import('pages/Auth/LoginPage.vue'),
+      },
+      {
+        path: 'lol/match/:id',
+        component: () => import('pages/League/LOLMatch.vue'),
+      },
+    ],
   },
 
   // Always leave this as last one,
