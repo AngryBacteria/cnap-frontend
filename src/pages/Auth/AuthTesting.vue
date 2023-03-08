@@ -16,12 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentUser, useCurrentUser, useFirebaseAuth } from 'vuefire';
+import { getCurrentUser, useFirebaseAuth } from 'vuefire';
+import {useSettingsStore} from 'stores/settingsStore';
+const store = useSettingsStore()
 
 //Promise for getting the current auth user$
 const user = await getCurrentUser();
 //FireBase auth object
 const auth = useFirebaseAuth();
 //Reactive user
-const refUser = useCurrentUser();
+const refUser = store.refUser
 </script>

@@ -42,7 +42,7 @@ export default route(function (/* { store, ssrContext } */) {
       // if the user is not logged in, redirect to the login page
       if (!currentUser) {
         Notify.create({
-          message: 'Du musst eingelogged sein um diese Seite zu betreten',
+          message: 'You have to be logged in to access this page',
           color: 'red',
           position: 'top',
           icon: 'mdi-close-octagon-outline',
@@ -50,7 +50,7 @@ export default route(function (/* { store, ssrContext } */) {
         return {
           path: '/login',
           query: {
-            // we keep the current path in the query so we can redirect to it after login
+            // we keep the current path in the query, so we can redirect to it after log in
             // with `router.push(route.query.redirect || '/')`
             redirect: to.fullPath,
           },

@@ -1,11 +1,21 @@
 <template>
   <q-page>
-    <q-card flat>
-      <div class="q-gutter-lg q-ma-lg q-pa-lg">
-        <q-input type="email" v-model="email" filled >email</q-input>
-        <q-input type="password" v-model="password" filled >Password</q-input>
-        <q-btn @click="login" color="primary" >Login</q-btn>
-        <q-btn @click="logout" color="secondary">Logout</q-btn>
+    <q-card class="small" flat>
+      <div class="q-gutter-sm q-ma-lg q-pa-lg">
+        <h3>Sign-in</h3>
+        <q-input
+          type="email"
+          v-model="email"
+          label="Email-Address"
+          filled
+          :rules="[val => !!val || 'Field is required']"/>
+        <q-input
+          type="password"
+          v-model="password"
+          label="Password"
+          filled
+          :rules="[val => !!val || 'Field is required']"/>
+        <q-btn class="center" @click="login" color="primary" >Login</q-btn>
       </div>
     </q-card>
   </q-page>
@@ -13,29 +23,35 @@
 
 <script setup>
 
-import {signOut, signInWithEmailAndPassword} from 'firebase/auth';
-import {useFirebaseAuth} from 'vuefire';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {getCurrentUser, useFirebaseAuth} from 'vuefire';
 import {useRouter} from 'vue-router';
-import {ref} from 'vue';
+import {ref, onMounted} from 'vue';
 import {Notify} from 'quasar';
 
 const router = useRouter()
+const route = useRouter()
 
 const email = ref('')
 const password = ref('')
 
 //Automatic restore from storage if present
-// onMounted(async () => {
-//   const currentUser = await getCurrentUser()
-//   if (currentUser) {
-//     console.log('User found in storage')
-//     const to =
-//       route.query.redirect && typeof route.query.redirect === 'string'
-//         ? route.query.redirect
-//         : '/'
-//     await router.push(to)
-//   }
-// })
+onMounted(async () => {
+  const currentUser = await getCurrentUser()
+  if (currentUser) {
+    console.log('User found in storage')
+    const to = route.currentRoute.value.query.redirect && typeof route.currentRoute.value.query.redirect === 'string'
+      ? route.currentRoute.value.query.redirect
+      : '/'
+    Notify.create({
+      message: 'Successfully logged in',
+      color: 'primary',
+      position: 'top',
+      icon: 'mdi-check',
+    })
+    await router.push(to)
+  }
+})
 //Todo correct error reaction
 async function login() {
   const auth = useFirebaseAuth()
@@ -43,34 +59,34 @@ async function login() {
     try {
       await signInWithEmailAndPassword(auth, email.value, password.value)
       Notify.create({
-        message: 'Erfolgreich eingelogged',
+        message: 'Successfully logged in',
         color: 'primary',
         position: 'top',
         icon: 'mdi-check',
       })
+      const to = route.currentRoute.value.query.redirect && typeof route.currentRoute.value.query.redirect === 'string'
+        ? route.currentRoute.value.query.redirect
+        : '/'
+      await router.push(to)
     } catch (error) {
       const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(`${errorCode} Error while attempting to Log-in: ${errorMessage}`)
+      Notify.create({
+        message: errorCode.split('/')[1],
+        color: 'red',
+        position: 'top',
+        icon: 'mdi-close-octagon-outline',
+      })
     }
-  }
-}
-async function logout() {
-  try {
-    const auth = useFirebaseAuth()
-    await signOut(auth);
-    console.log('logged out')
-    Notify.create({
-      message: 'Erfolgreich ausgelogged',
-      color: 'primary',
-      position: 'top',
-      icon: 'mdi-check',
-    })
-    await router.push('/')
-  } catch (error) {
-    console.log(`Error while attempting to Log-Out: ${error}`)
   }
 }
 </script>
 <style scoped>
+.small {
+  margin: auto;
+  max-width: 1000px;
+}
+h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
 </style>

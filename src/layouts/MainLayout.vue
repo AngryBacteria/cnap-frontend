@@ -13,6 +13,59 @@
 
         <q-toolbar-title> CNAP </q-toolbar-title>
 
+        <q-btn-dropdown
+          color="secondary" label="Account" rounded
+        >
+          <q-list>
+            <q-item
+              v-if="!store.isLoggedIn"
+              clickable v-close-popup
+              @click="router.push({ path: '/login', query: { redirect: route.currentRoute.value.fullPath }})"
+            >
+              <q-item-section avatar>
+                <q-avatar icon="mdi-login-variant" color="primary" text-color="white" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Login</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              v-if="store.isLoggedIn"
+              clickable v-close-popup @click="logout"
+            >
+              <q-item-section avatar>
+                <q-avatar icon="mdi-logout-variant" color="primary" text-color="white" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Logout</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              v-if="!store.isLoggedIn"
+              clickable v-close-popup
+              @click="router.push({ path: '/login', query: { redirect: route.currentRoute.value.fullPath }})"
+            >
+              <q-item-section avatar>
+                <q-avatar icon="mdi-account-plus" color="primary" text-color="white" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Register</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              v-if="store.isLoggedIn"
+              clickable v-close-popup
+              @click="router.push('/auth')"
+            >
+              <q-item-section>
+                <q-item-label>Account</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+
         <q-toggle
           v-model="store.userPrefDarkMode"
           checked-icon="mdi-weather-night"
@@ -32,7 +85,7 @@
     >
       <q-scroll-area
         :style="
-          refUser
+          store.refUser
             ? {
                 height: 'calc(100% - 120px)',
                 'margin-top': '120px',
@@ -94,16 +147,16 @@
       </q-scroll-area>
 
       <q-img
-        v-if="refUser"
+        v-if="store.refUser"
         class="absolute-top"
         src="https://cdn.quasar.dev/img/material.png"
         style="height: 120px"
       >
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png"  alt="profilePicture"/>
           </q-avatar>
-          <div class="text-weight-bold">{{ refUser.email }}</div>
+          <div class="text-weight-bold">{{ store.refUser.email }}</div>
         </div>
       </q-img>
     </q-drawer>
@@ -117,24 +170,24 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import NavigationItem from 'components/NavigationItem.vue';
-import {useQuasar} from 'quasar';
+import {Notify, useQuasar} from 'quasar';
 import { useSettingsStore } from 'stores/settingsStore';
-import {useCurrentUser} from 'vuefire';
+import {useFirebaseAuth} from 'vuefire';
+import {useRouter} from 'vue-router';
+import {signOut} from 'firebase/auth';
 
-const refUser = useCurrentUser();
+const store = useSettingsStore();
+const $q = useQuasar();
+const router = useRouter()
+const route = useRouter()
+
 const testingLinks = [
   {
     title: 'Auth Testing',
     caption: 'Test page for firebase auth',
     icon: 'school',
     link: '/auth',
-  },
-  {
-    title: 'Login',
-    caption: 'Test page for logging in',
-    icon: 'code',
-    link: '/login',
-  },
+  }
 ];
 const leagueLinks = [
   {
@@ -199,11 +252,28 @@ const lorLinks = [
     link: '/lor/decks',
   },
 ];
-const store = useSettingsStore();
-const $q = useQuasar();
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+async function logout() {
+  try {
+    const auth = useFirebaseAuth()
+    if (auth) {
+      await signOut(auth);
+      console.log('logged out')
+      Notify.create({
+        message: 'Erfolgreich ausgelogged',
+        color: 'primary',
+        position: 'top',
+        icon: 'mdi-check',
+      })
+    }
+    await router.push('/')
+  } catch (error) {
+    console.log(`Error while attempting to Log-Out: ${error}`)
+  }
 }
 </script>
 
