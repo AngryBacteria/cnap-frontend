@@ -14,7 +14,7 @@
         <q-toolbar-title> CNAP </q-toolbar-title>
 
         <q-btn-dropdown
-          color="secondary" label="Account" rounded
+          color="brand" label="Account" rounded
         >
           <q-list>
             <q-item

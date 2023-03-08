@@ -4,6 +4,7 @@ import { useQuasar } from 'quasar';
 import {useCurrentUser} from 'vuefire';
 
 export const useSettingsStore = defineStore('settings', () => {
+
   const userPrefDarkMode = ref(true)
   const $q = useQuasar();
   const refUser = useCurrentUser();
