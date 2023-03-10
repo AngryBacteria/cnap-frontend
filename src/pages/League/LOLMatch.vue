@@ -19,8 +19,9 @@
       :label="participant.summonerName"
     />
 
-
   </q-tabs>
+
+  <ParticipantTable :data="data"></ParticipantTable>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +30,7 @@ import { useFetch } from '@vueuse/core'
 import { MatchDTO } from 'src/data/MatchInterfaces';
 import {computed, ref} from 'vue';
 import RiotHelper from 'src/plugins/RiotHelper';
+import ParticipantTable from 'components/League/ParticipantTable.vue';
 
 const route = useRoute()
 const participant = ref('')
