@@ -2,7 +2,7 @@
   {{ url }}
 
   <div v-for="participant in data?.info.participants" :key="participant.puuid">
-    <img width="50" :src="rh.getChampionSquaredPortrait(participant.championId)">
+    <img width="50" :src="rh.getChampionSquaredPortrait(participant.championId)" :alt="participant.summonerName">
     {{ participant.summonerName }} --
     {{ participant.kills }}/{{ participant.deaths }}/{{ participant.assists }} --
     {{ participant.championName }}
@@ -18,7 +18,6 @@
       :icon="`img:${rh.getChampionSquaredPortrait(participant.championId)}`"
       :label="participant.summonerName"
     />
-
   </q-tabs>
 
   <ParticipantTable :data="data"></ParticipantTable>
