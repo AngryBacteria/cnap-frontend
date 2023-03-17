@@ -117,7 +117,7 @@
       >
         <q-list>
           <q-item-label header class="text-weight-bold text-uppercase">
-            Testing Area
+            Main Area
           </q-item-label>
           <NavigationItem
             v-for="link in testingLinks"
@@ -176,11 +176,11 @@
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
             <img
-              src="https://cdn.quasar.dev/img/boy-avatar.png"
+              :src="store.refUser.photoURL"
               alt="profilePicture"
             />
           </q-avatar>
-          <div class="text-weight-bold">{{ store.refUser.email }}</div>
+          <div class="text-weight-bold">{{ store.refUser.displayName }}</div>
         </div>
       </q-img>
     </q-drawer>
@@ -207,10 +207,10 @@ const route = useRouter();
 
 const testingLinks = [
   {
-    title: 'Auth Testing',
-    caption: 'Test page for firebase auth',
-    icon: 'school',
-    link: '/auth',
+    title: 'Home',
+    caption: 'Homepage',
+    icon: 'home',
+    link: '/home',
   },
 ];
 const leagueLinks = [

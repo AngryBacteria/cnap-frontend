@@ -12,17 +12,6 @@
             :rules="[(val) => !!val || 'Field is required']"
           />
           <q-input
-            type="email"
-            v-model="email2"
-            label="Repeat Email-Address"
-            filled
-            :rules="[
-              (val) => !!val || 'Field is required',
-              (val) => val === email || 'Email does not match',
-            ]"
-            lazy-rules
-          />
-          <q-input
             type="password"
             v-model="password"
             label="Password"
@@ -38,6 +27,19 @@
               (val) => !!val || 'Field is required',
               (val) => val === password2 || 'Password does not match',
             ]"
+          />
+          <q-input
+            type="text"
+            v-model="displayName"
+            label="UserName"
+            filled
+            :rules="[(val) => !!val || 'Field is required']"
+          />
+          <q-input
+            type="text"
+            v-model="photoURL"
+            label="photo URL (optional)"
+            filled
           />
           <section>
             <p>Password strength</p>
@@ -61,15 +63,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useFirebaseAuth } from 'vuefire';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { Notify } from 'quasar';
 import { useRouter } from 'vue-router';
 
 const email = ref('');
-const email2 = ref('');
 const password = ref('');
 const password2 = ref('');
-const progress = ref(0);
+const photoURL = ref('');
+const displayName = ref('');
 
 const router = useRouter();
 const route = useRouter();
@@ -98,7 +100,13 @@ async function register() {
   const auth = useFirebaseAuth();
   if (auth) {
     try {
-      await createUserWithEmailAndPassword(auth, email.value, password.value);
+      const user = await createUserWithEmailAndPassword(auth, email.value, password.value);
+      if (photoURL.value.length == 0) photoURL.value = 'https://cdn.quasar.dev/img/boy-avatar.png'
+      await updateProfile(user.user, {
+        displayName: displayName.value,
+        photoURL: photoURL.value
+      });
+
       Notify.create({
         message: 'Successfully Registered',
         color: 'primary',
@@ -111,6 +119,7 @@ async function register() {
           ? route.currentRoute.value.query.redirect
           : '/';
       await router.push(to);
+
     } catch (error: any) {
       const errorCode = error.code;
       Notify.create({
