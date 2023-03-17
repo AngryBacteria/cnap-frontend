@@ -40,6 +40,11 @@
             ]"
           />
           <section>
+            <p>Password strength</p>
+            <q-linear-progress :value="pwStrength" rounded size="20px">
+            </q-linear-progress>
+          </section>
+          <section>
             <q-btn class="center text-black" type="submit" color="primary"
               >Register</q-btn
             >
@@ -54,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useFirebaseAuth } from 'vuefire';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Notify } from 'quasar';
@@ -64,9 +69,30 @@ const email = ref('');
 const email2 = ref('');
 const password = ref('');
 const password2 = ref('');
+const progress = ref(0);
 
 const router = useRouter();
 const route = useRouter();
+
+const pwStrength = computed(() => {
+  let output = 0;
+  let step = 0.25;
+
+  let specialCharacterPattern = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  let capitalLetterPattern = /[A-Z]/;
+  let lowercaseLetterPattern = /[a-z]/;
+
+  if (password.value.length > 8) output += step;
+  if (specialCharacterPattern.test(password.value)) output += step;
+  if (password.value.match('\\d')) output += step;
+  if (
+    capitalLetterPattern.test(password.value) &&
+    lowercaseLetterPattern.test(password.value)
+  )
+    output += step;
+
+  return output;
+});
 
 async function register() {
   const auth = useFirebaseAuth();
