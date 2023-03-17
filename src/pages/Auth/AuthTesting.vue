@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentUser, useFirebaseAuth } from 'vuefire';
+import {getCurrentUser, useFirebaseAuth} from 'vuefire';
 import { useSettingsStore } from 'stores/settingsStore';
 const store = useSettingsStore();
 
