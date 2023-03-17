@@ -14,7 +14,16 @@
             <q-icon
               :name="`img:${rh.getChampionSquaredPortrait(props.col.label)}`"
               size="3em"
-            />
+            >
+              <q-tooltip
+                :delay="350"
+                anchor="top middle"
+                self="bottom middle"
+                :offset="[10, 10]"
+              >
+                {{ props.col.name }}
+              </q-tooltip>
+            </q-icon>
           </q-th>
         </template>
         <template v-else>

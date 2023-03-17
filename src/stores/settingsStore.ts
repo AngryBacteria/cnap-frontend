@@ -1,35 +1,36 @@
 import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
-import {useCurrentUser} from 'vuefire';
+import { useCurrentUser } from 'vuefire';
 
 export const useSettingsStore = defineStore('settings', () => {
-
-  const userPrefDarkMode = ref(true)
+  const userPrefDarkMode = ref(true);
   const $q = useQuasar();
   const refUser = useCurrentUser();
-  const isLoggedIn = ref(false)
+  const isLoggedIn = ref(false);
 
-  if (localStorage.getItem('userPrefDarkMode')){
-    userPrefDarkMode.value = JSON.parse(<string>localStorage.getItem('userPrefDarkMode'));
+  if (localStorage.getItem('userPrefDarkMode')) {
+    userPrefDarkMode.value = JSON.parse(
+      <string>localStorage.getItem('userPrefDarkMode')
+    );
   }
 
   watch(
-    userPrefDarkMode, (darkVal) => {
-      localStorage.setItem('userPrefDarkMode', JSON.stringify(darkVal))
-      $q.dark.set(darkVal)
-
+    userPrefDarkMode,
+    (darkVal) => {
+      localStorage.setItem('userPrefDarkMode', JSON.stringify(darkVal));
+      $q.dark.set(darkVal);
     },
-    {deep: true}
+    { deep: true }
   );
 
   watch(
-    refUser, (newRefUser) => {
+    refUser,
+    (newRefUser) => {
       isLoggedIn.value = !!newRefUser;
     },
-    {deep: true}
+    { deep: true }
   );
 
-  return { userPrefDarkMode, isLoggedIn, refUser }
-})
-
+  return { userPrefDarkMode, isLoggedIn, refUser };
+});

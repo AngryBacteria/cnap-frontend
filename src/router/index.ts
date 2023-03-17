@@ -6,8 +6,8 @@ import {
   createWebHistory,
 } from 'vue-router';
 import routes from './routes';
-import {getCurrentUser} from 'vuefire';
-import {Notify} from 'quasar';
+import { getCurrentUser } from 'vuefire';
+import { Notify } from 'quasar';
 
 /*
  * If not building with SSR mode, you can
@@ -21,7 +21,9 @@ import {Notify} from 'quasar';
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
+    : process.env.VUE_ROUTER_MODE === 'history'
+    ? createWebHistory
+    : createWebHashHistory;
 
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
@@ -38,7 +40,7 @@ export default route(function (/* { store, ssrContext } */) {
   Router.beforeEach(async (to) => {
     // routes with `meta: { requiresAuth: true }` will check for the users, others won't
     if (to.meta.requiresAuth) {
-      const currentUser = await getCurrentUser()
+      const currentUser = await getCurrentUser();
       // if the user is not logged in, redirect to the login page
       if (!currentUser) {
         Notify.create({
@@ -46,7 +48,7 @@ export default route(function (/* { store, ssrContext } */) {
           color: 'red',
           position: 'top',
           icon: 'mdi-close-octagon-outline',
-        })
+        });
         return {
           path: '/login',
           query: {
@@ -54,10 +56,10 @@ export default route(function (/* { store, ssrContext } */) {
             // with `router.push(route.query.redirect || '/')`
             redirect: to.fullPath,
           },
-        }
+        };
       }
     }
-  })
+  });
 
   return Router;
 });

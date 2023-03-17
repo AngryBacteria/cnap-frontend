@@ -1,9 +1,9 @@
 <template>
   <q-page>
     <q-card class="small" flat>
-      <q-form @submit="login()">
+      <q-form @submit="register()">
         <div class="q-gutter-sm q-ma-lg q-pa-lg">
-          <h3>Sign-in</h3>
+          <h3>Register</h3>
           <q-input
             type="email"
             v-model="email"
@@ -12,18 +12,39 @@
             :rules="[(val) => !!val || 'Field is required']"
           />
           <q-input
+            type="email"
+            v-model="email2"
+            label="Repeat Email-Address"
+            filled
+            :rules="[
+              (val) => !!val || 'Field is required',
+              (val) => val === email || 'Email does not match',
+            ]"
+            lazy-rules
+          />
+          <q-input
             type="password"
             v-model="password"
             label="Password"
             filled
             :rules="[(val) => !!val || 'Field is required']"
           />
+          <q-input
+            type="password"
+            v-model="password2"
+            label="Repeat Password"
+            filled
+            :rules="[
+              (val) => !!val || 'Field is required',
+              (val) => val === password2 || 'Password does not match',
+            ]"
+          />
           <section>
             <q-btn class="center text-black" type="submit" color="primary"
-              >Login</q-btn
+              >Register</q-btn
             >
-            <router-link to="/register" class="text-primary text-weight-bold"
-              >Register here</router-link
+            <router-link to="/login" class="text-primary text-weight-bold"
+              >Login here</router-link
             >
           </section>
         </div>
@@ -32,46 +53,28 @@
   </q-page>
 </template>
 
-<script setup>
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { getCurrentUser, useFirebaseAuth } from 'vuefire';
-import { useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useFirebaseAuth } from 'vuefire';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Notify } from 'quasar';
+import { useRouter } from 'vue-router';
+
+const email = ref('');
+const email2 = ref('');
+const password = ref('');
+const password2 = ref('');
 
 const router = useRouter();
 const route = useRouter();
 
-const email = ref('');
-const password = ref('');
-
-//Automatic restore from storage if present
-onMounted(async () => {
-  const currentUser = await getCurrentUser();
-  if (currentUser) {
-    console.log('User found in storage');
-    const to =
-      route.currentRoute.value.query.redirect &&
-      typeof route.currentRoute.value.query.redirect === 'string'
-        ? route.currentRoute.value.query.redirect
-        : '/';
-    Notify.create({
-      message: 'Successfully logged in',
-      color: 'primary',
-      position: 'top',
-      icon: 'mdi-check',
-    });
-    await router.push(to);
-  }
-});
-//Todo correct error reaction
-async function login() {
+async function register() {
   const auth = useFirebaseAuth();
   if (auth) {
     try {
-      await signInWithEmailAndPassword(auth, email.value, password.value);
+      await createUserWithEmailAndPassword(auth, email.value, password.value);
       Notify.create({
-        message: 'Successfully logged in',
+        message: 'Successfully Registered',
         color: 'primary',
         position: 'top',
         icon: 'mdi-check',
@@ -82,7 +85,7 @@ async function login() {
           ? route.currentRoute.value.query.redirect
           : '/';
       await router.push(to);
-    } catch (error) {
+    } catch (error: any) {
       const errorCode = error.code;
       Notify.create({
         message: errorCode.split('/')[1],
@@ -94,6 +97,7 @@ async function login() {
   }
 }
 </script>
+
 <style scoped>
 .small {
   margin: auto;

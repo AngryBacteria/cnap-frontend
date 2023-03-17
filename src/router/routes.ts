@@ -15,6 +15,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Auth/LoginPage.vue'),
       },
       {
+        path: '/register',
+        component: () => import('pages/Auth/RegisterPage.vue'),
+      },
+      {
         path: 'lol/match/:id',
         component: () => import('pages/League/LOLMatch.vue'),
       },

@@ -1,0 +1,15 @@
+.git
+.idea
+.quasar
+.vscode
+node_modules
+public
+.eslintrc.js
+.postcssrc.js
+babel.config.js
+quasar.config.js
+tsconfig.json
+
+src/env.d.ts
+src/quasar.d.ts
+src/shims-vue.d.ts
