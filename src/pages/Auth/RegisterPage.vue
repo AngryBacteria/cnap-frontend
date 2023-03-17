@@ -100,11 +100,16 @@ async function register() {
   const auth = useFirebaseAuth();
   if (auth) {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email.value, password.value);
-      if (photoURL.value.length == 0) photoURL.value = 'https://cdn.quasar.dev/img/boy-avatar.png'
+      const user = await createUserWithEmailAndPassword(
+        auth,
+        email.value,
+        password.value
+      );
+      if (photoURL.value.length == 0)
+        photoURL.value = 'https://cdn.quasar.dev/img/boy-avatar.png';
       await updateProfile(user.user, {
         displayName: displayName.value,
-        photoURL: photoURL.value
+        photoURL: photoURL.value,
       });
 
       Notify.create({
@@ -119,7 +124,6 @@ async function register() {
           ? route.currentRoute.value.query.redirect
           : '/';
       await router.push(to);
-
     } catch (error: any) {
       const errorCode = error.code;
       Notify.create({

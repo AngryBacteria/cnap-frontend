@@ -175,10 +175,7 @@
       >
         <div class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img
-              :src="store.refUser.photoURL"
-              alt="profilePicture"
-            />
+            <img :src="store.refUser.photoURL" alt="profilePicture" />
           </q-avatar>
           <div class="text-weight-bold">{{ store.refUser.displayName }}</div>
         </div>
