@@ -18,6 +18,8 @@
 <script setup lang="ts">
 import { getCurrentUser, useFirebaseAuth } from 'vuefire';
 import { useSettingsStore } from 'stores/settingsStore';
+import { doc, collection, getFirestore, updateDoc } from 'firebase/firestore';
+import { firebaseApp } from 'boot/firebase';
 const store = useSettingsStore();
 
 //Promise for getting the current auth user$
@@ -26,4 +28,11 @@ const user = await getCurrentUser();
 const auth = useFirebaseAuth();
 //Reactive user
 const refUser = store.refUser;
+
+const memberdata = doc(
+  collection(getFirestore(firebaseApp), 'members'),
+  refUser?.uid
+);
+
+updateDoc(memberdata, { catchPhrase: 'geming time' });
 </script>

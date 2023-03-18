@@ -75,7 +75,7 @@
               v-if="store.isLoggedIn"
               clickable
               v-close-popup
-              @click="router.push('/auth')"
+              @click="router.push('/account')"
             >
               <q-item-section avatar>
                 <q-avatar icon="mdi-account" color="primary" />
