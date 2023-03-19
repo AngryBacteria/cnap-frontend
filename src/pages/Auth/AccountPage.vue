@@ -2,40 +2,62 @@
   <h3>{{ refUser.displayName }}</h3>
   <section class="settings-grid">
     <section>
-      <q-form @submit="updateUserDocument()">
+      <q-form @submit="editUser()">
         <q-input
           type="text"
           v-model="catchPhrase"
           label="catchPhrase"
           filled
-          :rules="[(val) => !!val || 'Field is required']"
+          :rules="[
+            (val) => !!val || 'Field is required',
+            (val) =>
+              val.length > 3 || 'Fields needs to be longer than 5 characters',
+          ]"
+          counter
+          maxlength="40"
+          lazy-rules
         />
-        <q-input
-          type="text"
-          v-model="about"
-          label="about"
-          filled
-          :rules="[(val) => !!val || 'Field is required']"
-        />
-        <q-btn color="primary" type="submit">Edit</q-btn>
-      </q-form>
-
-      <q-form @submit="updateUser()">
         <q-input
           type="text"
           v-model="displayName"
           label="displayName"
           filled
-          :rules="[(val) => !!val || 'Field is required']"
+          :rules="[
+            (val) => !!val || 'Field is required',
+            (val) =>
+              val.length > 3 || 'Fields needs to be longer than 5 characters',
+          ]"
+          lazy-rules
+          counter
+          maxlength="20"
         />
         <q-input
-          type="text"
+          type="url"
           v-model="photoURL"
           label="photoURL"
           filled
-          :rules="[(val) => !!val || 'Field is required']"
+          :rules="[
+            (val) => !!val || 'Field is required',
+            (val) =>
+              val.length > 3 || 'Fields needs to be longer than 5 characters',
+          ]"
+          lazy-rules
         />
-        <q-btn color="primary" type="submit">Edit</q-btn>
+        <q-input
+          type="textarea"
+          v-model="about"
+          label="about"
+          filled
+          :rules="[
+            (val) => !!val || 'Field is required',
+            (val) =>
+              val.length > 3 || 'Fields needs to be longer than 5 characters',
+          ]"
+          lazy-rules
+          counter
+          maxlength="250"
+        />
+        <q-btn class="q-mt-md" color="primary" type="submit">Edit</q-btn>
       </q-form>
     </section>
     <img :src="refUser.photoURL" alt="profile picture" />
@@ -72,35 +94,38 @@ const about = ref(memberData?.about);
 const displayName = ref(refUser?.displayName);
 const photoURL = ref(refUser?.photoURL);
 
-//TODO error catching
-async function updateUserDocument() {
-  if (memberDoc) {
-    await updateDoc(docReference, {
-      catchPhrase: catchPhrase.value,
-      about: about.value,
-    });
+async function editUser() {
+  try {
+    if (memberDoc && refUser) {
+      await updateDoc(docReference, {
+        catchPhrase: catchPhrase.value,
+        about: about.value,
+      });
+      await updateProfile(refUser, {
+        displayName: displayName.value,
+        photoURL: photoURL.value,
+      });
 
+      Notify.create({
+        message: 'Profile edited',
+        color: 'primary',
+        position: 'top',
+        icon: 'mdi-check',
+      });
+    } else {
+      Notify.create({
+        message: 'Error while editing profile',
+        color: 'red',
+        position: 'top',
+        icon: 'mdi-close-octagon-outline',
+      });
+    }
+  } catch (e) {
     Notify.create({
-      message: 'Profile edited',
-      color: 'primary',
+      message: 'Error while editing profile',
+      color: 'red',
       position: 'top',
-      icon: 'mdi-check',
-    });
-  }
-}
-
-async function updateUser() {
-  if (refUser) {
-    await updateProfile(refUser, {
-      displayName: displayName.value,
-      photoURL: photoURL.value,
-    });
-
-    Notify.create({
-      message: 'Profile edited',
-      color: 'primary',
-      position: 'top',
-      icon: 'mdi-check',
+      icon: 'mdi-close-octagon-outline',
     });
   }
 }
@@ -131,7 +156,15 @@ img {
   }
 }
 
+.q-form > * {
+  margin-top: 0.5rem;
+}
+
 .q-form {
   margin-bottom: 2rem;
+}
+
+h3 {
+  margin-top: 0;
 }
 </style>

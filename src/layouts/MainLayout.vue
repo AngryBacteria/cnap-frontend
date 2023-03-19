@@ -120,7 +120,7 @@
             Main Area
           </q-item-label>
           <NavigationItem
-            v-for="link in testingLinks"
+            v-for="link in accountLinks"
             :key="link.title"
             v-bind="link"
           />
@@ -202,12 +202,18 @@ const $q = useQuasar();
 const router = useRouter();
 const route = useRouter();
 
-const testingLinks = [
+const accountLinks = [
   {
     title: 'Home',
     caption: 'Homepage',
     icon: 'home',
     link: '/home',
+  },
+  {
+    title: 'Account',
+    caption: 'Your Account',
+    icon: 'mdi-account',
+    link: '/account',
   },
 ];
 const leagueLinks = [
@@ -240,7 +246,7 @@ const loreLinks = [
   {
     title: 'Champions',
     caption: 'Champions of Runeterra',
-    icon: 'mdi-account',
+    icon: 'mdi-account-cowboy-hat',
     link: '/lol/champions',
   },
 ];
