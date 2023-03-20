@@ -27,6 +27,10 @@ const routes: RouteRecordRaw[] = [
         path: 'lol/match/:id',
         component: () => import('pages/League/LOLMatch.vue'),
       },
+      {
+        path: '/pnp/dsa',
+        component: () => import('pages/PenAndPaper/createForm.vue'),
+      },
     ],
   },
 
