@@ -6,7 +6,7 @@
       :columns="columns"
       row-key="name"
       :pagination="initialPagination"
-      :separator="{ label: 'None', value: 'none' }"
+      :separator="'none'"
     >
       <template v-slot:header-cell="props">
         <template v-if="props.col.label !== 'Participant'">
@@ -59,6 +59,7 @@ const columns: QTableProps['columns'] = [
   },
 ];
 
+//Every Participant has a column
 props.data.info.participants.forEach((participant) => {
   columns.push({
     name: participant.summonerName,
@@ -88,33 +89,19 @@ const stats = [
   'longestTimeSpentLiving',
   'totalTimeSpentDead',
 ];
-const rows = [];
+const rows: any[] = [];
 const initialPagination = { page: 1, rowsPerPage: 25 };
 
 stats.forEach((stat) => {
-  const obj: any = {};
-  obj['name'] = stat;
-  obj[props.data.info.participants[0].summonerName] =
-    props.data.info.participants[0][stat as keyof Participant];
-  obj[props.data.info.participants[1].summonerName] =
-    props.data.info.participants[1][stat as keyof Participant];
-  obj[props.data.info.participants[2].summonerName] =
-    props.data.info.participants[2][stat as keyof Participant];
-  obj[props.data.info.participants[3].summonerName] =
-    props.data.info.participants[3][stat as keyof Participant];
-  obj[props.data.info.participants[4].summonerName] =
-    props.data.info.participants[4][stat as keyof Participant];
-  obj[props.data.info.participants[5].summonerName] =
-    props.data.info.participants[5][stat as keyof Participant];
-  obj[props.data.info.participants[6].summonerName] =
-    props.data.info.participants[6][stat as keyof Participant];
-  obj[props.data.info.participants[7].summonerName] =
-    props.data.info.participants[7][stat as keyof Participant];
-  obj[props.data.info.participants[8].summonerName] =
-    props.data.info.participants[8][stat as keyof Participant];
-  obj[props.data.info.participants[9].summonerName] =
-    props.data.info.participants[9][stat as keyof Participant];
-  rows.push(obj);
+  const row: any = {};
+  row['name'] = stat;
+  //For every participant add the current stat
+  for (let index = 0; index < props.data.info.participants.length; index++) {
+    row[props.data.info.participants[index].summonerName] =
+      props.data.info.participants[index][stat as keyof Participant];
+  }
+  rows.push(row);
+  console.log(row);
 });
 </script>
 
