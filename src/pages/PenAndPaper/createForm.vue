@@ -1,80 +1,94 @@
-<template>
-  <q-page>
-    <q-card class="small" flat>
-      <q-form @submit="createCharacter()">
-        <div class="q-gutter-sm q-ma-lg q-pa-lg">
-          <h3>Create a new Character!</h3>
-          <q-input
-            type="text"
-            v-model="name"
-            label="Name"
-            filled
-            :rules="[(val) => !!val || 'Field is required']"
-          />
-          <q-select
-            v-model="framework"
-            label="Framework"
-            :options="frameworks"
-          />
-          <q-file
-            outlined
-            v-model="sheet">
-            <template v-slot:prepend>
-              <q-icon name="attach_file" />
-            </template>
-          </q-file>
-
-
-          <section>
-            <q-btn class="center text-black" type="submit" color="primary">
-              Create!
-            </q-btn>
-          </section>
-        </div>
-      </q-form>
-    </q-card>
-  </q-page>
-</template>
-
 <script setup lang="ts">
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
-import {collection, doc, getFirestore, getDoc, setDoc} from 'firebase/firestore';
-import { getStorage } from "firebase/storage";
-import {firebaseApp} from 'boot/firebase';
+// See https://vueuse.org/core/useFileDialog
+import { useFileDialog } from '@vueuse/core';
+import { ref as storageRef } from 'firebase/storage';
+import { useFirebaseStorage, useStorageFile } from 'vuefire';
+import {ref, watch} from 'vue';
+import { firebaseApp } from 'boot/firebase';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  addDoc,
+  collection,
+} from 'firebase/firestore';
+
+// upload an image to the storage
+const storage = useFirebaseStorage();
+const fileRef = storageRef(storage, 'images/mountains.jpg');
 
 const name = ref('');
 const framework = ref('');
-const sheet = ref('');
-const frameworks = ['dsa', 'dnd', 'swn']
-
-
-const router = useRouter();
-const route = useRouter();
+const frameworks = ['Das Schwarze Auge', 'Dungeons And Dragons', 'Stars Without Numbers']
 
 const db = getFirestore(firebaseApp);
-const storage = getStorage();
 
-// Add a new document in collection "cities" with ID 'LA'
+const {
+  url,
+  // gives you a percentage between 0 and 1 of the upload progress
+  uploadProgress,
+  uploadError,
+  // firebase upload task
+  uploadTask,
+  upload,
+  refresh
+} = useStorageFile(fileRef);
 
-/*
-async function createCharacter() {
-  const filePath = 'pnp_characters' + framework.value + name.value + '.pdf';
-  const sheetReference = ref(storage, filePath);
+async function submitFile() {
+  const data = files.value?.item(0);
+  if (data) {
+    upload(data);
+  }
+  watch(url, async (url) => {
+    const imageLink = url
+    console.log(imageLink)
 
-
-  await setDoc(doc(db, 'pnp_characters', 'LA'), {
-    name: name,
-    framework: framework,
-    sheet: sheet
-  });
+    await addDoc(collection(db, "pnp_characters"), {
+      name: name.value,
+      framework: framework.value,
+      sheet: imageLink
+    });
+  })
 }
 
- */
-
-
+const filename = ref<string>();
+const { files, open, reset } = useFileDialog();
 </script>
 
-<style scoped>
+<template>
+  <q-card class="small" flat>
+    <q-form @submit.prevent="submitFile">
+      <!-- disable the form while uploading -->
+      <fieldset :disabled="!!uploadTask">
+        <q-input
+          type="text"
+          v-model="name"
+          label="Name"
+          filled
+          :rules="[(val) => !!val || 'Field is required']"
+        />
+        <q-select
+          v-model="framework"
+          label="Framework"
+          :options="frameworks"
+        />
+        <button
+          type="button"
+          @click="open({ accept: 'image/*', multiple: false })"
+        >
+          <template v-if="files?.length === 1">
+            Selected file: {{ files.item(0)!.name }} (Click to select another)
+          </template>
+          <template v-else>
+            Select one picture
+          </template>
+        </button>
 
-</style>
+        <br />
+
+        <button>Upload</button>
+      </fieldset>
+    </q-form>
+    <q-img v-if="url" :src="url" />
+  </q-card>
+</template>
