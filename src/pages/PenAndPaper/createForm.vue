@@ -3,7 +3,7 @@
 import { useFileDialog } from '@vueuse/core';
 import { ref as storageRef } from 'firebase/storage';
 import { useFirebaseStorage, useStorageFile } from 'vuefire';
-import {ref, watch} from 'vue';
+import { ref, watch } from 'vue';
 import { firebaseApp } from 'boot/firebase';
 import {
   getFirestore,
@@ -19,7 +19,11 @@ const fileRef = storageRef(storage, 'images/mountains.jpg');
 
 const name = ref('');
 const framework = ref('');
-const frameworks = ['Das Schwarze Auge', 'Dungeons And Dragons', 'Stars Without Numbers']
+const frameworks = [
+  'Das Schwarze Auge',
+  'Dungeons And Dragons',
+  'Stars Without Numbers',
+];
 
 const db = getFirestore(firebaseApp);
 
@@ -31,7 +35,7 @@ const {
   // firebase upload task
   uploadTask,
   upload,
-  refresh
+  refresh,
 } = useStorageFile(fileRef);
 
 async function submitFile() {
@@ -40,15 +44,15 @@ async function submitFile() {
     upload(data);
   }
   watch(url, async (url) => {
-    const imageLink = url
-    console.log(imageLink)
+    const imageLink = url;
+    console.log(imageLink);
 
-    await addDoc(collection(db, "pnp_characters"), {
+    await addDoc(collection(db, 'pnp_characters'), {
       name: name.value,
       framework: framework.value,
-      sheet: imageLink
+      sheet: imageLink,
     });
-  })
+  });
 }
 
 const filename = ref<string>();
@@ -67,11 +71,7 @@ const { files, open, reset } = useFileDialog();
           filled
           :rules="[(val) => !!val || 'Field is required']"
         />
-        <q-select
-          v-model="framework"
-          label="Framework"
-          :options="frameworks"
-        />
+        <q-select v-model="framework" label="Framework" :options="frameworks" />
         <button
           type="button"
           @click="open({ accept: 'image/*', multiple: false })"
@@ -79,9 +79,7 @@ const { files, open, reset } = useFileDialog();
           <template v-if="files?.length === 1">
             Selected file: {{ files.item(0)!.name }} (Click to select another)
           </template>
-          <template v-else>
-            Select one picture
-          </template>
+          <template v-else> Select one picture </template>
         </button>
 
         <br />

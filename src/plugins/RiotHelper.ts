@@ -25,6 +25,10 @@ export default class RiotHelper {
   }
 
   getItemIcon(id: number) {
-    `https://cdn.mobalytics.gg/assets/lol/images/dd/game-items/${id}.png?v04`;
+    return `https://cdn.mobalytics.gg/assets/lol/images/dd/game-items/${id}.png?v04`;
+  }
+
+  getItemPlaceholder() {
+    return 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png';
   }
 }

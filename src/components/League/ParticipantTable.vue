@@ -101,7 +101,6 @@ stats.forEach((stat) => {
       props.data.info.participants[index][stat as keyof Participant];
   }
   rows.push(row);
-  console.log(row);
 });
 </script>
 

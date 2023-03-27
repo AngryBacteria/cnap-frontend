@@ -1,20 +1,8 @@
 <template>
-  {{ url }}
   <div v-if="data">
-    <div
-      v-for="participant in data?.info.participants"
-      :key="participant.puuid"
-    >
-      <img
-        width="50"
-        :src="rh.getChampionSquaredPortrait(participant.championId)"
-        :alt="participant.summonerName"
-      />
-      {{ participant.summonerName }} -- {{ participant.kills }}/{{
-        participant.deaths
-      }}/{{ participant.assists }} --
-      {{ participant.championName }}
-    </div>
+    <ParticipantPair :data="data"></ParticipantPair>
+
+    <ParticipantTable :data="data"></ParticipantTable>
 
     <q-tabs v-model="participant" class="text-teal">
       <q-tab
@@ -25,8 +13,6 @@
         :label="participant.summonerName"
       />
     </q-tabs>
-
-    <ParticipantTable :data="data"></ParticipantTable>
   </div>
 </template>
 
@@ -37,6 +23,7 @@ import { MatchDTO } from 'src/data/MatchInterfaces';
 import { computed, ref } from 'vue';
 import RiotHelper from 'src/plugins/RiotHelper';
 import ParticipantTable from 'components/League/ParticipantTable.vue';
+import ParticipantPair from 'components/League/ParticipantPair.vue';
 
 const route = useRoute();
 const participant = ref('');
@@ -56,6 +43,7 @@ const { data } = await useFetch(url, { refetch: true }).get().json<MatchDTO>();
 .q-tab__label {
   font-size: 1em;
 }
+
 .q-tab__icon {
   width: 50px;
   height: 50px;
