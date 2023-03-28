@@ -1,17 +1,14 @@
 <template>
   <div v-if="data">
-    <ParticipantPair :data="data"></ParticipantPair>
+
+    <LaneSummary :data="data"></LaneSummary>
 
     <ParticipantTable :data="data"></ParticipantTable>
 
     <q-tabs v-model="participant" class="text-teal">
-      <q-tab
-        v-for="participant in data?.info.participants"
-        :key="participant.summonerName"
-        :name="participant.championName"
-        :icon="`img:${rh.getChampionSquaredPortrait(participant.championId)}`"
-        :label="participant.summonerName"
-      />
+      <q-tab v-for="participant in data?.info.participants" :key="participant.summonerName"
+        :name="participant.championName" :icon="`img:${rh.getChampionSquaredPortrait(participant.championId)}`"
+        :label="participant.summonerName" />
     </q-tabs>
   </div>
 </template>
@@ -22,8 +19,8 @@ import { useFetch } from '@vueuse/core';
 import { MatchDTO } from 'src/data/MatchInterfaces';
 import { computed, ref } from 'vue';
 import RiotHelper from 'src/plugins/RiotHelper';
-import ParticipantTable from 'components/League/ParticipantTable.vue';
-import ParticipantPair from 'components/League/ParticipantPair.vue';
+import ParticipantTable from 'src/components/League/Match/ParticipantTable.vue';
+import LaneSummary from 'src/components/League/Match/LaneSummary.vue';
 
 const route = useRoute();
 const participant = ref('');

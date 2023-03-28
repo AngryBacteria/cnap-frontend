@@ -24,11 +24,26 @@ export default class RiotHelper {
     return `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${id}.jpg`;
   }
 
-  getItemIcon(id: number) {
+  getItemIcon(id: number): string {
     return `https://cdn.mobalytics.gg/assets/lol/images/dd/game-items/${id}.png?v04`;
   }
 
-  getItemPlaceholder() {
+  getItemPlaceholder(): string {
     return 'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png';
+  }
+
+  getLaneIcon(lane: string): string {
+    switch ( lane ) {
+      case 'TOP':
+          return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+      case 'JUNGLE':
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+      case 'MIDDLE':
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+      case 'BOTTOM':
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+      default:
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+   }
   }
 }
