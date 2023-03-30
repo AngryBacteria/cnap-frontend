@@ -307,11 +307,11 @@ async function logout() {
 <style lang="sass" scoped>
 .my-div
   body.screen--xl &
-    margin: 5% 10% 5% 10%
+    margin: 5% 5% 5% 5%
   body.screen--lg &
-    margin: 5% 10% 5% 10%
+    margin: 5% 5% 5% 5%
   body.screen--md &
-    margin: 5% 10% 5% 10%
+    margin: 5% 5% 5% 5%
   body.screen--sm &
     margin: 5% 5% 5% 5%
   body.screen--xs &

@@ -10,6 +10,7 @@ const routes: RouteRecordRaw[] = [
         path: '/home',
         component: () => import('pages/HomePage.vue'),
       },
+      //auth
       {
         path: '/account',
         component: () => import('pages/Auth/AccountPage.vue'),
@@ -23,10 +24,16 @@ const routes: RouteRecordRaw[] = [
         path: '/register',
         component: () => import('pages/Auth/RegisterPage.vue'),
       },
+      //League of Legends
+      {
+        path: 'lol/summoners',
+        component: () => import('pages/League/SummonerOverview.vue'),
+      },
       {
         path: 'lol/match/:id',
         component: () => import('pages/League/LOLMatch.vue'),
       },
+      //Tabletop
       {
         path: '/pnp/dsa',
         component: () => import('pages/PenAndPaper/createForm.vue'),

@@ -2,12 +2,15 @@ import { defineStore } from 'pinia';
 import { ref, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { useCurrentUser } from 'vuefire';
+import { MatchDTO } from 'src/data/MatchInterfaces';
 
 export const useSettingsStore = defineStore('settings', () => {
   const userPrefDarkMode = ref(true);
   const $q = useQuasar();
   const refUser = useCurrentUser();
   const isLoggedIn = ref(false);
+
+  const matchData = ref<MatchDTO | null>();
 
   if (localStorage.getItem('userPrefDarkMode')) {
     userPrefDarkMode.value = JSON.parse(
@@ -32,5 +35,5 @@ export const useSettingsStore = defineStore('settings', () => {
     { deep: true }
   );
 
-  return { userPrefDarkMode, isLoggedIn, refUser };
+  return { userPrefDarkMode, isLoggedIn, refUser, matchData };
 });

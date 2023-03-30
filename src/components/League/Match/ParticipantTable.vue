@@ -37,36 +37,43 @@
 </template>
 
 <script setup lang="ts">
-import { MatchDTO, Participant } from 'src/data/MatchInterfaces';
+import { Participant } from 'src/data/MatchInterfaces';
 import { QTableProps } from 'quasar';
 import RiotHelper from 'src/plugins/RiotHelper';
+import { useSettingsStore } from 'stores/settingsStore';
+import { computed } from 'vue';
 
 const rh = RiotHelper.getInstance();
+const store = useSettingsStore();
+const initialPagination = { page: 1, rowsPerPage: 25 };
 
-const props = defineProps<{
-  data: MatchDTO;
-}>();
+const columns = computed(() => {
+  if (!store.matchData) {
+    return undefined;
+  }
 
-const columns: QTableProps['columns'] = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Participant',
-    align: 'center',
-    field: (row) => row.name,
-    format: (val) => `${val}`,
-    sortable: false,
-  },
-];
+  const columns: QTableProps['columns'] = [
+    {
+      name: 'name',
+      required: true,
+      label: 'Participant',
+      align: 'center',
+      field: (row) => row.name,
+      format: (val) => `${val}`,
+      sortable: false,
+    },
+  ];
 
-//Every Participant has a column
-props.data.info.participants.forEach((participant) => {
-  columns.push({
-    name: participant.summonerName,
-    align: 'center',
-    label: `${participant.championId}`,
-    field: participant.summonerName,
+  //Every Participant has a column
+  store.matchData.info.participants.forEach((participant) => {
+    columns.push({
+      name: participant.summonerName,
+      align: 'center',
+      label: `${participant.championId}`,
+      field: participant.summonerName,
+    });
   });
+  return columns;
 });
 
 const stats = [
@@ -89,18 +96,27 @@ const stats = [
   'longestTimeSpentLiving',
   'totalTimeSpentDead',
 ];
-const rows: any[] = [];
-const initialPagination = { page: 1, rowsPerPage: 25 };
 
-stats.forEach((stat) => {
-  const row: any = {};
-  row['name'] = stat;
-  //For every participant add the current stat
-  for (let index = 0; index < props.data.info.participants.length; index++) {
-    row[props.data.info.participants[index].summonerName] =
-      props.data.info.participants[index][stat as keyof Participant];
-  }
-  rows.push(row);
+const rows = computed(() => {
+  const output: any[] = [];
+
+  stats.forEach((stat) => {
+    if (store.matchData) {
+      const row: any = {};
+      row['name'] = stat;
+      //For every participant add the current stat
+      for (
+        let index = 0;
+        index < store.matchData.info.participants.length;
+        index++
+      ) {
+        row[store.matchData.info.participants[index].summonerName] =
+          store.matchData.info.participants[index][stat as keyof Participant];
+      }
+      output.push(row);
+    }
+  });
+  return output;
 });
 </script>
 

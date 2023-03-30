@@ -33,17 +33,17 @@ export default class RiotHelper {
   }
 
   getLaneIcon(lane: string): string {
-    switch ( lane ) {
+    switch (lane) {
       case 'TOP':
-          return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg';
       case 'JUNGLE':
-        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg';
       case 'MIDDLE':
-        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg';
       case 'BOTTOM':
-        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg';
       default:
-        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg'
-   }
+        return 'https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg';
+    }
   }
 }
