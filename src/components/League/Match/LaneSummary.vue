@@ -6,13 +6,13 @@
           <div class="participant_summonerIcons">
             <img
               :width="smallIcons"
-              :src="rh.getItemPlaceholder()"
-              alt="item1"
+              :src="rh.getSummerSpellIcon(pair.team1.summoner1Id)"
+              alt="summoner1"
             />
             <img
               :width="smallIcons"
-              :src="rh.getItemPlaceholder()"
-              alt="item1"
+              :src="rh.getSummerSpellIcon(pair.team1.summoner2Id)"
+              alt="summoner2"
             />
           </div>
           <img
@@ -24,12 +24,36 @@
         </div>
 
         <div class="items">
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team1.item0)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team1.item1)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team1.item2)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team1.item3)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team1.item4)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team1.item5)"
+            alt="item1"
+          />
         </div>
 
         <div class="statGroup">
@@ -56,7 +80,7 @@
         <div class="position">
           <img
             width="50"
-            src="https://cdn.mobalytics.gg/assets/common/icons/lol-roles/24-top-faded.svg"
+            :src="rh.getLaneIcon(pair.team1.teamPosition)"
             alt="item1"
           />
         </div>
@@ -83,12 +107,36 @@
         </div>
 
         <div class="items">
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
-          <img :width="smallIcons" :src="rh.getItemPlaceholder()" alt="item1" />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team2.item0)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team2.item1)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team2.item2)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team2.item3)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team2.item4)"
+            alt="item1"
+          />
+          <img
+            :width="smallIcons"
+            :src="rh.getItemIcon(pair.team2.item5)"
+            alt="item1"
+          />
         </div>
 
         <div class="participant_info_right">
@@ -101,12 +149,12 @@
           <div class="participant_summonerIcons">
             <img
               :width="smallIcons"
-              :src="rh.getItemPlaceholder()"
+              :src="rh.getSummerSpellIcon(pair.team2.summoner1Id)"
               alt="item1"
             />
             <img
               :width="smallIcons"
-              :src="rh.getItemPlaceholder()"
+              :src="rh.getSummerSpellIcon(pair.team2.summoner2Id)"
               alt="item1"
             />
           </div>
@@ -177,14 +225,27 @@ p {
   padding: 1rem;
   display: grid;
   align-items: center;
-  grid-template-columns: minmax(150px, 1fr) minmax(75px, auto) minmax(
-      100px,
-      1fr
-    ) minmax(100px, 1fr) minmax(50px, auto) minmax(100px, 1fr) minmax(
-      100px,
-      1fr
-    ) minmax(75px, auto) minmax(150px, 1fr);
+  grid-template-columns:
+    minmax(175px, 1fr) repeat(3, minmax(75px, 1fr)) minmax(50px, auto) repeat(
+      3,
+      minmax(75px, 1fr)
+    )
+    minmax(175px, 1fr);
   gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .participant_summary {
+    grid-template-columns:
+      minmax(150px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(
+        50px,
+        auto
+      )
+      minmax(100px, 1fr) minmax(100px, 1fr) minmax(150px, 1fr);
+  }
+  .items {
+    display: none !important;
+  }
 }
 
 .participant_info_right {
@@ -218,8 +279,6 @@ p {
   align-items: center;
   display: flex;
   flex-direction: column;
-  padding-right: 1rem;
-  padding-left: 1rem;
 }
 
 .items {

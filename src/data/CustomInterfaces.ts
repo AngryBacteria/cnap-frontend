@@ -150,3 +150,36 @@ export interface TacticalInfo {
   difficulty: number;
   damageType: string;
 }
+
+//Summoner spell / summonerspell
+export interface SummonerSpell {
+  id: number;
+  name: string;
+  description: string;
+  summonerLevel: number;
+  cooldown: number;
+  gameModes: string[];
+  iconPath: string;
+}
+
+//League Item / Leagueitem
+export interface LeagueItem {
+  id: number;
+  name: string;
+  description: string;
+  active: boolean;
+  inStore: boolean;
+  from?: (number | null)[] | null;
+  to?: (number | null)[] | null;
+  categories?: (string | null)[] | null;
+  maxStacks: number;
+  requiredChampion: string;
+  requiredAlly: string;
+  requiredBuffCurrencyName: string;
+  requiredBuffCurrencyCost: number;
+  specialRecipe: number;
+  isEnchantment: boolean;
+  price: number;
+  priceTotal: number;
+  iconPath: string;
+}

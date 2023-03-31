@@ -5,13 +5,7 @@ import { ref as storageRef } from 'firebase/storage';
 import { useFirebaseStorage, useStorageFile } from 'vuefire';
 import { ref, watch } from 'vue';
 import { firebaseApp } from 'boot/firebase';
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  addDoc,
-  collection,
-} from 'firebase/firestore';
+import { getFirestore, addDoc, collection } from 'firebase/firestore';
 
 // upload an image to the storage
 const storage = useFirebaseStorage();
@@ -29,13 +23,9 @@ const db = getFirestore(firebaseApp);
 
 const {
   url,
-  // gives you a percentage between 0 and 1 of the upload progress
-  uploadProgress,
-  uploadError,
   // firebase upload task
   uploadTask,
   upload,
-  refresh,
 } = useStorageFile(fileRef);
 
 async function submitFile() {
@@ -55,8 +45,7 @@ async function submitFile() {
   });
 }
 
-const filename = ref<string>();
-const { files, open, reset } = useFileDialog();
+const { files, open } = useFileDialog();
 </script>
 
 <template>
