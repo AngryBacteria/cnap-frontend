@@ -1,3 +1,12 @@
+//Permissions from firebase
+export enum Permissions {
+  LOGGED_IN = 'logged_in',
+  LOGGED_OUT = 'logged_out',
+  ADMIN = 'admin',
+  SWN = 'swn',
+}
+
+//Summoner data of postgres DB
 export interface SummonerDB {
   id: string;
   data: {
@@ -10,6 +19,7 @@ export interface SummonerDB {
   };
 }
 
+//Summoner data from riot
 export interface SummonerData {
   accountId: string;
   profileIconId: number;
