@@ -168,7 +168,7 @@
       </q-scroll-area>
 
       <q-img
-        v-if="store.refUser"
+        v-if="store.refUser && store.refUser.photoURL"
         class="absolute-top"
         src="https://cdn.quasar.dev/img/material.png"
         style="height: 120px"
@@ -196,13 +196,22 @@ import { useSettingsStore } from 'stores/settingsStore';
 import { useFirebaseAuth } from 'vuefire';
 import { useRouter } from 'vue-router';
 import { signOut } from 'firebase/auth';
+import { Permissions } from 'src/data/CustomInterfaces';
 
 const store = useSettingsStore();
 const $q = useQuasar();
 const router = useRouter();
 const route = useRouter();
 
-const accountLinks = [
+interface NavigationLink {
+  title: string;
+  caption: string;
+  icon: string;
+  link: string;
+  permission?: Permissions;
+}
+
+const accountLinks: NavigationLink[] = [
   {
     title: 'Home',
     caption: 'Homepage',
@@ -214,9 +223,24 @@ const accountLinks = [
     caption: 'Your Account',
     icon: 'mdi-account',
     link: '/account',
+    permission: Permissions.LOGGED_IN,
+  },
+  {
+    title: 'Login',
+    caption: 'Login to your Account',
+    icon: 'mdi-login-variant',
+    link: '/login',
+    permission: Permissions.LOGGED_OUT,
+  },
+  {
+    title: 'Register',
+    caption: 'Register an Account',
+    icon: 'mdi-account-plus',
+    link: '/register',
+    permission: Permissions.LOGGED_OUT,
   },
 ];
-const leagueLinks = [
+const leagueLinks: NavigationLink[] = [
   {
     title: 'Leaderboard',
     caption: 'Leaderboard of CNAP-Players',
@@ -236,7 +260,7 @@ const leagueLinks = [
     link: '/lol/matches',
   },
 ];
-const loreLinks = [
+const loreLinks: NavigationLink[] = [
   {
     title: 'Regions',
     caption: 'Regions of Ruenterra',
@@ -250,7 +274,7 @@ const loreLinks = [
     link: '/lol/champions',
   },
 ];
-const pnpLinks = [
+const pnpLinks: NavigationLink[] = [
   {
     title: 'DSA',
     caption: 'Das schwarze Auge',
@@ -262,10 +286,10 @@ const pnpLinks = [
     caption: 'Stars without Numbers',
     icon: 'ion-planet',
     link: '/pnp/swn',
-    permission: 'swn',
+    permission: Permissions.SWN,
   },
 ];
-const lorLinks = [
+const lorLinks: NavigationLink[] = [
   {
     title: 'Cards',
     caption: 'Cards of LoR',

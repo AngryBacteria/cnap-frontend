@@ -1,3 +1,12 @@
+//Permissions from firebase
+export enum Permissions {
+  LOGGED_IN = 'logged_in',
+  LOGGED_OUT = 'logged_out',
+  ADMIN = 'admin',
+  SWN = 'swn',
+}
+
+//Summoner data of postgres DB
 export interface SummonerDB {
   id: string;
   data: {
@@ -10,6 +19,7 @@ export interface SummonerDB {
   };
 }
 
+//Summoner data from riot
 export interface SummonerData {
   accountId: string;
   profileIconId: number;
@@ -149,4 +159,37 @@ export interface TacticalInfo {
   style: number;
   difficulty: number;
   damageType: string;
+}
+
+//Summoner spell / summonerspell
+export interface SummonerSpell {
+  id: number;
+  name: string;
+  description: string;
+  summonerLevel: number;
+  cooldown: number;
+  gameModes: string[];
+  iconPath: string;
+}
+
+//League Item / Leagueitem
+export interface LeagueItem {
+  id: number;
+  name: string;
+  description: string;
+  active: boolean;
+  inStore: boolean;
+  from?: (number | null)[] | null;
+  to?: (number | null)[] | null;
+  categories?: (string | null)[] | null;
+  maxStacks: number;
+  requiredChampion: string;
+  requiredAlly: string;
+  requiredBuffCurrencyName: string;
+  requiredBuffCurrencyCost: number;
+  specialRecipe: number;
+  isEnchantment: boolean;
+  price: number;
+  priceTotal: number;
+  iconPath: string;
 }
