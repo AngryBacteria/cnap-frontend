@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
       //auth
       {
         path: '/account',
-        component: () => import('pages/Auth/AccountPage.vue'),
+        component: () => import('src/pages/Auth/EditAccountPage.vue'),
         meta: { requiresAuth: true },
       },
       {

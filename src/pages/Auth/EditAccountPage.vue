@@ -1,67 +1,40 @@
 <template>
-  <h3>{{ refUser.displayName }}</h3>
-  <section class="settings-grid">
-    <section>
-      <q-form @submit="editUser()">
-        <q-input
-          type="text"
-          v-model="catchPhrase"
-          label="catchPhrase"
-          filled
-          :rules="[
+  <div v-if="refUser">
+    <h3>{{ refUser.displayName }}</h3>
+    <section class="settings-grid">
+      <section>
+        <q-form @submit="editUser()">
+          <q-input type="text" v-model="catchPhrase" label="catchPhrase" filled :rules="[
             (val) => !!val || 'Field is required',
             (val) =>
               val.length > 3 || 'Fields needs to be longer than 5 characters',
-          ]"
-          counter
-          maxlength="40"
-          lazy-rules
-        />
-        <q-input
-          type="text"
-          v-model="displayName"
-          label="displayName"
-          filled
-          :rules="[
+          ]" counter maxlength="40" lazy-rules />
+          <q-input type="text" v-model="displayName" label="displayName" filled :rules="[
             (val) => !!val || 'Field is required',
             (val) =>
               val.length > 3 || 'Fields needs to be longer than 5 characters',
-          ]"
-          lazy-rules
-          counter
-          maxlength="20"
-        />
-        <q-input
-          type="url"
-          v-model="photoURL"
-          label="photoURL"
-          filled
-          :rules="[
+          ]" lazy-rules counter maxlength="20" />
+          <q-input type="url" v-model="photoURL" label="photoURL" filled :rules="[
             (val) => !!val || 'Field is required',
             (val) =>
               val.length > 3 || 'Fields needs to be longer than 5 characters',
-          ]"
-          lazy-rules
-        />
-        <q-input
-          type="textarea"
-          v-model="about"
-          label="about"
-          filled
-          :rules="[
+          ]" lazy-rules />
+          <q-input type="textarea" v-model="about" label="about" filled :rules="[
             (val) => !!val || 'Field is required',
             (val) =>
               val.length > 3 || 'Fields needs to be longer than 5 characters',
-          ]"
-          lazy-rules
-          counter
-          maxlength="250"
-        />
-        <q-btn class="q-mt-md" color="primary" type="submit">Edit</q-btn>
-      </q-form>
+          ]" lazy-rules counter maxlength="250" />
+          <q-btn class="q-mt-md" color="primary" type="submit">Edit</q-btn>
+        </q-form>
+      </section>
+      <img v-if="refUser.photoURL" :src="refUser.photoURL" alt="profile picture" />
+      <img v-else src="https://i0.wp.com/ch-electrical.co.uk/wp-content/uploads/2022/04/6.-Man.png?fit=1984%2C2000&ssl=1"
+        alt="profile picture" />
     </section>
-    <img :src="refUser.photoURL" alt="profile picture" />
-  </section>
+  </div>
+  <div v-else>
+    <h1>No account (are you logged in?)</h1>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -149,6 +122,7 @@ img {
     grid-template-columns: auto;
     grid-auto-flow: dense;
   }
+
   img {
     width: 200px;
     border-radius: 100%;
@@ -156,7 +130,7 @@ img {
   }
 }
 
-.q-form > * {
+.q-form>* {
   margin-top: 0.5rem;
 }
 
