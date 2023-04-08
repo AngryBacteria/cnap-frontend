@@ -196,7 +196,7 @@ import { useSettingsStore } from 'stores/settingsStore';
 import { useFirebaseAuth } from 'vuefire';
 import { useRouter } from 'vue-router';
 import { signOut } from 'firebase/auth';
-import { Permissions } from 'src/data/CustomInterfaces';
+import { Permissions } from 'src/data/interfaces/CustomInterfaces';
 
 const store = useSettingsStore();
 const $q = useQuasar();
@@ -241,38 +241,38 @@ const accountLinks: NavigationLink[] = [
   },
 ];
 const leagueLinks: NavigationLink[] = [
-  {
-    title: 'Leaderboard',
-    caption: 'Leaderboard of CNAP-Players',
-    icon: 'leaderboard',
-    link: '/lol/leaderboard',
-  },
+  /*   {
+      title: 'Leaderboard',
+      caption: 'Leaderboard of CNAP-Players',
+      icon: 'leaderboard',
+      link: '/lol/leaderboard',
+    }, */
   {
     title: 'Summoners',
     caption: 'Summoners of CNAP',
     icon: 'groups',
     link: '/lol/summoners',
   },
-  {
-    title: 'Macthes',
-    caption: 'Matches of CNAP',
-    icon: 'sports_mma',
-    link: '/lol/matches',
-  },
+  /*   {
+      title: 'Macthes',
+      caption: 'Matches of CNAP',
+      icon: 'sports_mma',
+      link: '/lol/matches',
+    }, */
 ];
 const loreLinks: NavigationLink[] = [
-  {
-    title: 'Regions',
-    caption: 'Regions of Ruenterra',
-    icon: 'mdi-earth',
-    link: '/lore/regions',
-  },
-  {
-    title: 'Champions',
-    caption: 'Champions of Runeterra',
-    icon: 'mdi-account-cowboy-hat',
-    link: '/lol/champions',
-  },
+  /*   {
+      title: 'Regions',
+      caption: 'Regions of Ruenterra',
+      icon: 'mdi-earth',
+      link: '/lore/regions',
+    },
+    {
+      title: 'Champions',
+      caption: 'Champions of Runeterra',
+      icon: 'mdi-account-cowboy-hat',
+      link: '/lol/champions',
+    }, */
 ];
 const pnpLinks: NavigationLink[] = [
   {
@@ -290,18 +290,18 @@ const pnpLinks: NavigationLink[] = [
   },
 ];
 const lorLinks: NavigationLink[] = [
-  {
-    title: 'Cards',
-    caption: 'Cards of LoR',
-    icon: 'mdi-cards-playing-diamond',
-    link: '/lor/cards',
-  },
-  {
-    title: 'Decks',
-    caption: 'Decks of LoR',
-    icon: 'mdi-cards-playing',
-    link: '/lor/decks',
-  },
+  /*   {
+      title: 'Cards',
+      caption: 'Cards of LoR',
+      icon: 'mdi-cards-playing-diamond',
+      link: '/lor/cards',
+    },
+    {
+      title: 'Decks',
+      caption: 'Decks of LoR',
+      icon: 'mdi-cards-playing',
+      link: '/lor/decks',
+    }, */
 ];
 const leftDrawerOpen = ref(false);
 function toggleLeftDrawer() {

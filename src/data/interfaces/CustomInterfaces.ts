@@ -193,3 +193,11 @@ export interface LeagueItem {
   priceTotal: number;
   iconPath: string;
 }
+
+//https://static.developer.riotgames.com/docs/lol/queues.json
+export interface QueueDTO {
+  queueId: number;
+  map: string;
+  description: null | string;
+  notes: null | string;
+}

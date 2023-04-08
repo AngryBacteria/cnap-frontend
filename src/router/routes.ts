@@ -27,7 +27,11 @@ const routes: RouteRecordRaw[] = [
       //League of Legends
       {
         path: 'lol/summoners',
-        component: () => import('pages/League/SummonerOverview.vue'),
+        component: () => import('src/pages/League/SummonersOverview.vue'),
+      },
+      {
+        path: 'lol/summoners/:puuid',
+        component: () => import('src/pages/League/SummonerDetails.vue'),
       },
       {
         path: 'lol/match/:id',

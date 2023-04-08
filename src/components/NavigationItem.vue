@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { useCurrentUser } from 'vuefire';
 import { ref, watch } from 'vue';
-import { Permissions } from '../data/CustomInterfaces';
+import { Permissions } from '../data/interfaces/CustomInterfaces';
 
 export interface NavigationItemProps {
   title: string;

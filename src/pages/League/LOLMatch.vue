@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { useFetch } from '@vueuse/core';
-import { MatchDTO } from 'src/data/MatchInterfaces';
+import { MatchDTO } from 'src/data/interfaces/MatchInterfaces';
 import { watch, computed, ref } from 'vue';
 import RiotHelper from 'src/plugins/RiotHelper';
 import ParticipantTable from 'src/components/League/Match/ParticipantTable.vue';
@@ -35,7 +35,7 @@ const url = computed(() => {
   const matchId = Array.isArray(route.params.id)
     ? route.params.id[0]
     : route.params.id;
-  return `http://157.90.27.91:3000/api/v1/match/archive/id/${matchId}`;
+  return store.apiEndpoint + `/api/v1/match/archive/id/${matchId}`;
 });
 
 watch(

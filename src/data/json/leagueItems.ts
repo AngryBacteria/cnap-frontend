@@ -1,4 +1,4 @@
-import { LeagueItem } from '../CustomInterfaces';
+import { LeagueItem } from '../interfaces/CustomInterfaces';
 
 export const leagueItems: LeagueItem[] = [
   {

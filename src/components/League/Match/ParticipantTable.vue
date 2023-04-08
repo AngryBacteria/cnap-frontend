@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { Participant } from 'src/data/MatchInterfaces';
+import { Participant } from 'src/data/interfaces/MatchInterfaces';
 import { QTableProps } from 'quasar';
 import RiotHelper from 'src/plugins/RiotHelper';
 import { useSettingsStore } from 'stores/settingsStore';

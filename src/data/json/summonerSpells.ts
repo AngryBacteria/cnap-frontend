@@ -1,4 +1,4 @@
-import { SummonerSpell } from '../CustomInterfaces';
+import { SummonerSpell } from '../interfaces/CustomInterfaces';
 
 export const summonerSpells: SummonerSpell[] = [
   {

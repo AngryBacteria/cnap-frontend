@@ -1,4 +1,6 @@
+import { QueueDTO } from 'src/data/interfaces/CustomInterfaces';
 import { leagueItems } from 'src/data/json/leagueItems';
+import { queues } from 'src/data/json/queues';
 import { summonerSpells } from 'src/data/json/summonerSpells';
 
 export default class RiotHelper {
@@ -71,5 +73,9 @@ export default class RiotHelper {
         ?.toLowerCase()}`;
     }
     return this.getItemPlaceholder();
+  }
+
+  getQueueInfo(id: number): QueueDTO | undefined {
+    return queues.find((queue) => queue.queueId == id);
   }
 }

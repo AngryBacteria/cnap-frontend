@@ -166,7 +166,7 @@
 
 <script setup lang="ts">
 import RiotHelper from 'src/plugins/RiotHelper';
-import { Participant } from 'src/data/MatchInterfaces';
+import { Participant } from 'src/data/interfaces/MatchInterfaces';
 import { computed } from 'vue';
 import { useSettingsStore } from 'stores/settingsStore';
 
