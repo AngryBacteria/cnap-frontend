@@ -34,7 +34,6 @@ export default class RiotHelper {
 
     const item = leagueItems.find((item) => item.id === id);
 
-    console.log(item?.iconPath);
     if (item) {
       return `https://raw.communitydragon.org/latest/game/assets/items/icons2d/${item.iconPath
         .split('/')

@@ -1,8 +1,8 @@
 {
-  "name": "angryindex",
+  "name": "cnap",
   "version": "0.0.1",
-  "description": "angryIndex",
-  "productName": "angryIndex",
+  "description": "CNAP",
+  "productName": "CNAP",
   "author": "AngryBacteria@protonmail.ch",
   "private": true,
   "scripts": {

@@ -147,8 +147,8 @@ module.exports = configure(function (ctx) {
       // chainWebpackCustomSW (/* chain */) {},
 
       manifest: {
-        name: 'angryIndex',
-        short_name: 'angryIndex',
+        name: 'CNAP',
+        short_name: 'CNAP',
         description: '',
         display: 'standalone',
         orientation: 'portrait',
@@ -212,7 +212,7 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'angryindex',
+        appId: 'CNAP',
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
