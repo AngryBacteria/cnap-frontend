@@ -93,6 +93,7 @@ async function searchForSummoner() {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: center;
 }
 
 a {

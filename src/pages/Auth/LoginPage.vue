@@ -99,10 +99,12 @@ async function login() {
   margin: auto;
   max-width: 1000px;
 }
+
 h3 {
   margin-top: 0;
   margin-bottom: 1rem;
 }
+
 a {
   padding-left: 1rem;
 }

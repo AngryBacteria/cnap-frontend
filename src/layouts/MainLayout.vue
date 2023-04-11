@@ -281,13 +281,13 @@ const pnpLinks: NavigationLink[] = [
     icon: 'mdi-sword',
     link: '/pnp/dsa',
   },
-  {
-    title: 'SWN',
-    caption: 'Stars without Numbers',
-    icon: 'ion-planet',
-    link: '/pnp/swn',
-    permission: Permissions.SWN,
-  },
+  /*   {
+      title: 'SWN',
+      caption: 'Stars without Numbers',
+      icon: 'ion-planet',
+      link: '/pnp/swn',
+      permission: Permissions.SWN,
+    }, */
 ];
 const lorLinks: NavigationLink[] = [
   /*   {
