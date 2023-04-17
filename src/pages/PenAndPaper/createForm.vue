@@ -12,10 +12,10 @@ const name = ref('');
 // upload an image to the storage
 const storage = useFirebaseStorage();
 
-let fileRef = storageRef(storage, 'images/');
+let fileRef = storageRef(storage, 'pnp_characters/');
 
 watch(name, async (name) => {
-  fileRef = storageRef(storage, 'images/' + name);
+  fileRef = storageRef(storage, 'pnp_characters/' + name);
 });
 
 const framework = ref('');
