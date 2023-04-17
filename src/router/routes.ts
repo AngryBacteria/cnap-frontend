@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
       },
       //Tabletop
       {
-        path: '/pnp/dsa',
+        path: '/pnp/create',
         component: () => import('pages/PenAndPaper/createForm.vue'),
       },
     ],

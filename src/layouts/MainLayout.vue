@@ -276,10 +276,10 @@ const loreLinks: NavigationLink[] = [
 ];
 const pnpLinks: NavigationLink[] = [
   {
-    title: 'DSA',
-    caption: 'Das schwarze Auge',
+    title: 'Character Creator',
+    caption: 'create your character',
     icon: 'mdi-sword',
-    link: '/pnp/dsa',
+    link: '/pnp/create',
   },
   /*   {
       title: 'SWN',

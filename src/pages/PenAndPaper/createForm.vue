@@ -73,13 +73,15 @@ const { files, open } = useFileDialog();
       <!-- disable the form while uploading -->
       <fieldset  :disabled="!!uploadTask">
         <q-input
+          clearable
           type="text"
           v-model="name"
           label="Name"
           filled
           :rules="[(val) => !!val || 'Field is required']"
         />
-        <q-select v-model="framework" label="Framework" :options="frameworks" />
+        <q-select filled v-model="framework" label="Framework" :options="frameworks" />
+        <!--
         <button
           type="button"
           @click="open({ accept: 'image/*', multiple: false })"
@@ -89,10 +91,25 @@ const { files, open } = useFileDialog();
           </template>
           <template v-else> Select one picture </template>
         </button>
+        -->
 
         <br />
 
-        <button>Upload</button>
+        <q-file
+          clearable
+          filled
+          @click="open({ accept: 'image/*', multiple: false })"
+          label="Select One File"
+        >
+          <template v-if="files?.length === 1">
+            {{ files.item(0)!.name }}
+          </template>
+        </q-file>
+
+        <br />
+
+        <button class="submit">Upload</button>
+
       </fieldset>
     </q-form>
 
@@ -102,3 +119,16 @@ const { files, open } = useFileDialog();
 
   </q-card>
 </template>
+<style>
+
+.submit {
+  font-size: 1em;
+  outline: none;
+  border: none;
+  padding: 12px;
+  margin: 0 40% 0 40%;
+  border-radius: 5px;
+  width: 20%;
+}
+
+</style>
