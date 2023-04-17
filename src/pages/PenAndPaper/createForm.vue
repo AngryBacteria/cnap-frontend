@@ -7,11 +7,17 @@ import { ref, watch } from 'vue';
 import { firebaseApp } from 'boot/firebase';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 
+const name = ref('');
+
 // upload an image to the storage
 const storage = useFirebaseStorage();
-const fileRef = storageRef(storage, 'images/mountains.jpg');
 
-const name = ref('');
+let fileRef = storageRef(storage, 'images/');
+
+watch(name, async (name) => {
+  fileRef = storageRef(storage, 'images/' + name);
+});
+
 const framework = ref('');
 const frameworks = [
   'Das Schwarze Auge',
@@ -19,28 +25,28 @@ const frameworks = [
   'Stars Without Numbers',
 ];
 
-const db = getFirestore(firebaseApp);
-
 const {
-  url,
-  // firebase upload task
   uploadTask,
-  upload,
 } = useStorageFile(fileRef);
 
+const db = getFirestore(firebaseApp);
+
 async function submitFile() {
+
+  const {
+    url,
+    upload,
+  } = useStorageFile(fileRef);
+
   const data = files.value?.item(0);
   if (data) {
     upload(data);
   }
   watch(url, async (url) => {
-    const imageLink = url;
-    console.log(imageLink);
-
     await addDoc(collection(db, 'pnp_characters'), {
       name: name.value,
       framework: framework.value,
-      sheet: imageLink,
+      sheet: url,
     });
   });
 }
@@ -52,7 +58,7 @@ const { files, open } = useFileDialog();
   <q-card class="small" flat>
     <q-form @submit.prevent="submitFile">
       <!-- disable the form while uploading -->
-      <fieldset :disabled="!!uploadTask">
+      <fieldset  :disabled="!!uploadTask">
         <q-input
           type="text"
           v-model="name"
@@ -76,6 +82,10 @@ const { files, open } = useFileDialog();
         <button>Upload</button>
       </fieldset>
     </q-form>
+
+    <!--
     <q-img v-if="url" :src="url" />
+    -->
+
   </q-card>
 </template>
