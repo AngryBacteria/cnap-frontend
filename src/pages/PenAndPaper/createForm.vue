@@ -2,28 +2,29 @@
 // See https://vueuse.org/core/useFileDialog
 import { useFileDialog } from '@vueuse/core';
 import { ref as storageRef } from 'firebase/storage';
-import { useFirebaseStorage, useStorageFile } from 'vuefire';
+import {getCurrentUser, useFirebaseStorage, useStorageFile} from 'vuefire';
 import { ref, watch } from 'vue';
 import { firebaseApp } from 'boot/firebase';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 
-const name = ref('');
+const currentUser = await getCurrentUser()
 
 // upload an image to the storage
 const storage = useFirebaseStorage();
 
 let fileRef = storageRef(storage, 'pnp_characters/');
 
-watch(name, async (name) => {
-  fileRef = storageRef(storage, 'pnp_characters/' + name);
-});
-
+const name = ref('');
 const framework = ref('');
 const frameworks = [
   'Das Schwarze Auge',
   'Dungeons And Dragons',
   'Stars Without Numbers',
 ];
+
+watch(name, async (name) => {
+  fileRef = storageRef(storage, 'pnp_characters/' + name);
+});
 
 const {
   uploadTask,
@@ -42,13 +43,25 @@ async function submitFile() {
   if (data) {
     upload(data);
   }
-  watch(url, async (url) => {
-    await addDoc(collection(db, 'pnp_characters'), {
-      name: name.value,
-      framework: framework.value,
-      sheet: url,
+
+  if(currentUser){
+    watch(url, async (url) => {
+      await addDoc(collection(db, 'pnp_characters'), {
+        name: name.value,
+        framework: framework.value,
+        sheet: url,
+        creatorID: currentUser?.uid
+      });
     });
-  });
+  } else {
+    watch(url, async (url) => {
+      await addDoc(collection(db, 'pnp_characters'), {
+        name: name.value,
+        framework: framework.value,
+        sheet: url,
+      });
+    });
+  }
 }
 
 const { files, open } = useFileDialog();
