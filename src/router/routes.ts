@@ -42,6 +42,10 @@ const routes: RouteRecordRaw[] = [
         path: '/pnp/create',
         component: () => import('pages/PenAndPaper/createForm.vue'),
       },
+      {
+        path: '/pnp/:charid',
+        component: () => import('src/pages/PenAndPaper/CharacterDetails.vue'),
+      },
     ],
   },
 

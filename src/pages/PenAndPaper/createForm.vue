@@ -1,11 +1,14 @@
 <script setup lang="ts">
 // See https://vueuse.org/core/useFileDialog
-import { useFileDialog } from '@vueuse/core';
-import { ref as storageRef } from 'firebase/storage';
+import {useFileDialog} from '@vueuse/core';
+import {ref as storageRef} from 'firebase/storage';
 import {getCurrentUser, useFirebaseStorage, useStorageFile} from 'vuefire';
-import { ref, watch } from 'vue';
-import { firebaseApp } from 'boot/firebase';
-import { getFirestore, addDoc, collection } from 'firebase/firestore';
+import {ref, watch} from 'vue';
+import {firebaseApp} from 'boot/firebase';
+import {getFirestore, addDoc, collection} from 'firebase/firestore';
+import {useRouter} from 'vue-router';
+
+const router = useRouter();
 
 const currentUser = await getCurrentUser()
 
@@ -44,34 +47,39 @@ async function submitFile() {
     upload(data);
   }
 
-  if(currentUser){
+  if (currentUser) {
     watch(url, async (url) => {
-      await addDoc(collection(db, 'pnp_characters'), {
+      const docRef = await addDoc(collection(db, 'pnp_characters'), {
         name: name.value,
         framework: framework.value,
         sheet: url,
         creatorID: currentUser?.uid
       });
+      await router.push(`/pnp/${docRef.id}`)
     });
   } else {
     watch(url, async (url) => {
-      await addDoc(collection(db, 'pnp_characters'), {
+      const docRef = await addDoc(collection(db, 'pnp_characters'), {
         name: name.value,
         framework: framework.value,
         sheet: url,
       });
+      await router.push(`/pnp/${docRef.id}`)
     });
   }
+
+  // await router.push(`/pnp/${docRef.id}`)
+
 }
 
-const { files, open } = useFileDialog();
+const {files, open} = useFileDialog();
 </script>
 
 <template>
   <q-card class="small" flat>
     <q-form @submit.prevent="submitFile">
       <!-- disable the form while uploading -->
-      <fieldset  :disabled="!!uploadTask">
+      <fieldset :disabled="!!uploadTask">
         <q-input
           clearable
           type="text"
@@ -80,7 +88,7 @@ const { files, open } = useFileDialog();
           filled
           :rules="[(val) => !!val || 'Field is required']"
         />
-        <q-select filled v-model="framework" label="Framework" :options="frameworks" />
+        <q-select filled v-model="framework" label="Framework" :options="frameworks"/>
         <!--
         <button
           type="button"
@@ -93,7 +101,7 @@ const { files, open } = useFileDialog();
         </button>
         -->
 
-        <br />
+        <br/>
 
         <q-file
           clearable
@@ -106,7 +114,7 @@ const { files, open } = useFileDialog();
           </template>
         </q-file>
 
-        <br />
+        <br/>
 
         <button class="submit">Upload</button>
 
