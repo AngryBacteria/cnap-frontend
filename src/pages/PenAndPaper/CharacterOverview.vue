@@ -19,7 +19,7 @@ const characters = characterCollection.docs;
       <router-link :to="'/pnp/' + character.id">
         <q-card>
           <img
-            style="width: 200px"
+            style="width: 200px; height: 200px; object-fit: cover;"
             :src="character.data().sheet"
             alt=""/>
           <q-card-section>
