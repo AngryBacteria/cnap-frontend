@@ -31,6 +31,16 @@ const characters = characterCollection.docs;
   </div>
 </template>
 
-<style scoped>
+<style>
+.characters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
 
+a {
+  text-decoration: none;
+}
 </style>
