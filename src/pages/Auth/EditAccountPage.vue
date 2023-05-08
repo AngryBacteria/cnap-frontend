@@ -1,6 +1,17 @@
 <template>
   <div v-if="user">
-    <h3>{{ user.displayName }}</h3>
+    <h3>
+
+      {{ user.displayName }}
+
+      <q-badge
+        v-if="memberData.coreMember"
+        outline align="middle"
+        color="teal">
+        Core
+      </q-badge>
+
+    </h3>
     <h5 style="margin-top: 0px; margin-bottom: 0px">General Info</h5>
     <section class="settings-grid">
       <section>
