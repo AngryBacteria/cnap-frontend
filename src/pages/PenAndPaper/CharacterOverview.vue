@@ -2,18 +2,49 @@
 import {getFirestore} from 'firebase/firestore';
 import {firebaseApp} from 'boot/firebase';
 import {collection, getDocs} from 'firebase/firestore';
+import {computed, ref} from 'vue';
 
 const db = getFirestore(firebaseApp);
 
-const q = collection(db, 'pnp_characters');
+let q = collection(db, 'pnp_characters');
 
 const characterCollection = await getDocs(q);
 
-const characters = characterCollection.docs;
+
+const characterSearch = ref('');
+
+const characters = computed(() => {
+  return characterCollection.docs.filter((character) =>
+    character.data().name
+      ?.toLowerCase()
+      .includes(characterSearch.value.toLowerCase())
+  )
+});
+
+const loadingFlag = ref(false);
+
+async function searchForCharacters() {
+  console.log('ok')
+
+}
 
 </script>
 
 <template>
+
+  <div class="search">
+    <q-form @submit="searchForCharacters()" style="margin-bottom: 2rem">
+      <q-input
+        :loading="loadingFlag"
+        type="text"
+        v-model="characterSearch"
+        label="Search for a Character"
+        filled
+        lazy-rules
+      />
+    </q-form>
+  </div>
+
   <div v-if="characters" class="characters">
     <div v-for="character in characters" :key="character.id">
       <router-link :to="'/pnp/' + character.id">
@@ -24,6 +55,9 @@ const characters = characterCollection.docs;
             alt=""/>
           <q-card-section>
             <div class="text-h6">{{ character.data().name }}</div>
+            <div class="text-subtitle2">
+              {{ character.data().framework }}
+            </div>
           </q-card-section>
         </q-card>
       </router-link>
