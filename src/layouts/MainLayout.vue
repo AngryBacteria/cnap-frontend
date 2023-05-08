@@ -276,6 +276,12 @@ const loreLinks: NavigationLink[] = [
 ];
 const pnpLinks: NavigationLink[] = [
   {
+    title: 'Character Overview',
+    caption: 'All Characters',
+    icon: 'groups',
+    link: '/pnp/characters',
+  },
+  {
     title: 'Character Creator',
     caption: 'create your character',
     icon: 'mdi-sword',
