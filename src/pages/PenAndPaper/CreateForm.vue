@@ -36,7 +36,6 @@ const {
 const db = getFirestore(firebaseApp);
 
 async function submitFile() {
-
   const {
     url,
     upload,
