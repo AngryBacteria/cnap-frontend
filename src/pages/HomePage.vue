@@ -1,20 +1,30 @@
 <template>
-  <h1>Home</h1>
+  <q-img
+    class="banner"
+    src="https://placehold.co/1920x480"
+    alt="Character Image"
+  />
+
+  <h1 class="title">
+    The Boys
+  </h1>
 
   <div v-if="coreMembers" class="coreMembers">
     <div v-for="member in coreMembers" :key="member.data">
       <q-card>
 
-        <!--          <img-->
-        <!--            style="width: 200px; height: 200px; object-fit: cover;"-->
-        <!--            :src="member.data().sheet"-->
-        <!--            alt=""/>-->
+        <img
+          style="
+          width: 200px;
+          height: 200px;
+          object-fit: cover;
+          padding: 10px
+          "
+          :src="member.data().imageLink"
+          alt=""/>
 
         <q-card-section>
-          <div class="text-h6">{{ member.data().catchPhrase }}</div>
-          <div class="text-subtitle2">
-            {{ member.data().about }}
-          </div>
+          <div class="text-h6">{{ member.data().displayName }}</div>
         </q-card-section>
       </q-card>
     </div>
@@ -47,6 +57,15 @@ const coreMembers = computed(() => {
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
+}
+
+.banner {
+
+}
+
+.title {
+  font-size: 4rem;
+  text-align: center;
 }
 
 a {
