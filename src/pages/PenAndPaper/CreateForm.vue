@@ -14,8 +14,10 @@ const currentUser = await getCurrentUser()
 const storage = useFirebaseStorage();
 
 let fileRef = storageRef(storage, 'pnp_characters/');
+let fileRef2 = storageRef(storage, 'pnp_characters/');
 
-let file = ref(null)
+let sheet = ref(null)
+let image = ref(null)
 let name = ref('');
 let framework = ref('');
 const frameworks = [
@@ -25,7 +27,8 @@ const frameworks = [
 ];
 
 watch(name, async (name) => {
-  fileRef = storageRef(storage, 'pnp_characters/' + name);
+  fileRef = storageRef(storage, 'pnp_characters/' + name + 'Image');
+  fileRef2 = storageRef(storage, 'pnp_characters/' + name + 'Sheet');
 });
 
 const {
@@ -40,8 +43,11 @@ async function submitFile() {
     upload,
   } = useStorageFile(fileRef);
 
-  //const data = files.value?.item(0);
-  const data = file.value;
+  const data = image.value;
+  const data2 = sheet.value;
+  if (data2) {
+    upload(data2);
+  }
   if (data) {
     upload(data);
   }
@@ -71,7 +77,8 @@ async function submitFile() {
 function onReset () {
   name.value = ''
   framework.value = ''
-  file.value = null
+  image.value = null
+  sheet.value = null
 }
 
 </script>
@@ -102,7 +109,18 @@ function onReset () {
           clearable
           filled
           label="Select One Image"
-          v-model="file"
+          v-model="image"
+          accept=".jpg, image/*"
+        />
+
+        <br/>
+
+        <q-file
+          clearable
+          filled
+          label="Select One PDF (.pdf)"
+          v-model="sheet"
+          accept=".pdf"
         />
 
         <br/>
