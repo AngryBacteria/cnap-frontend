@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>
-      {{ charName }}
+      {{ name }}
     </h3>
     <h4>
       {{ framework }}
@@ -12,6 +12,7 @@
       style="max-width: 500px; height: 500px;"
       :fit="'contain'"
     />
+    <q-btn color="primary" label="Edit" @click="$router.push(`/pnp/edit/${charid}`)" />
   </div>
 </template>
 
@@ -26,7 +27,7 @@ const charid = route.params.charid;
 
 const db = getFirestore(firebaseApp);
 
-let charName = ''
+let name = ''
 let framework = ''
 let imageLink = ''
 
@@ -35,11 +36,12 @@ const character = await getDoc(doc(db, 'pnp_characters', charid));
 if (character.exists()) {
   const charData = character.data()
   console.log(charData)
-  charName = charData.name
+  name = charData.name
   framework = charData.framework
   imageLink = charData.sheet
 } else {
   alert('This Character doesn\'t exist!')
 }
+
 </script>
 

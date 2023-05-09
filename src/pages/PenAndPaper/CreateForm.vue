@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// See https://vueuse.org/core/useFileDialog
-import {useFileDialog} from '@vueuse/core';
 import {ref as storageRef} from 'firebase/storage';
 import {getCurrentUser, useFirebaseStorage, useStorageFile} from 'vuefire';
 import {ref, watch} from 'vue';
@@ -17,8 +15,9 @@ const storage = useFirebaseStorage();
 
 let fileRef = storageRef(storage, 'pnp_characters/');
 
-const name = ref('');
-const framework = ref('');
+let file = ref(null)
+let name = ref('');
+let framework = ref('');
 const frameworks = [
   'Das Schwarze Auge',
   'Dungeons And Dragons',
@@ -41,7 +40,8 @@ async function submitFile() {
     upload,
   } = useStorageFile(fileRef);
 
-  const data = files.value?.item(0);
+  //const data = files.value?.item(0);
+  const data = file.value;
   if (data) {
     upload(data);
   }
@@ -66,17 +66,19 @@ async function submitFile() {
       await router.push(`/pnp/${docRef.id}`)
     });
   }
-
-  // await router.push(`/pnp/${docRef.id}`)
-
 }
 
-const {files, open} = useFileDialog();
+function onReset () {
+  name.value = ''
+  framework.value = ''
+  file.value = null
+}
+
 </script>
 
 <template>
   <q-card class="small" flat>
-    <q-form @submit.prevent="submitFile">
+    <q-form @submit.prevent="submitFile" @reset="onReset">
       <!-- disable the form while uploading -->
       <fieldset :disabled="!!uploadTask">
         <q-input
@@ -87,55 +89,35 @@ const {files, open} = useFileDialog();
           filled
           :rules="[(val) => !!val || 'Field is required']"
         />
-        <q-select filled v-model="framework" label="Framework" :options="frameworks"/>
-        <!--
-        <button
-          type="button"
-          @click="open({ accept: 'image/*', multiple: false })"
-        >
-          <template v-if="files?.length === 1">
-            Selected file: {{ files.item(0)!.name }} (Click to select another)
-          </template>
-          <template v-else> Select one picture </template>
-        </button>
-        -->
+        <q-select
+          filled
+          v-model="framework"
+          label="Framework"
+          :options="frameworks"
+        />
 
         <br/>
 
         <q-file
           clearable
           filled
-          @click="open({ accept: 'image/*', multiple: false })"
-          label="Select One File"
-        >
-          <template v-if="files?.length === 1">
-            {{ files.item(0)!.name }}
-          </template>
-        </q-file>
+          label="Select One Image"
+          v-model="file"
+        />
 
         <br/>
 
-        <button class="submit">Upload</button>
+        <q-btn type="submit" color="primary" label="Submit" />
+        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
 
       </fieldset>
     </q-form>
-
-    <!--
-    <q-img v-if="url" :src="url" />
-    -->
-
   </q-card>
 </template>
 <style>
 
-.submit {
-  font-size: 1em;
-  outline: none;
+fieldset {
   border: none;
-  padding: 12px;
-  margin: 0 40% 0 40%;
-  border-radius: 5px;
-  width: 20%;
+  padding-top: 15px;
 }
-
 </style>
