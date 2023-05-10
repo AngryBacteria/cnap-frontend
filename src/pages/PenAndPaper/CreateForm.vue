@@ -1,109 +1,3 @@
-<script setup lang="ts">
-import {ref as storageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
-import {getCurrentUser, useFirebaseStorage, useStorageFile} from 'vuefire';
-import {ref, watch} from 'vue';
-import {firebaseApp} from 'boot/firebase';
-import {getFirestore, addDoc, collection} from 'firebase/firestore';
-import {useRouter} from 'vue-router';
-
-const router = useRouter();
-
-const currentUser = await getCurrentUser()
-
-// upload an image to the storage
-const storage = useFirebaseStorage();
-
-let fileRef = storageRef(storage, 'pnp_characters/');
-let fileRef2 = storageRef(storage, 'pnp_characters/');
-
-let sheet = ref(null)
-let image = ref(null)
-let name = ref('');
-let framework = ref('');
-const frameworks = [
-  'Das Schwarze Auge',
-  'Dungeons And Dragons',
-  'Stars Without Numbers',
-];
-
-let sheetLink = ref('');
-
-watch(name, async (name) => {
-  fileRef = storageRef(storage, 'pnp_characters/' + name + 'Image');
-  fileRef2 = storageRef(storage, 'pnp_characters/' + name + 'Sheet');
-});
-
-const {
-  uploadTask,
-} = useStorageFile(fileRef);
-
-const db = getFirestore(firebaseApp);
-
-async function submitFile() {
-  const {
-    url,
-    upload,
-  } = useStorageFile(fileRef);
-
-  const data = image.value;
-  const data2 = sheet.value;
-
-  // Still needed because of watcher on url. in Progress to get removed
-  if (data) {
-    upload(data);
-  }
-
-  /*
-
-  if (data) {
-    uploadBytes(fileRef2, data).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-    });
-  }
-
-   */
-
-  if (data2) {
-    uploadBytes(fileRef2, data2).then(() => {
-      getDownloadURL(fileRef2).then(function (result) {
-        sheetLink.value = result;
-      });
-    });
-  }
-
-  if (currentUser) {
-    watch(url, async (url) => {
-      const docRef = await addDoc(collection(db, 'pnp_characters'), {
-        name: name.value,
-        framework: framework.value,
-        sheetLink: sheetLink.value,
-        imageLink: url,
-        creatorID: currentUser?.uid
-      });
-      await router.push(`/pnp/${docRef.id}`)
-    });
-  } else {
-    watch(url, async (url) => {
-      const docRef = await addDoc(collection(db, 'pnp_characters'), {
-        name: name.value,
-        framework: framework.value,
-        sheetLink: sheetLink.value,
-        imageLink: url,
-      });
-      await router.push(`/pnp/${docRef.id}`)
-    });
-  }
-}
-
-function onReset() {
-  name.value = ''
-  framework.value = ''
-  image.value = null
-  sheet.value = null
-}
-
-</script>
-
 <template>
   <q-card class="small" flat>
     <q-form @submit.prevent="submitFile" @reset="onReset">
@@ -153,6 +47,116 @@ function onReset() {
     </q-form>
   </q-card>
 </template>
+
+<script setup lang="ts">
+import {ref as storageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
+import {getCurrentUser, useFirebaseStorage, useStorageFile} from 'vuefire';
+import {ref, watch} from 'vue';
+import {firebaseApp} from 'boot/firebase';
+import {getFirestore, addDoc, collection} from 'firebase/firestore';
+import {useRouter} from 'vue-router';
+
+// General Variables
+const router = useRouter();
+const currentUser = await getCurrentUser()
+const storage = useFirebaseStorage();
+const db = getFirestore(firebaseApp);
+
+// File References for to be uploaded files
+let fileRef = storageRef(storage, 'pnp_characters/');
+let fileRef2 = storageRef(storage, 'pnp_characters/');
+const {uploadTask} = useStorageFile(fileRef);
+
+// Variables for storing selected Files
+let sheet = ref(null)
+let image = ref(null)
+
+// Variables for Firestore entry
+let name = ref('');
+let framework = ref('');
+let sheetLink = ref('');
+const frameworks = [
+  'Das Schwarze Auge',
+  'Dungeons And Dragons',
+  'Stars Without Numbers',
+];
+
+// update fileRefs to match the name of the character
+watch(name, async (name) => {
+  fileRef = storageRef(storage, 'pnp_characters/' + name + 'Image');
+  fileRef2 = storageRef(storage, 'pnp_characters/' + name + 'Sheet');
+});
+
+async function submitFile() {
+  const {
+    url,
+    upload,
+  } = useStorageFile(fileRef);
+
+  const data = image.value;
+  const data2 = sheet.value;
+
+  // Still needed because of watcher on url. in Progress to get removed
+  if (data) {
+    upload(data);
+  }
+
+  /*
+
+  if (data) {
+    uploadBytes(fileRef2, data).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+    });
+  }
+
+   */
+
+  if (data2) {
+    uploadBytes(fileRef2, data2).then(() => {
+      getDownloadURL(fileRef2).then(function (result) {
+        sheetLink.value = result;
+      });
+    });
+  }
+
+  // Check if the character was created by a user or not
+  if (currentUser) {
+    // watch for the url to change to indicate the finished upload
+    watch(url, async (url) => {
+      // add a doc to Firestore with all the available info
+      const docRef = await addDoc(collection(db, 'pnp_characters'), {
+        name: name.value,
+        framework: framework.value,
+        sheetLink: sheetLink.value,
+        imageLink: url,
+        creatorID: currentUser?.uid
+      });
+      await router.push(`/pnp/${docRef.id}`)
+    });
+  } else {
+    // if the character wasn't created by a user there is no creatorID saved
+    watch(url, async (url) => {
+      const docRef = await addDoc(collection(db, 'pnp_characters'), {
+        name: name.value,
+        framework: framework.value,
+        sheetLink: sheetLink.value,
+        imageLink: url,
+      });
+      await router.push(`/pnp/${docRef.id}`)
+    });
+  }
+}
+
+// clear the form
+function onReset() {
+  name.value = ''
+  framework.value = ''
+  image.value = null
+  sheet.value = null
+}
+
+</script>
+
 <style>
 
 fieldset {

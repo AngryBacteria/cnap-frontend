@@ -1,55 +1,3 @@
-<script setup lang="ts">
-import {useRoute} from 'vue-router';
-import {doc, getDoc, getFirestore, setDoc} from 'firebase/firestore';
-import {firebaseApp} from 'boot/firebase';
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
-
-const router = useRouter();
-
-const route = useRoute();
-
-const charid = route.params.charid;
-
-const db = getFirestore(firebaseApp);
-
-let name = ref('')
-let framework = ref('')
-let imageLink = ref('')
-let image = ref(null)
-let sheet = ref(null)
-
-const frameworks = [
-  'Das Schwarze Auge',
-  'Dungeons And Dragons',
-  'Stars Without Numbers',
-];
-
-// Geht trotz Error
-const character = await getDoc(doc(db, 'pnp_characters', charid));
-if (character.exists()) {
-  const charData = character.data()
-  console.log(charData)
-  name.value = charData.name
-  framework.value = charData.framework
-  imageLink.value = charData.sheet
-} else {
-  alert('This Character doesn\'t exist!')
-}
-
-async function editCharacter(){
-
-
-  await setDoc(doc(db, 'pnp_characters', charid), {
-    name: name.value,
-    framework: framework.value,
-  }, {
-    merge: true,
-  })
-  await router.push(`/pnp/${charid}`)
-}
-</script>
-
 <template>
   <div class="settings">
     <q-card class="small" flat>
@@ -106,6 +54,55 @@ async function editCharacter(){
     />
   </div>
 </template>
+
+<script setup lang="ts">
+import {useRoute} from 'vue-router';
+import {doc, getDoc, getFirestore, setDoc} from 'firebase/firestore';
+import {firebaseApp} from 'boot/firebase';
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
+
+// General Variables
+const router = useRouter();
+const route = useRoute();
+const charid = route.params.charid;
+const db = getFirestore(firebaseApp);
+
+// Variables used for Firestore entry
+let name = ref('')
+let framework = ref('')
+let imageLink = ref('')
+let image = ref(null)
+let sheet = ref(null)
+const frameworks = [
+  'Das Schwarze Auge',
+  'Dungeons And Dragons',
+  'Stars Without Numbers',
+];
+
+// Geht trotz Error
+// Get Doc to fill the form with already existing data
+const character = await getDoc(doc(db, 'pnp_characters', charid));
+if (character.exists()) {
+  const charData = character.data()
+  name.value = charData.name
+  framework.value = charData.framework
+  imageLink.value = charData.sheet
+} else {
+  alert('This Character doesn\'t exist!')
+}
+
+async function editCharacter() {
+  // updates values for name and framework. Files cant be changed yet
+  await setDoc(doc(db, 'pnp_characters', charid), {
+    name: name.value,
+    framework: framework.value,
+  }, {
+    merge: true,
+  })
+  await router.push(`/pnp/${charid}`)
+}
+</script>
 
 <style scoped>
 

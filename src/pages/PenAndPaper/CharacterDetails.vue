@@ -29,7 +29,7 @@
     />
 
     <a>
-      Character Sheet : {{sheetLink}}
+      Character Sheet : {{ sheetLink }}
     </a>
   </div>
 </template>
@@ -40,46 +40,45 @@ import {doc, getDoc, getFirestore, deleteDoc} from 'firebase/firestore';
 import {firebaseApp} from 'boot/firebase';
 import {getCurrentUser} from 'vuefire';
 import {getStorage, ref as storageRef, deleteObject} from 'firebase/storage';
+import {ref} from 'vue';
 
+// General Variables
 const storage = getStorage();
-
-
 const route = useRoute();
-
 const charid = route.params.charid;
-
 const currentUser = await getCurrentUser()
 const currentUserID = currentUser?.uid
 let userIsCreator = false;
-
 const db = getFirestore(firebaseApp);
 
-let name = ''
-let framework = ''
-let imageLink = ''
-let sheetLink = ''
+// Variables from Firestore entry
+let name = ref('')
+let framework = ref('')
+let imageLink = ref('')
+let sheetLink = ref('')
 
 // Geht trotz Error
+// Get Doc and values to display
 const character = await getDoc(doc(db, 'pnp_characters', charid));
 if (character.exists()) {
   const charData = character.data()
-  name = charData.name
-  framework = charData.framework
-  imageLink = charData.imageLink
-  sheetLink = charData.sheetLink
+  name.value = charData.name
+  framework.value = charData.framework
+  imageLink.value = charData.imageLink
+  sheetLink.value = charData.sheetLink
   if (character.data().creatorID == '') {
     userIsCreator = true;
   } else {
     userIsCreator = (currentUserID == character.data().creatorID)
   }
-
 } else {
   alert('This Character doesn\'t exist!')
 }
 
+// deletes the Firestore entry of character. Doesn't delete files attached to it (WIP)
 async function deleteCharacter() {
   await deleteDoc(doc(db, 'pnp_characters', charid));
-  const desertRef = storageRef(storage, 'pnp_characters/' + name);
+  const desertRef = storageRef(storage, 'pnp_characters/' + name.value);
   deleteObject(desertRef).then(() => {
     // File deleted successfully
   }).catch((error) => {

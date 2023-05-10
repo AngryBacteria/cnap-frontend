@@ -1,35 +1,3 @@
-<script setup lang="ts">
-import {getFirestore} from 'firebase/firestore';
-import {firebaseApp} from 'boot/firebase';
-import {collection, getDocs} from 'firebase/firestore';
-import {computed, ref} from 'vue';
-
-const db = getFirestore(firebaseApp);
-
-let q = collection(db, 'pnp_characters');
-
-const characterCollection = await getDocs(q);
-
-
-const characterSearch = ref('');
-
-const characters = computed(() => {
-  return characterCollection.docs.filter((character) =>
-    character.data().name
-      ?.toLowerCase()
-      .includes(characterSearch.value.toLowerCase())
-  )
-});
-
-const loadingFlag = ref(false);
-
-async function searchForCharacters() {
-  console.log('ok')
-
-}
-
-</script>
-
 <template>
 
   <div class="search">
@@ -64,6 +32,35 @@ async function searchForCharacters() {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import {getFirestore} from 'firebase/firestore';
+import {firebaseApp} from 'boot/firebase';
+import {collection, getDocs} from 'firebase/firestore';
+import {computed, ref} from 'vue';
+
+// General Variables
+const db = getFirestore(firebaseApp);
+let q = collection(db, 'pnp_characters');
+const characterCollection = await getDocs(q);
+const loadingFlag = ref(false);
+const characterSearch = ref('');
+
+// Filters every character to match search in searchbar
+const characters = computed(() => {
+  return characterCollection.docs.filter((character) =>
+    character.data().name
+      ?.toLowerCase()
+      .includes(characterSearch.value.toLowerCase())
+  )
+});
+
+// directly search and open without clicking (WIP)
+async function searchForCharacters() {
+  console.log('ok')
+}
+
+</script>
 
 <style>
 .characters {
