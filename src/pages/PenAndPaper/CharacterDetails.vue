@@ -12,18 +12,25 @@
       style="max-width: 500px; height: 500px;"
       :fit="'contain'"
     />
+
     <q-btn
       v-if="userIsCreator"
       color="primary"
       label="Edit"
       @click="$router.push(`/pnp/edit/${charid}`)"
     />
+
     <q-btn
+      v-if="userIsCreator"
       @click="deleteCharacter()"
       style="margin-left: auto; margin-right: 1rem"
       color="red"
       label="Delete"
     />
+
+    <a>
+      Character Sheet : {{sheetLink}}
+    </a>
   </div>
 </template>
 
@@ -32,7 +39,7 @@ import {useRoute} from 'vue-router';
 import {doc, getDoc, getFirestore, deleteDoc} from 'firebase/firestore';
 import {firebaseApp} from 'boot/firebase';
 import {getCurrentUser} from 'vuefire';
-import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
+import {getStorage, ref as storageRef, deleteObject} from 'firebase/storage';
 
 const storage = getStorage();
 
@@ -50,6 +57,7 @@ const db = getFirestore(firebaseApp);
 let name = ''
 let framework = ''
 let imageLink = ''
+let sheetLink = ''
 
 // Geht trotz Error
 const character = await getDoc(doc(db, 'pnp_characters', charid));
@@ -57,8 +65,9 @@ if (character.exists()) {
   const charData = character.data()
   name = charData.name
   framework = charData.framework
-  imageLink = charData.sheet
-  if(character.data().creatorID == ''){
+  imageLink = charData.imageLink
+  sheetLink = charData.sheetLink
+  if (character.data().creatorID == '') {
     userIsCreator = true;
   } else {
     userIsCreator = (currentUserID == character.data().creatorID)
@@ -68,7 +77,7 @@ if (character.exists()) {
   alert('This Character doesn\'t exist!')
 }
 
-async function deleteCharacter(){
+async function deleteCharacter() {
   await deleteDoc(doc(db, 'pnp_characters', charid));
   const desertRef = storageRef(storage, 'pnp_characters/' + name);
   deleteObject(desertRef).then(() => {
@@ -78,7 +87,6 @@ async function deleteCharacter(){
     // Uh-oh, an error occurred!
   });
 }
-
 
 </script>
 

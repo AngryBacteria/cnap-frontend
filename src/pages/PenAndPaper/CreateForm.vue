@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref as storageRef} from 'firebase/storage';
+import {ref as storageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
 import {getCurrentUser, useFirebaseStorage, useStorageFile} from 'vuefire';
 import {ref, watch} from 'vue';
 import {firebaseApp} from 'boot/firebase';
@@ -26,6 +26,8 @@ const frameworks = [
   'Stars Without Numbers',
 ];
 
+let sheetLink = ref('');
+
 watch(name, async (name) => {
   fileRef = storageRef(storage, 'pnp_characters/' + name + 'Image');
   fileRef2 = storageRef(storage, 'pnp_characters/' + name + 'Sheet');
@@ -45,11 +47,28 @@ async function submitFile() {
 
   const data = image.value;
   const data2 = sheet.value;
-  if (data2) {
-    upload(data2);
-  }
+
+  // Still needed because of watcher on url. in Progress to get removed
   if (data) {
     upload(data);
+  }
+
+  /*
+
+  if (data) {
+    uploadBytes(fileRef2, data).then((snapshot) => {
+      console.log('Uploaded a blob or file!');
+    });
+  }
+
+   */
+
+  if (data2) {
+    uploadBytes(fileRef2, data2).then(() => {
+      getDownloadURL(fileRef2).then(function (result) {
+        sheetLink.value = result;
+      });
+    });
   }
 
   if (currentUser) {
@@ -57,7 +76,8 @@ async function submitFile() {
       const docRef = await addDoc(collection(db, 'pnp_characters'), {
         name: name.value,
         framework: framework.value,
-        sheet: url,
+        sheetLink: sheetLink.value,
+        imageLink: url,
         creatorID: currentUser?.uid
       });
       await router.push(`/pnp/${docRef.id}`)
@@ -67,14 +87,15 @@ async function submitFile() {
       const docRef = await addDoc(collection(db, 'pnp_characters'), {
         name: name.value,
         framework: framework.value,
-        sheet: url,
+        sheetLink: sheetLink.value,
+        imageLink: url,
       });
       await router.push(`/pnp/${docRef.id}`)
     });
   }
 }
 
-function onReset () {
+function onReset() {
   name.value = ''
   framework.value = ''
   image.value = null
@@ -125,8 +146,8 @@ function onReset () {
 
         <br/>
 
-        <q-btn type="submit" color="primary" label="Submit" />
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+        <q-btn type="submit" color="primary" label="Submit"/>
+        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"/>
 
       </fieldset>
     </q-form>
