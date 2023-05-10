@@ -51,7 +51,7 @@ async function searchForCharacters() {
         <q-card>
           <img
             style="width: 200px; height: 200px; object-fit: cover;"
-            :src="character.data().sheet"
+            :src="character.data().imageLink"
             alt=""/>
           <q-card-section>
             <div class="text-h6">{{ character.data().name }}</div>
