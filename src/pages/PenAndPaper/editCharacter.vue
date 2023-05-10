@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import {useRoute} from 'vue-router';
-import {doc, getDoc, getFirestore} from 'firebase/firestore';
+import {doc, getDoc, getFirestore, setDoc} from 'firebase/firestore';
 import {firebaseApp} from 'boot/firebase';
 import {ref} from 'vue';
+import {useRouter} from 'vue-router';
+
+const router = useRouter();
 
 const route = useRoute();
 
@@ -10,10 +13,11 @@ const charid = route.params.charid;
 
 const db = getFirestore(firebaseApp);
 
-let name = ''
-let framework = ''
-let imageLink = ''
-let file = ref(null)
+let name = ref('')
+let framework = ref('')
+let imageLink = ref('')
+let image = ref(null)
+let sheet = ref(null)
 
 const frameworks = [
   'Das Schwarze Auge',
@@ -26,11 +30,23 @@ const character = await getDoc(doc(db, 'pnp_characters', charid));
 if (character.exists()) {
   const charData = character.data()
   console.log(charData)
-  name = charData.name
-  framework = charData.framework
-  imageLink = charData.sheet
+  name.value = charData.name
+  framework.value = charData.framework
+  imageLink.value = charData.sheet
 } else {
   alert('This Character doesn\'t exist!')
+}
+
+async function editCharacter(){
+
+
+  await setDoc(doc(db, 'pnp_characters', charid), {
+    name: name.value,
+    framework: framework.value,
+  }, {
+    merge: true,
+  })
+  await router.push(`/pnp/${charid}`)
 }
 </script>
 
@@ -38,7 +54,7 @@ if (character.exists()) {
   <div class="settings">
     <q-card class="small" flat>
       <fieldset>
-        <q-form>
+        <q-form @submit.prevent="editCharacter">
           <q-input
             clearable
             type="text"
@@ -54,11 +70,23 @@ if (character.exists()) {
             :options="frameworks"
           />
           <br/>
+
           <q-file
             clearable
             filled
             label="Select One Image"
-            v-model="file"
+            v-model="image"
+            accept=".jpg, image/*"
+          />
+
+          <br/>
+
+          <q-file
+            clearable
+            filled
+            label="Select One PDF (.pdf)"
+            v-model="sheet"
+            accept=".pdf"
           />
 
           <br/>
