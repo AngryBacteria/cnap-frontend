@@ -87,7 +87,7 @@ if (character.exists()) {
   const charData = character.data()
   name.value = charData.name
   framework.value = charData.framework
-  imageLink.value = charData.sheet
+  imageLink.value = charData.imageLink
 } else {
   alert('This Character doesn\'t exist!')
 }
