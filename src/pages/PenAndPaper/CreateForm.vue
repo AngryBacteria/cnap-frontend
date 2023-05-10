@@ -11,11 +11,32 @@
           filled
           :rules="[(val) => !!val || 'Field is required']"
         />
+
+        <q-input
+          clearable
+          type="text"
+          v-model="charClass"
+          label="Class"
+          filled
+          :rules="[(val) => !!val || 'Field is required']"
+        />
+
         <q-select
           filled
           v-model="framework"
           label="Framework"
           :options="frameworks"
+        />
+
+        <br/>
+
+        <q-input
+          clearable
+          type="text"
+          v-model="backstory"
+          label="Backstory"
+          filled
+          autogrow
         />
 
         <br/>
@@ -41,7 +62,7 @@
         <br/>
 
         <q-btn type="submit" color="primary" label="Submit"/>
-        <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"/>
+        <q-btn type="reset" color="primary" label="Reset" flat class="q-ml-sm"/>
 
       </fieldset>
     </q-form>
@@ -55,6 +76,7 @@ import {ref, watch} from 'vue';
 import {firebaseApp} from 'boot/firebase';
 import {getFirestore, addDoc, collection} from 'firebase/firestore';
 import {useRouter} from 'vue-router';
+import {biBarChart} from '@quasar/extras/bootstrap-icons';
 
 // General Variables
 const router = useRouter();
@@ -73,8 +95,10 @@ let image = ref(null)
 
 // Variables for Firestore entry
 let name = ref('');
+let charClass = ref('');
 let framework = ref('');
 let sheetLink = ref('');
+let backstory = ref('')
 const frameworks = [
   'Das Schwarze Auge',
   'Dungeons And Dragons',
@@ -96,6 +120,13 @@ async function submitFile() {
   const data = image.value;
   const data2 = sheet.value;
 
+  if (data2) {
+    uploadBytes(fileRef2, data2).then(() => {
+      getDownloadURL(fileRef2).then(function (result) {
+        sheetLink.value = result;
+      });
+    });
+  }
   // Still needed because of watcher on url. in Progress to get removed
   if (data) {
     upload(data);
@@ -111,14 +142,6 @@ async function submitFile() {
 
    */
 
-  if (data2) {
-    uploadBytes(fileRef2, data2).then(() => {
-      getDownloadURL(fileRef2).then(function (result) {
-        sheetLink.value = result;
-      });
-    });
-  }
-
   // Check if the character was created by a user or not
   if (currentUser) {
     // watch for the url to change to indicate the finished upload
@@ -126,10 +149,12 @@ async function submitFile() {
       // add a doc to Firestore with all the available info
       const docRef = await addDoc(collection(db, 'pnp_characters'), {
         name: name.value,
+        class: charClass.value,
         framework: framework.value,
         sheetLink: sheetLink.value,
         imageLink: url,
-        creatorID: currentUser?.uid
+        creatorID: currentUser?.uid,
+        backstory: backstory.value,
       });
       await router.push(`/pnp/${docRef.id}`)
     });
@@ -138,9 +163,11 @@ async function submitFile() {
     watch(url, async (url) => {
       const docRef = await addDoc(collection(db, 'pnp_characters'), {
         name: name.value,
+        class: charClass.value,
         framework: framework.value,
         sheetLink: sheetLink.value,
         imageLink: url,
+        backstory: backstory.value,
       });
       await router.push(`/pnp/${docRef.id}`)
     });
@@ -150,7 +177,9 @@ async function submitFile() {
 // clear the form
 function onReset() {
   name.value = ''
+  charClass.value = ''
   framework.value = ''
+  backstory.value = ''
   image.value = null
   sheet.value = null
 }
