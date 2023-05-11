@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="character.exists()">
     <h3>
       {{ name }}
     </h3>
@@ -42,6 +42,7 @@ import {getCurrentUser} from 'vuefire';
 import {getStorage, ref as storageRef, deleteObject} from 'firebase/storage';
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
+import {Notify} from 'quasar';
 
 // General Variables
 const router = useRouter();
@@ -74,7 +75,12 @@ if (character.exists()) {
     userIsCreator = (currentUserID == character.data().creatorID)
   }
 } else {
-  alert('This Character doesn\'t exist!')
+  Notify.create({
+    message: 'This Character doesn\'t exist',
+    color: 'red',
+    position: 'top',
+    icon: 'mdi-close-octagon-outline',
+  });
 }
 
 // deletes the Firestore entry of character. Doesn't delete files attached to it (WIP)

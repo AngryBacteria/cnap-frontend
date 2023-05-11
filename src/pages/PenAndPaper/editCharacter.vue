@@ -101,6 +101,7 @@ import {ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {getDownloadURL, ref as storageRef, uploadBytes} from 'firebase/storage';
 import {getCurrentUser, useFirebaseStorage} from 'vuefire';
+import {Notify} from 'quasar';
 
 // General Variables
 const currentUser = await getCurrentUser()
@@ -141,19 +142,13 @@ if (character.exists()) {
   backstory.value = charData.backstory
   description.value = charData.description
 } else {
-  alert('This Character doesn\'t exist!')
+  Notify.create({
+    message: 'This Character doesn\'t exist',
+    color: 'red',
+    position: 'top',
+    icon: 'mdi-close-octagon-outline',
+  });
 }
-
-/*
-      name: name.value,
-      class: charClass.value,
-      framework: framework.value,
-      sheetLink: sheetLink.value,
-      imageLink: imageLink.value,
-      creatorID: currentUser?.uid,
-      backstory: backstory.value,
-      description: description.value,
- */
 
 async function editCharacter() {
 
