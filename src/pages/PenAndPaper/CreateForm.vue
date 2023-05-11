@@ -1,7 +1,6 @@
 <template>
   <q-card class="small" flat>
     <q-form @submit.prevent="submitCharacter" @reset="onReset">
-      <!-- disable the form while uploading -->
       <fieldset>
         <q-input
           clearable
