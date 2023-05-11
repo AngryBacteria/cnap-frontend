@@ -29,6 +29,15 @@
           :rules="[(val) => !!val || 'Field is required']"
         />
 
+        <q-input
+          clearable
+          type="text"
+          v-model="description"
+          label="Personal Description"
+          filled
+          autogrow
+        />
+
         <br/>
 
         <q-input
@@ -48,7 +57,11 @@
           label="Select One Image"
           v-model="image"
           accept=".jpg, image/*"
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="attach_file"/>
+          </template>
+        </q-file>
 
         <br/>
 
@@ -58,7 +71,11 @@
           label="Select One PDF (.pdf)"
           v-model="sheet"
           accept=".pdf"
-        />
+        >
+          <template v-slot:prepend>
+            <q-icon name="attach_file"/>
+          </template>
+        </q-file>
 
         <br/>
 
@@ -90,6 +107,7 @@ let image = ref(null)
 
 // Variables for Firestore entry
 let name = ref('');
+let description = ref('');
 let charClass = ref('');
 let framework = ref('');
 let sheetLink = ref('');
@@ -115,6 +133,7 @@ async function submitCharacter() {
       imageLink: imageLink.value,
       creatorID: currentUser?.uid,
       backstory: backstory.value,
+      description: description.value,
     });
 
     const data = image.value;
@@ -163,6 +182,7 @@ async function submitCharacter() {
       sheetLink: sheetLink.value,
       imageLink: imageLink.value,
       backstory: backstory.value,
+      description: description.value,
     });
 
     const data = image.value;
@@ -205,6 +225,7 @@ function onReset() {
   charClass.value = ''
   framework.value = ''
   backstory.value = ''
+  description.value = ''
   image.value = null
   sheet.value = null
 }
