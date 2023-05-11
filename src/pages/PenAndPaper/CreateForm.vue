@@ -1,8 +1,8 @@
 <template>
   <q-card class="small" flat>
-    <q-form @submit.prevent="submitFile" @reset="onReset">
+    <q-form @submit.prevent="submitCharacter" @reset="onReset">
       <!-- disable the form while uploading -->
-      <fieldset :disabled="!!uploadTask">
+      <fieldset>
         <q-input
           clearable
           type="text"
@@ -26,6 +26,7 @@
           v-model="framework"
           label="Framework"
           :options="frameworks"
+          :rules="[(val) => !!val || 'Field is required']"
         />
 
         <br/>
@@ -71,10 +72,10 @@
 
 <script setup lang="ts">
 import {ref as storageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
-import {getCurrentUser, useFirebaseStorage, useStorageFile} from 'vuefire';
-import {ref, watch} from 'vue';
+import {getCurrentUser, useFirebaseStorage} from 'vuefire';
+import {ref} from 'vue';
 import {firebaseApp} from 'boot/firebase';
-import {getFirestore, addDoc, collection} from 'firebase/firestore';
+import {getFirestore, addDoc, collection, setDoc, doc} from 'firebase/firestore';
 import {useRouter} from 'vue-router';
 
 // General Variables
@@ -82,11 +83,6 @@ const router = useRouter();
 const currentUser = await getCurrentUser()
 const storage = useFirebaseStorage();
 const db = getFirestore(firebaseApp);
-
-// File References for to be uploaded files
-let fileRef = storageRef(storage, 'pnp_characters/');
-let fileRef2 = storageRef(storage, 'pnp_characters/');
-const {uploadTask} = useStorageFile(fileRef);
 
 // Variables for storing selected Files
 let sheet = ref(null)
@@ -97,79 +93,109 @@ let name = ref('');
 let charClass = ref('');
 let framework = ref('');
 let sheetLink = ref('');
-let backstory = ref('')
+let imageLink = ref('');
+let backstory = ref('');
+
 const frameworks = [
   'Das Schwarze Auge',
   'Dungeons And Dragons',
   'Stars Without Numbers',
 ];
 
-// update fileRefs to match the name of the character
-watch(name, async (name) => {
-  fileRef = storageRef(storage, 'pnp_characters/' + name + 'Image');
-  fileRef2 = storageRef(storage, 'pnp_characters/' + name + 'Sheet');
-});
-
-async function submitFile() {
-  const {
-    url,
-    upload,
-  } = useStorageFile(fileRef);
-
-  const data = image.value;
-  const data2 = sheet.value;
-
-  if (data2) {
-    uploadBytes(fileRef2, data2).then(() => {
-      getDownloadURL(fileRef2).then(function (result) {
-        sheetLink.value = result;
-      });
-    });
-  }
-  // Still needed because of watcher on url. in Progress to get removed
-  if (data) {
-    upload(data);
-  }
-
-  /*
-
-  if (data) {
-    uploadBytes(fileRef2, data).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-    });
-  }
-
-   */
+async function submitCharacter() {
 
   // Check if the character was created by a user or not
   if (currentUser) {
-    // watch for the url to change to indicate the finished upload
-    watch(url, async (url) => {
-      // add a doc to Firestore with all the available info
-      const docRef = await addDoc(collection(db, 'pnp_characters'), {
-        name: name.value,
-        class: charClass.value,
-        framework: framework.value,
-        sheetLink: sheetLink.value,
-        imageLink: url,
-        creatorID: currentUser?.uid,
-        backstory: backstory.value,
-      });
-      await router.push(`/pnp/${docRef.id}`)
+    // Create Firestore entry without file links
+    const docRef = await addDoc(collection(db, 'pnp_characters'), {
+      name: name.value,
+      class: charClass.value,
+      framework: framework.value,
+      sheetLink: sheetLink.value,
+      imageLink: imageLink.value,
+      creatorID: currentUser?.uid,
+      backstory: backstory.value,
     });
+
+    const data = image.value;
+    const data2 = sheet.value;
+
+    if (!data && !data2) {
+      await router.push(`/pnp/${docRef.id}`);
+    }
+
+    const fileRef = storageRef(storage, 'pnp_characters/' + docRef.id + 'Image');
+    const fileRef2 = storageRef(storage, 'pnp_characters/' + docRef.id + 'Sheet');
+
+    if (data) {
+      uploadBytes(fileRef, data).then(() => {
+        getDownloadURL(fileRef).then(async function (result) {
+          await setDoc(doc(db, 'pnp_characters', docRef.id), {
+            imageLink: result,
+          }, {
+            merge: true
+          });
+          if (!data2) {
+            await router.push(`/pnp/${docRef.id}`)
+          }
+        });
+      });
+    }
+    if (data2) {
+      uploadBytes(fileRef2, data2).then(() => {
+        getDownloadURL(fileRef2).then(async function (result) {
+          await setDoc(doc(db, 'pnp_characters', docRef.id), {
+            sheetLink: result,
+          }, {
+            merge: true
+          });
+          await router.push(`/pnp/${docRef.id}`)
+        });
+      });
+    }
+
   } else {
     // if the character wasn't created by a user there is no creatorID saved
-    watch(url, async (url) => {
-      const docRef = await addDoc(collection(db, 'pnp_characters'), {
-        name: name.value,
-        class: charClass.value,
-        framework: framework.value,
-        sheetLink: sheetLink.value,
-        imageLink: url,
-        backstory: backstory.value,
-      });
-      await router.push(`/pnp/${docRef.id}`)
+    const docRef = await addDoc(collection(db, 'pnp_characters'), {
+      name: name.value,
+      class: charClass.value,
+      framework: framework.value,
+      sheetLink: sheetLink.value,
+      imageLink: imageLink.value,
+      backstory: backstory.value,
     });
+
+    const data = image.value;
+    const data2 = sheet.value;
+
+    const fileRef = storageRef(storage, 'pnp_characters/' + docRef.id + 'Image');
+    const fileRef2 = storageRef(storage, 'pnp_characters/' + docRef.id + 'Sheet');
+
+    if (data) {
+      uploadBytes(fileRef, data).then(() => {
+        getDownloadURL(fileRef).then(async function (result) {
+          await setDoc(doc(db, 'pnp_characters', docRef.id), {
+            imageLink: result,
+          }, {
+            merge: true
+          });
+          await router.push(`/pnp/${docRef.id}`)
+        });
+      });
+    }
+    if (data2) {
+      uploadBytes(fileRef2, data2).then(() => {
+        getDownloadURL(fileRef2).then(async function (result) {
+          await setDoc(doc(db, 'pnp_characters', docRef.id), {
+            sheetLink: result,
+          }, {
+            merge: true
+          });
+          await router.push(`/pnp/${docRef.id}`)
+        });
+      });
+    }
+
   }
 }
 
