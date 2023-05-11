@@ -76,7 +76,6 @@ import {ref, watch} from 'vue';
 import {firebaseApp} from 'boot/firebase';
 import {getFirestore, addDoc, collection} from 'firebase/firestore';
 import {useRouter} from 'vue-router';
-import {biBarChart} from '@quasar/extras/bootstrap-icons';
 
 // General Variables
 const router = useRouter();

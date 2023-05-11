@@ -41,8 +41,10 @@ import {firebaseApp} from 'boot/firebase';
 import {getCurrentUser} from 'vuefire';
 import {getStorage, ref as storageRef, deleteObject} from 'firebase/storage';
 import {ref} from 'vue';
+import {useRouter} from 'vue-router';
 
 // General Variables
+const router = useRouter();
 const storage = getStorage();
 const route = useRoute();
 const charid = route.params.charid;
@@ -82,9 +84,10 @@ async function deleteCharacter() {
   deleteObject(desertRef).then(() => {
     // File deleted successfully
   }).catch((error) => {
-    alert(error)
+    console.log(error)
     // Uh-oh, an error occurred!
   });
+  await router.push('/pnp/characters')
 }
 
 </script>

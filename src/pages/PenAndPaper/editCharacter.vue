@@ -40,7 +40,6 @@
           <br/>
 
           <q-btn type="submit" color="primary" label="Edit"/>
-          <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm"/>
 
         </q-form>
       </fieldset>
