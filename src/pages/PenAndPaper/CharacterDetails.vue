@@ -1,37 +1,68 @@
 <template>
-  <div v-if="character.exists()">
-    <h3>
-      {{ name }}
-    </h3>
-    <h4>
-      {{ framework }}
-    </h4>
-    <q-img
-      :src="imageLink"
-      alt="Character Image"
-      style="max-width: 500px; height: 500px;"
-      :fit="'contain'"
-    />
+  <q-card class="small" flat v-if="character.exists()">
+    <fieldset>
+      <h1>
+        {{ name }}
+        <q-badge
+          class="badge"
+          outline align="middle"
+          color="primary">
+          {{ charClass }}
+        </q-badge>
+        <q-badge
+          class="badge"
+          outline align="middle"
+          color="secondary"
+          style="font-size: 1rem; height: 1.25rem">
+          {{ framework }}
+        </q-badge>
+      </h1>
+      <div class="charContainer">
+        <div class="personalContainer">
+          <q-img
+            :src="imageLink"
+            alt="Character Image"
+            style="max-width: 500px; height: 500px;"
+            :fit="'contain'"
+          />
+          <div>
+            {{ description }}
+          </div>
+          <div class="buttonContainer">
 
-    <q-btn
-      v-if="userIsCreator"
-      color="primary"
-      label="Edit"
-      @click="$router.push(`/pnp/edit/${charid}`)"
-    />
+            <q-btn
+              class="button"
+              v-if="userIsCreator"
+              color="primary"
+              label="Character Sheet"
+              @click="$router.push(`${sheetLink}`)"
+            />
 
-    <q-btn
-      v-if="userIsCreator"
-      @click="deleteCharacter()"
-      style="margin-left: auto; margin-right: 1rem"
-      color="red"
-      label="Delete"
-    />
+            <q-btn
+              class="button"
+              v-if="userIsCreator"
+              color="primary"
+              label="Edit"
+              @click="router.push(`/pnp/${charid}`)"
+            />
 
-    <a>
-      Character Sheet : {{ sheetLink }}
-    </a>
-  </div>
+            <q-btn
+              class="button"
+              v-if="userIsCreator"
+              @click="deleteCharacter()"
+              style="margin-left: auto; margin-right: 1rem"
+              color="red"
+              label="Delete"
+            />
+
+          </div>
+        </div>
+        <div>
+          {{ backstory }}
+        </div>
+      </div>
+    </fieldset>
+  </q-card>
 </template>
 
 <script setup lang="ts">
@@ -55,10 +86,13 @@ let userIsCreator = false;
 const db = getFirestore(firebaseApp);
 
 // Variables from Firestore entry
-let name = ref('')
-let framework = ref('')
-let imageLink = ref('')
-let sheetLink = ref('')
+let name = ref('');
+let description = ref('');
+let charClass = ref('');
+let framework = ref('');
+let sheetLink = ref('');
+let imageLink = ref('');
+let backstory = ref('');
 
 // Geht trotz Error
 // Get Doc and values to display
@@ -69,6 +103,9 @@ if (character.exists()) {
   framework.value = charData.framework
   imageLink.value = charData.imageLink
   sheetLink.value = charData.sheetLink
+  charClass.value = charData.class
+  backstory.value = charData.backstory
+  description.value = charData.description
   if (character.data().creatorID == '') {
     userIsCreator = true;
   } else {
@@ -97,4 +134,42 @@ async function deleteCharacter() {
 }
 
 </script>
+
+<style>
+
+.badge {
+  font-size: 1rem;
+  height: 1.3rem;
+  margin-right: 0.5rem;
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 0;
+  text-align: center;
+}
+
+h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+fieldset {
+  border: none;
+  padding: 25px;
+}
+
+.charContainer {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  padding: 10px;
+  column-gap: 2rem;
+}
+
+.button {
+  margin-right: 0.5rem;
+}
+
+
+</style>
 

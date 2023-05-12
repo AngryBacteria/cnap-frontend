@@ -235,6 +235,6 @@ function onReset() {
 
 fieldset {
   border: none;
-  padding-top: 15px;
+  padding: 25px;
 }
 </style>
