@@ -25,13 +25,15 @@
               alt="Character Image"
               :fit="'contain'"
             />
-            <q-btn
-              class="button"
-              v-if="userIsCreator"
-              color="primary"
-              label="Character Sheet"
-              @click="$router.push(`${sheetLink}`)"
-            />
+            <a :href="sheetLink" target="_blank">
+              <q-btn
+                class="button"
+                v-if="userIsCreator"
+                color="primary"
+                label="Character Sheet"
+                target="_blank"
+              />
+            </a>
           </div>
           <div class="descriptionContainer">
             <h2>
