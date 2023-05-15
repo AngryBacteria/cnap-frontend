@@ -7,7 +7,7 @@
       <q-badge
         v-if="memberData.coreMember"
         outline align="middle"
-        color="teal">
+        color="primary">
         Core
       </q-badge>
 

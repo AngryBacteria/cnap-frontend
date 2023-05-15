@@ -18,18 +18,13 @@
         </q-badge>
       </h1>
       <div class="charContainer">
-        <div class="personalContainer">
-          <q-img
-            :src="imageLink"
-            alt="Character Image"
-            style="max-width: 500px; height: 500px;"
-            :fit="'contain'"
-          />
-          <div>
-            {{ description }}
-          </div>
-          <div class="buttonContainer">
-
+        <div class="upperContainer">
+          <div class="personalContainer">
+            <q-img
+              :src="imageLink"
+              alt="Character Image"
+              :fit="'contain'"
+            />
             <q-btn
               class="button"
               v-if="userIsCreator"
@@ -37,7 +32,23 @@
               label="Character Sheet"
               @click="$router.push(`${sheetLink}`)"
             />
+          </div>
+          <div class="descriptionContainer">
+            <h2>
+              Description
+            </h2>
+            {{ description }}
+          </div>
 
+        </div>
+        <div class="lowerContainer">
+          <div class="backstoryContainer">
+            <h2>
+              Backstory
+            </h2>
+            {{ backstory }}
+          </div>
+          <div class="buttonContainer">
             <q-btn
               class="button"
               v-if="userIsCreator"
@@ -54,11 +65,7 @@
               color="red"
               label="Delete"
             />
-
           </div>
-        </div>
-        <div>
-          {{ backstory }}
         </div>
       </div>
     </fieldset>
@@ -159,17 +166,62 @@ fieldset {
   padding: 25px;
 }
 
+.personalContainer {
+  display: flex;
+  flex-direction: column;
+  width: 33%;
+}
+
+.personalContainer button {
+  width: 90%;
+  margin: 5%;
+}
+
+.upperContainer {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+
+.descriptionContainer {
+  width: 66%;
+  text-align: center;
+}
+
 .charContainer {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  padding: 10px;
-  column-gap: 2rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.button {
-  margin-right: 0.5rem;
+.backstoryContainer {
+  text-align: center;
 }
 
+.buttonContainer {
+  width: 30%;
+  margin-right: 35%;
+  margin-left: 35%;
+  margin-top: 2%;
+}
+
+.buttonContainer .button {
+  width: 100%;
+  margin-bottom: 1%;
+}
+
+@media screen and (max-width: 720px) {
+  .upperContainer {
+    flex-direction: column;
+  }
+
+  .descriptionContainer {
+    width: 100%;
+  }
+
+  .personalContainer {
+    width: 100%;
+  }
+}
 
 </style>
 
