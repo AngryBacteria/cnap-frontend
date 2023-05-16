@@ -12,7 +12,7 @@
       </q-badge>
 
     </h3>
-    <h5 style="margin-top: 0px; margin-bottom: 0px">General Info</h5>
+    <h5 style="margin-top: 0; margin-bottom: 0">General Info</h5>
     <section class="settings-grid">
       <section>
         <q-form @submit="editUser()">
@@ -89,7 +89,7 @@
 
     <!-- Possible connections of account to for example RIOT -->
     <section class="connections">
-      <h5 style="margin-top: 0px; margin-bottom: 0px">Connections</h5>
+      <h5 style="margin-top: 0; margin-bottom: 0">Connections</h5>
       <section v-if="!summoner">
         <q-form @submit="updateLeagueConnection()">
           <q-input
@@ -113,9 +113,9 @@
 
       <q-card flat v-if="summoner" class="summoner">
         <q-avatar size="100px">
-          <img :src="rh.getProfileIcon(summoner.profileIconId)" />
+          <img :src="rh.getProfileIcon(summoner.profileIconId)" alt="profile Picture"/>
         </q-avatar>
-        <h5 style="padding-left: 1rem; margin: 0px">
+        <h5 style="padding-left: 1rem; margin: 0">
           {{ summoner.name }} (LvL: {{ summoner.summonerLevel }})
         </h5>
         <q-btn
@@ -253,6 +253,8 @@ async function editUser() {
     loadingFlag.value = true;
     if (memberDoc && user) {
       await updateDoc(docReference, {
+        displayName: displayName.value,
+        photoURL: photoURL.value,
         catchPhrase: catchPhrase.value,
         about: about.value,
       });
@@ -316,10 +318,6 @@ img {
 
 .q-form > * {
   margin-top: 0.5rem;
-}
-
-.q-form {
-  margin-bottom: 2rem;
 }
 
 h3 {

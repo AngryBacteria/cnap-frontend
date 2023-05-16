@@ -67,6 +67,10 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { Notify } from 'quasar';
 import { useRouter } from 'vue-router';
 
+// TODO
+// Nico Fix it du Huso
+// update Firestore mit displayName und photoURL
+
 const email = ref('');
 const password = ref('');
 const password2 = ref('');

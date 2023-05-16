@@ -56,7 +56,7 @@
               v-if="userIsCreator"
               color="primary"
               label="Edit"
-              @click="router.push(`/pnp/${charid}`)"
+              @click="router.push(`/pnp/edit/${charid}`)"
             />
 
             <q-btn
@@ -132,8 +132,16 @@ if (character.exists()) {
 // deletes the Firestore entry of character. Doesn't delete files attached to it (WIP)
 async function deleteCharacter() {
   await deleteDoc(doc(db, 'pnp_characters', charid));
-  const desertRef = storageRef(storage, 'pnp_characters/' + name.value);
-  deleteObject(desertRef).then(() => {
+  const imageRef = storageRef(storage, 'pnp_characters/' + charid + "Image");
+  const sheetRef = storageRef(storage, 'pnp_characters/' + charid + "Sheet");
+  deleteObject(imageRef).then(() => {
+    // File deleted successfully
+  }).catch((error) => {
+    console.log(error)
+    // Uh-oh, an error occurred!
+  });
+
+  deleteObject(sheetRef).then(() => {
     // File deleted successfully
   }).catch((error) => {
     console.log(error)

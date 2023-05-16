@@ -20,7 +20,7 @@
           object-fit: cover;
           padding: 10px
           "
-          :src="member.data().imageLink"
+          :src="member.data().photoURL"
           alt=""/>
 
         <q-card-section>
