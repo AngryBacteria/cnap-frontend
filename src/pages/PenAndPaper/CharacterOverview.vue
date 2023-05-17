@@ -1,5 +1,4 @@
 <template>
-
   <div class="search">
     <q-form @submit="searchForCharacters()" style="margin-bottom: 2rem">
       <q-input
@@ -18,9 +17,10 @@
       <router-link :to="'/pnp/' + character.id">
         <q-card>
           <img
-            style="width: 200px; height: 200px; object-fit: cover;"
+            style="width: 200px; height: 200px; object-fit: cover"
             :src="character.data().imageLink"
-            alt=""/>
+            alt=""
+          />
           <q-card-section>
             <div class="text-h6">{{ character.data().name }}</div>
             <div class="text-subtitle2">
@@ -34,10 +34,10 @@
 </template>
 
 <script setup lang="ts">
-import {getFirestore} from 'firebase/firestore';
-import {firebaseApp} from 'boot/firebase';
-import {collection, getDocs} from 'firebase/firestore';
-import {computed, ref} from 'vue';
+import { getFirestore } from 'firebase/firestore';
+import { firebaseApp } from 'boot/firebase';
+import { collection, getDocs } from 'firebase/firestore';
+import { computed, ref } from 'vue';
 
 // General Variables
 const db = getFirestore(firebaseApp);
@@ -49,17 +49,17 @@ const characterSearch = ref('');
 // Filters every character to match search in searchbar
 const characters = computed(() => {
   return characterCollection.docs.filter((character) =>
-    character.data().name
-      ?.toLowerCase()
+    character
+      .data()
+      .name?.toLowerCase()
       .includes(characterSearch.value.toLowerCase())
-  )
+  );
 });
 
 // directly search and open without clicking (WIP)
 async function searchForCharacters() {
-  console.log('ok')
+  console.log('ok');
 }
-
 </script>
 
 <style>

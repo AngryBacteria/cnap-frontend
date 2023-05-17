@@ -5,23 +5,16 @@
     alt="Character Image"
   />
 
-  <h1 class="title">
-    The Boys
-  </h1>
+  <h1 class="title">The Boys</h1>
 
   <div v-if="coreMembers" class="coreMembers">
     <div v-for="member in coreMembers" :key="member.data">
       <q-card>
-
         <img
-          style="
-          width: 200px;
-          height: 200px;
-          object-fit: cover;
-          padding: 10px
-          "
+          style="width: 200px; height: 200px; object-fit: cover; padding: 10px"
           :src="member.data().photoURL"
-          alt=""/>
+          alt=""
+        />
 
         <q-card-section>
           <div class="text-h6">{{ member.data().displayName }}</div>
@@ -32,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import {collection, getDocs, getFirestore} from 'firebase/firestore';
-import {firebaseApp} from 'boot/firebase';
-import {computed} from 'vue';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import { firebaseApp } from 'boot/firebase';
+import { computed } from 'vue';
 
 const db = getFirestore(firebaseApp);
 
@@ -43,14 +36,11 @@ let q = collection(db, 'members');
 const memberCollection = await getDocs(q);
 
 const coreMembers = computed(() => {
-  return memberCollection.docs.filter((member) =>
-    member.data().coreMember
-  )
+  return memberCollection.docs.filter((member) => member.data().coreMember);
 });
 </script>
 
 <style scoped>
-
 .coreMembers {
   display: flex;
   flex-direction: row;
@@ -60,7 +50,6 @@ const coreMembers = computed(() => {
 }
 
 .banner {
-
 }
 
 .title {
@@ -71,5 +60,4 @@ const coreMembers = computed(() => {
 a {
   text-decoration: none;
 }
-
 </style>

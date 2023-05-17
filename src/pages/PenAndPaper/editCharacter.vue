@@ -38,7 +38,7 @@
             autogrow
           />
 
-          <br/>
+          <br />
 
           <q-input
             clearable
@@ -49,7 +49,7 @@
             autogrow
           />
 
-          <br/>
+          <br />
 
           <q-file
             clearable
@@ -59,11 +59,11 @@
             accept=".jpg, image/*"
           >
             <template v-slot:prepend>
-              <q-icon name="attach_file"/>
+              <q-icon name="attach_file" />
             </template>
           </q-file>
 
-          <br/>
+          <br />
 
           <q-file
             clearable
@@ -73,13 +73,13 @@
             accept=".pdf"
           >
             <template v-slot:prepend>
-              <q-icon name="attach_file"/>
+              <q-icon name="attach_file" />
             </template>
           </q-file>
 
-          <br/>
+          <br />
 
-          <q-btn type="submit" color="primary" label="Submit"/>
+          <q-btn type="submit" color="primary" label="Submit" />
         </fieldset>
       </q-form>
     </q-card>
@@ -87,42 +87,48 @@
       class="portrait"
       :src="imageLink"
       alt="Character Image"
-      style="max-width: 500px; height: 500px;"
+      style="max-width: 500px; height: 500px"
       :fit="'contain'"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import {useRoute} from 'vue-router';
-import {collection, doc, getDoc, getFirestore, setDoc} from 'firebase/firestore';
-import {firebaseApp} from 'boot/firebase';
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
-import {getDownloadURL, ref as storageRef, uploadBytes} from 'firebase/storage';
-import {getCurrentUser, useFirebaseStorage} from 'vuefire';
-import {Notify} from 'quasar';
+import { useRoute } from 'vue-router';
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import { firebaseApp } from 'boot/firebase';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import {
+  getDownloadURL,
+  ref as storageRef,
+  uploadBytes,
+} from 'firebase/storage';
+import { getCurrentUser, useFirebaseStorage } from 'vuefire';
+import { Notify } from 'quasar';
 
 // General Variables
-const currentUser = await getCurrentUser()
+const currentUser = await getCurrentUser();
 const storage = useFirebaseStorage();
 const router = useRouter();
 const route = useRoute();
-const charid = route.params.charid;
+const charid = Array.isArray(route.params.charid)
+  ? route.params.charid[0]
+  : route.params.charid;
 const db = getFirestore(firebaseApp);
 
 // Variables for storing selected Files
-let sheet = ref(null)
-let image = ref(null)
+const sheet = ref(null);
+const image = ref(null);
 
 // Variables used for Firestore entry
-let name = ref('');
-let description = ref('');
-let charClass = ref('');
-let framework = ref('');
-let sheetLink = ref('');
-let imageLink = ref('');
-let backstory = ref('');
+const name = ref('');
+const description = ref('');
+const charClass = ref('');
+const framework = ref('');
+const sheetLink = ref('');
+const imageLink = ref('');
+const backstory = ref('');
 const frameworks = [
   'Das Schwarze Auge',
   'Dungeons And Dragons',
@@ -133,17 +139,17 @@ const frameworks = [
 // Get Doc to fill the form with already existing data
 const character = await getDoc(doc(db, 'pnp_characters', charid));
 if (character.exists()) {
-  const charData = character.data()
-  name.value = charData.name
-  charClass.value = charData.class
-  framework.value = charData.framework
-  sheetLink.value = charData.sheetLink
-  imageLink.value = charData.imageLink
-  backstory.value = charData.backstory
-  description.value = charData.description
+  const charData = character.data();
+  name.value = charData.name;
+  charClass.value = charData.class;
+  framework.value = charData.framework;
+  sheetLink.value = charData.sheetLink;
+  imageLink.value = charData.imageLink;
+  backstory.value = charData.backstory;
+  description.value = charData.description;
 } else {
   Notify.create({
-    message: 'This Character doesn\'t exist',
+    message: "This Character doesn't exist",
     color: 'red',
     position: 'top',
     icon: 'mdi-close-octagon-outline',
@@ -151,22 +157,25 @@ if (character.exists()) {
 }
 
 async function editCharacter() {
-
   // Check if the character was created by a user or not
   if (currentUser) {
     // Create Firestore entry without file links
-    await setDoc(doc(db, 'pnp_characters', charid), {
-      name: name.value,
-      class: charClass.value,
-      framework: framework.value,
-      sheetLink: sheetLink.value,
-      imageLink: imageLink.value,
-      creatorID: currentUser?.uid,
-      backstory: backstory.value,
-      description: description.value,
-    }, {
-      merge: true
-    });
+    await setDoc(
+      doc(db, 'pnp_characters', charid),
+      {
+        name: name.value,
+        class: charClass.value,
+        framework: framework.value,
+        sheetLink: sheetLink.value,
+        imageLink: imageLink.value,
+        creatorID: currentUser?.uid,
+        backstory: backstory.value,
+        description: description.value,
+      },
+      {
+        merge: true,
+      }
+    );
 
     const data = image.value;
     const data2 = sheet.value;
@@ -181,13 +190,17 @@ async function editCharacter() {
     if (data) {
       uploadBytes(fileRef, data).then(() => {
         getDownloadURL(fileRef).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', charid), {
-            imageLink: result,
-          }, {
-            merge: true
-          });
+          await setDoc(
+            doc(db, 'pnp_characters', charid),
+            {
+              imageLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
           if (!data2) {
-            await router.push(`/pnp/${charid}`)
+            await router.push(`/pnp/${charid}`);
           }
         });
       });
@@ -195,16 +208,19 @@ async function editCharacter() {
     if (data2) {
       uploadBytes(fileRef2, data2).then(() => {
         getDownloadURL(fileRef2).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', charid), {
-            sheetLink: result,
-          }, {
-            merge: true
-          });
-          await router.push(`/pnp/${charid}`)
+          await setDoc(
+            doc(db, 'pnp_characters', charid),
+            {
+              sheetLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
+          await router.push(`/pnp/${charid}`);
         });
       });
     }
-
   } else {
     // if the character wasn't created by a user there is no creatorID saved
     await setDoc(doc(db, 'pnp_characters', charid), {
@@ -226,34 +242,40 @@ async function editCharacter() {
     if (data) {
       uploadBytes(fileRef, data).then(() => {
         getDownloadURL(fileRef).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', charid), {
-            imageLink: result,
-          }, {
-            merge: true
-          });
-          await router.push(`/pnp/${charid}`)
+          await setDoc(
+            doc(db, 'pnp_characters', charid),
+            {
+              imageLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
+          await router.push(`/pnp/${charid}`);
         });
       });
     }
     if (data2) {
       uploadBytes(fileRef2, data2).then(() => {
         getDownloadURL(fileRef2).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', charid), {
-            sheetLink: result,
-          }, {
-            merge: true
-          });
-          await router.push(`/pnp/${charid}`)
+          await setDoc(
+            doc(db, 'pnp_characters', charid),
+            {
+              sheetLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
+          await router.push(`/pnp/${charid}`);
         });
       });
     }
-
   }
 }
 </script>
 
 <style scoped>
-
 fieldset {
   border: none;
   padding-top: 15px;
