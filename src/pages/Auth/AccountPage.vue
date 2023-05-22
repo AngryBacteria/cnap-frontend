@@ -1,35 +1,3 @@
-<script setup lang="ts">
-import {useRoute} from 'vue-router';
-import {doc, getDoc, getFirestore} from 'firebase/firestore';
-import {firebaseApp} from 'boot/firebase';
-import {ref} from 'vue';
-
-// General Variables
-const route = useRoute();
-const uid = route.params.uid;
-const db = getFirestore(firebaseApp);
-
-// Variables from Firestore
-let displayName = ref('');
-let photoURL = ref('');
-let catchPhrase = ref('');
-let about = ref('');
-let coreMember = ref(false);
-
-
-const user = await getDoc(doc(db, 'members', uid));
-
-if (user.exists()) {
-  const charData = user.data();
-  displayName.value = charData.displayName;
-  photoURL.value = charData.photoURL;
-  catchPhrase.value = charData.catchPhrase;
-  about.value = charData.about;
-  coreMember.value = charData.coreMember;
-}
-
-</script>
-
 <template>
   <q-card class="small" flat>
     <h1>
@@ -50,6 +18,13 @@ if (user.exists()) {
             alt="Profile Picture"
             :fit="'contain'"
           />
+          <q-btn
+            class="button"
+            v-if="userIsUser"
+            color="primary"
+            label="Edit"
+            :to="'/Account'"
+          />
         </div>
         <div class="descriptionContainer">
           <h2>
@@ -66,6 +41,42 @@ if (user.exists()) {
     </div>
   </q-card>
 </template>
+
+<script setup lang="ts">
+import {useRoute} from 'vue-router';
+import {doc, getDoc, getFirestore} from 'firebase/firestore';
+import {firebaseApp} from 'boot/firebase';
+import {ref} from 'vue';
+import {getCurrentUser} from 'vuefire';
+
+// General Variables
+const route = useRoute();
+const uid = route.params.uid;
+const db = getFirestore(firebaseApp);
+const currentUser = await getCurrentUser();
+const currentUserID = currentUser?.uid;
+let userIsUser = ref(false);
+
+// Variables from Firestore
+let displayName = ref('');
+let photoURL = ref('');
+let catchPhrase = ref('');
+let about = ref('');
+let coreMember = ref(false);
+
+const user = await getDoc(doc(db, 'members', uid));
+
+if (user.exists()) {
+  const charData = user.data();
+  displayName.value = charData.displayName;
+  photoURL.value = charData.photoURL;
+  catchPhrase.value = charData.catchPhrase;
+  about.value = charData.about;
+  coreMember.value = charData.coreMember;
+  userIsUser.value = (currentUserID == user.data().uid);
+}
+
+</script>
 
 <style>
 

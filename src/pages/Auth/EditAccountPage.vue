@@ -74,8 +74,16 @@
             color="primary"
             type="submit"
             :loading="loadingFlag"
-            >Update Profile</q-btn
-          >
+            >
+            Update Profile
+          </q-btn>
+          <q-btn
+            class="button"
+            color="primary"
+            label="Back To Account"
+            :to="'/' + user.uid"
+            flat
+          />
         </q-form>
       </section>
       <img v-if="user.photoURL" :src="user.photoURL" alt="profile picture" />
