@@ -11,22 +11,24 @@
 
   <div v-if="coreMembers" class="coreMembers">
     <div v-for="member in coreMembers" :key="member.data">
-      <q-card>
+      <router-link :to="'/' + member.data().uid">
+        <q-card>
 
-        <img
-          style="
+          <img
+            style="
           width: 200px;
           height: 200px;
           object-fit: cover;
           padding: 10px
           "
-          :src="member.data().imageLink"
-          alt=""/>
+            :src="member.data().photoURL"
+            alt=""/>
 
-        <q-card-section>
-          <div class="text-h6">{{ member.data().displayName }}</div>
-        </q-card-section>
-      </q-card>
+          <q-card-section>
+            <div class="text-h6">{{ member.data().displayName }}</div>
+          </q-card-section>
+        </q-card>
+      </router-link>
     </div>
   </div>
 </template>
