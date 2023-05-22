@@ -1,24 +1,23 @@
 <template>
-  <div v-if="user">
+  <div v-if="user && memberData">
     <h3>
-
       {{ user.displayName }}
-
       <q-badge
-        v-if="memberData.coreMember"
-        outline align="middle"
-        color="primary">
+        v-if="memberData?.coreMember"
+        outline
+        align="middle"
+        color="primary"
+      >
         Core
       </q-badge>
-
     </h3>
-    <h5 style="margin-top: 0px; margin-bottom: 0px">General Info</h5>
+    <h5 style="margin-top: 0; margin-bottom: 0">General Info</h5>
     <section class="settings-grid">
       <section>
         <q-form @submit="editUser()">
           <q-input
             type="text"
-            v-model="catchPhrase"
+            v-model="memberData.catchPhrase"
             label="catchPhrase"
             filled
             :rules="[
@@ -32,7 +31,7 @@
           />
           <q-input
             type="text"
-            v-model="displayName"
+            v-model="memberData.displayName"
             label="displayName"
             filled
             :rules="[
@@ -46,7 +45,7 @@
           />
           <q-input
             type="url"
-            v-model="photoURL"
+            v-model="memberData.photoURL"
             label="photoURL"
             filled
             :rules="[
@@ -58,7 +57,7 @@
           />
           <q-input
             type="textarea"
-            v-model="about"
+            v-model="memberData.about"
             label="about"
             filled
             :rules="[
@@ -89,7 +88,7 @@
 
     <!-- Possible connections of account to for example RIOT -->
     <section class="connections">
-      <h5 style="margin-top: 0px; margin-bottom: 0px">Connections</h5>
+      <h5 style="margin-top: 0; margin-bottom: 0">Connections</h5>
       <section v-if="!summoner">
         <q-form @submit="updateLeagueConnection()">
           <q-input
@@ -113,9 +112,12 @@
 
       <q-card flat v-if="summoner" class="summoner">
         <q-avatar size="100px">
-          <img :src="rh.getProfileIcon(summoner.profileIconId)" />
+          <img
+            :src="rh.getProfileIcon(summoner.profileIconId)"
+            alt="profile Picture"
+          />
         </q-avatar>
-        <h5 style="padding-left: 1rem; margin: 0px">
+        <h5 style="padding-left: 1rem; margin: 0">
           {{ summoner.name }} (LvL: {{ summoner.summonerLevel }})
         </h5>
         <q-btn
@@ -153,34 +155,45 @@ import { useFetch } from '@vueuse/core';
 import RiotHelper from 'src/plugins/RiotHelper';
 import { useSettingsStore } from 'src/stores/settingsStore';
 
+//General fields
 const user = await getCurrentUser();
 const rh = RiotHelper.getInstance();
 const store = useSettingsStore();
 
+//Flahs
 const loadingFlag = ref(false);
+const errorFlag = ref(false);
+
+const memberData = ref();
+
+//Possible connections of account to for example RIOT
+const summonerName = ref('');
+const summoner = ref<SummonerData | null>(null);
 
 const docReference = doc(
   collection(getFirestore(firebaseApp), 'members'),
   user?.uid
 );
-const memberDoc = await getDoc(docReference);
-const memberData = memberDoc.data();
 
-const catchPhrase = ref(memberData?.catchPhrase);
-const about = ref(memberData?.about);
+await initLoad();
+await loadSummonerByPuuid();
 
-const displayName = ref(user?.displayName);
-const photoURL = ref(user?.photoURL);
+async function initLoad() {
+  errorFlag.value = false;
+  const memberDoc = await getDoc(docReference);
+  const docData = memberDoc.data();
 
-//Possible connections of account to for example RIOT
-const summonerName = ref('');
-const summoner = ref<SummonerData | null>(null);
-loadSummonerByPuuid();
+  if (docData) {
+    memberData.value = docData;
+    return;
+  }
+  errorFlag.value = true;
+}
 
 async function loadSummonerByPuuid() {
-  if (memberData?.riot_puuid) {
+  if (memberData.value.riot_puuid) {
     const { data } = await useFetch(
-      `${store.apiEndpoint}/api/v1/summoner/puuid/${memberData?.riot_puuid}`
+      `${store.apiEndpoint}/api/v1/summoner/puuid/${memberData.value.riot_puuid}`
     )
       .get()
       .json<SummonerData>();
@@ -251,16 +264,17 @@ async function removeLeagueConnection() {
 async function editUser() {
   try {
     loadingFlag.value = true;
-    if (memberDoc && user) {
+    if (memberData.value && user) {
       await updateDoc(docReference, {
-        catchPhrase: catchPhrase.value,
-        about: about.value,
+        displayName: memberData.value.displayName,
+        photoURL: memberData.value.photoURL,
+        catchPhrase: memberData.value.catchPhrase,
+        about: memberData.value.about,
       });
       await updateProfile(user, {
-        displayName: displayName.value,
-        photoURL: photoURL.value,
+        displayName: memberData.value.displayName,
+        photoURL: memberData.value.photoURL,
       });
-
       Notify.create({
         message: 'Profile edited',
         color: 'primary',
@@ -276,6 +290,7 @@ async function editUser() {
       });
     }
   } catch (e) {
+    console.log(e);
     Notify.create({
       message: 'Error while editing profile',
       color: 'red',
@@ -316,10 +331,6 @@ img {
 
 .q-form > * {
   margin-top: 0.5rem;
-}
-
-.q-form {
-  margin-bottom: 2rem;
 }
 
 h3 {

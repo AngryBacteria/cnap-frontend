@@ -37,7 +37,7 @@
           autogrow
         />
 
-        <br/>
+        <br />
 
         <q-input
           clearable
@@ -48,7 +48,7 @@
           autogrow
         />
 
-        <br/>
+        <br />
 
         <q-file
           clearable
@@ -58,11 +58,11 @@
           accept=".jpg, image/*"
         >
           <template v-slot:prepend>
-            <q-icon name="attach_file"/>
+            <q-icon name="attach_file" />
           </template>
         </q-file>
 
-        <br/>
+        <br />
 
         <q-file
           clearable
@@ -72,46 +72,61 @@
           accept=".pdf"
         >
           <template v-slot:prepend>
-            <q-icon name="attach_file"/>
+            <q-icon name="attach_file" />
           </template>
         </q-file>
 
-        <br/>
+        <br />
 
-        <q-btn type="submit" color="primary" label="Submit"/>
-        <q-btn type="reset" color="primary" label="Reset" flat class="q-ml-sm"/>
-
+        <q-btn type="submit" color="primary" label="Submit" />
+        <q-btn
+          type="reset"
+          color="primary"
+          label="Reset"
+          flat
+          class="q-ml-sm"
+        />
       </fieldset>
     </q-form>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import {ref as storageRef, uploadBytes, getDownloadURL} from 'firebase/storage';
-import {getCurrentUser, useFirebaseStorage} from 'vuefire';
-import {ref} from 'vue';
-import {firebaseApp} from 'boot/firebase';
-import {getFirestore, addDoc, collection, setDoc, doc} from 'firebase/firestore';
-import {useRouter} from 'vue-router';
+import {
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
+import { getCurrentUser, useFirebaseStorage } from 'vuefire';
+import { ref } from 'vue';
+import { firebaseApp } from 'boot/firebase';
+import {
+  getFirestore,
+  addDoc,
+  collection,
+  setDoc,
+  doc,
+} from 'firebase/firestore';
+import { useRouter } from 'vue-router';
 
 // General Variables
 const router = useRouter();
-const currentUser = await getCurrentUser()
+const currentUser = await getCurrentUser();
 const storage = useFirebaseStorage();
 const db = getFirestore(firebaseApp);
 
 // Variables for storing selected Files
-let sheet = ref(null)
-let image = ref(null)
+const sheet = ref(null);
+const image = ref(null);
 
 // Variables for Firestore entry
-let name = ref('');
-let description = ref('');
-let charClass = ref('');
-let framework = ref('');
-let sheetLink = ref('');
-let imageLink = ref('');
-let backstory = ref('');
+const name = ref('');
+const description = ref('');
+const charClass = ref('');
+const framework = ref('');
+const sheetLink = ref('');
+const imageLink = ref('');
+const backstory = ref('');
 
 const frameworks = [
   'Das Schwarze Auge',
@@ -120,7 +135,6 @@ const frameworks = [
 ];
 
 async function submitCharacter() {
-
   // Check if the character was created by a user or not
   if (currentUser) {
     // Create Firestore entry without file links
@@ -142,19 +156,29 @@ async function submitCharacter() {
       await router.push(`/pnp/${docRef.id}`);
     }
 
-    const fileRef = storageRef(storage, 'pnp_characters/' + docRef.id + 'Image');
-    const fileRef2 = storageRef(storage, 'pnp_characters/' + docRef.id + 'Sheet');
+    const fileRef = storageRef(
+      storage,
+      'pnp_characters/' + docRef.id + 'Image'
+    );
+    const fileRef2 = storageRef(
+      storage,
+      'pnp_characters/' + docRef.id + 'Sheet'
+    );
 
     if (data) {
       uploadBytes(fileRef, data).then(() => {
         getDownloadURL(fileRef).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', docRef.id), {
-            imageLink: result,
-          }, {
-            merge: true
-          });
+          await setDoc(
+            doc(db, 'pnp_characters', docRef.id),
+            {
+              imageLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
           if (!data2) {
-            await router.push(`/pnp/${docRef.id}`)
+            await router.push(`/pnp/${docRef.id}`);
           }
         });
       });
@@ -162,16 +186,19 @@ async function submitCharacter() {
     if (data2) {
       uploadBytes(fileRef2, data2).then(() => {
         getDownloadURL(fileRef2).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', docRef.id), {
-            sheetLink: result,
-          }, {
-            merge: true
-          });
-          await router.push(`/pnp/${docRef.id}`)
+          await setDoc(
+            doc(db, 'pnp_characters', docRef.id),
+            {
+              sheetLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
+          await router.push(`/pnp/${docRef.id}`);
         });
       });
     }
-
   } else {
     // if the character wasn't created by a user there is no creatorID saved
     const docRef = await addDoc(collection(db, 'pnp_characters'), {
@@ -187,52 +214,63 @@ async function submitCharacter() {
     const data = image.value;
     const data2 = sheet.value;
 
-    const fileRef = storageRef(storage, 'pnp_characters/' + docRef.id + 'Image');
-    const fileRef2 = storageRef(storage, 'pnp_characters/' + docRef.id + 'Sheet');
+    const fileRef = storageRef(
+      storage,
+      'pnp_characters/' + docRef.id + 'Image'
+    );
+    const fileRef2 = storageRef(
+      storage,
+      'pnp_characters/' + docRef.id + 'Sheet'
+    );
 
     if (data) {
       uploadBytes(fileRef, data).then(() => {
         getDownloadURL(fileRef).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', docRef.id), {
-            imageLink: result,
-          }, {
-            merge: true
-          });
-          await router.push(`/pnp/${docRef.id}`)
+          await setDoc(
+            doc(db, 'pnp_characters', docRef.id),
+            {
+              imageLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
+          await router.push(`/pnp/${docRef.id}`);
         });
       });
     }
     if (data2) {
       uploadBytes(fileRef2, data2).then(() => {
         getDownloadURL(fileRef2).then(async function (result) {
-          await setDoc(doc(db, 'pnp_characters', docRef.id), {
-            sheetLink: result,
-          }, {
-            merge: true
-          });
-          await router.push(`/pnp/${docRef.id}`)
+          await setDoc(
+            doc(db, 'pnp_characters', docRef.id),
+            {
+              sheetLink: result,
+            },
+            {
+              merge: true,
+            }
+          );
+          await router.push(`/pnp/${docRef.id}`);
         });
       });
     }
-
   }
 }
 
 // clear the form
 function onReset() {
-  name.value = ''
-  charClass.value = ''
-  framework.value = ''
-  backstory.value = ''
-  description.value = ''
-  image.value = null
-  sheet.value = null
+  name.value = '';
+  charClass.value = '';
+  framework.value = '';
+  backstory.value = '';
+  description.value = '';
+  image.value = null;
+  sheet.value = null;
 }
-
 </script>
 
 <style>
-
 fieldset {
   border: none;
   padding: 25px;
