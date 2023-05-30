@@ -279,13 +279,25 @@ const pnpLinks: NavigationLink[] = [
     title: 'Character Overview',
     caption: 'All Characters',
     icon: 'groups',
-    link: '/pnp/characters',
+    link: '/pnp/characterOverview',
   },
   {
     title: 'Character Creator',
     caption: 'create your character',
-    icon: 'mdi-sword',
-    link: '/pnp/create',
+    icon: 'mdi-account-plus',
+    link: '/pnp/createCharacter',
+  },
+  {
+    title: 'Campaign Overview',
+    caption: 'All Campaigns',
+    icon: 'mdi-book-multiple',
+    link: '/pnp/campaignOverview',
+  },
+  {
+    title: 'Campaign Creator',
+    caption: 'create a campaign',
+    icon: 'mdi-book-plus',
+    link: '/pnp/createCampaign',
   },
   /*   {
       title: 'SWN',

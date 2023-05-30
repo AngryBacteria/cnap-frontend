@@ -1,5 +1,8 @@
 <template>
   <q-card class="small" flat>
+    <h1>
+      Character Creator
+    </h1>
     <q-form @submit.prevent="submitCharacter" @reset="onReset">
       <fieldset>
         <q-input
@@ -41,7 +44,7 @@
 
         <q-input
           clearable
-          type="text"
+          type="textarea"
           v-model="backstory"
           label="Backstory"
           filled
@@ -274,5 +277,11 @@ function onReset() {
 fieldset {
   border: none;
   padding: 25px;
+}
+
+h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: -2rem;
 }
 </style>

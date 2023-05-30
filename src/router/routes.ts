@@ -43,12 +43,20 @@ const routes: RouteRecordRaw[] = [
       },
       //Tabletop
       {
-        path: '/pnp/create',
-        component: () => import('pages/PenAndPaper/CreateForm.vue'),
+        path: '/pnp/createCharacter',
+        component: () => import('pages/PenAndPaper/CharacterCreator.vue'),
       },
       {
-        path: '/pnp/characters',
+        path: '/pnp/characterOverview',
         component: () => import('pages/PenAndPaper/CharacterOverview.vue'),
+      },
+      {
+        path: '/pnp/createCampaign',
+        component: () => import('pages/PenAndPaper/CampaignCreator.vue'),
+      },
+      {
+        path: '/pnp/campaignOverview',
+        component: () => import('pages/PenAndPaper/CampaignOverview.vue'),
       },
       {
         path: '/pnp/:charid',
