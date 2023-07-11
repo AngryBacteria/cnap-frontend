@@ -34,6 +34,16 @@
         <q-input
           clearable
           type="text"
+          v-model="model"
+          label="Model Link (Try Eldritch Foundry)"
+          filled
+        />
+
+        <br/>
+
+        <q-input
+          clearable
+          type="text"
           v-model="description"
           label="Personal Description"
           filled
@@ -81,7 +91,11 @@
 
         <br />
 
-        <q-btn type="submit" color="primary" label="Submit" />
+        <q-btn
+          type="submit"
+          color="primary"
+          label="Submit"
+        />
         <q-btn
           type="reset"
           color="primary"
@@ -130,6 +144,7 @@ const framework = ref('');
 const sheetLink = ref('');
 const imageLink = ref('');
 const backstory = ref('');
+const model = ref('');
 
 const frameworks = [
   'Das Schwarze Auge',
@@ -150,6 +165,7 @@ async function submitCharacter() {
       creatorID: currentUser?.uid,
       backstory: backstory.value,
       description: description.value,
+      model: model.value,
     });
 
     const data = image.value;
