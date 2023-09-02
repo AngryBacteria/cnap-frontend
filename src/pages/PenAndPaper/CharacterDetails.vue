@@ -29,6 +29,15 @@
                 target="_blank"
               />
             </a>
+            <a :href="model" target="_blank" v-if="model">
+              <q-btn
+                class="button"
+                v-if="userIsCreator"
+                color="primary"
+                label="Character Model"
+                target="_blank"
+              />
+            </a>
           </div>
           <div class="descriptionContainer">
             <h2>Description</h2>
@@ -94,6 +103,7 @@ const framework = ref('');
 const sheetLink = ref('');
 const imageLink = ref('');
 const backstory = ref('');
+const model = ref('');
 
 // Geht trotz Error
 // Get Doc and values to display
@@ -107,6 +117,7 @@ if (character.exists()) {
   charClass.value = charData.class;
   backstory.value = charData.backstory;
   description.value = charData.description;
+  model.value = charData.model;
   if (character.data().creatorID == '') {
     userIsCreator = true;
   } else {

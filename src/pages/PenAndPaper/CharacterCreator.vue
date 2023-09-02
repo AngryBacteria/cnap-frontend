@@ -1,5 +1,8 @@
 <template>
   <q-card class="small" flat>
+    <h1>
+      Character Creator
+    </h1>
     <q-form @submit.prevent="submitCharacter" @reset="onReset">
       <fieldset>
         <q-input
@@ -31,6 +34,16 @@
         <q-input
           clearable
           type="text"
+          v-model="model"
+          label="Model Link (Try Eldritch Foundry)"
+          filled
+        />
+
+        <br/>
+
+        <q-input
+          clearable
+          type="text"
           v-model="description"
           label="Personal Description"
           filled
@@ -41,7 +54,7 @@
 
         <q-input
           clearable
-          type="text"
+          type="textarea"
           v-model="backstory"
           label="Backstory"
           filled
@@ -78,7 +91,11 @@
 
         <br />
 
-        <q-btn type="submit" color="primary" label="Submit" />
+        <q-btn
+          type="submit"
+          color="primary"
+          label="Submit"
+        />
         <q-btn
           type="reset"
           color="primary"
@@ -127,6 +144,7 @@ const framework = ref('');
 const sheetLink = ref('');
 const imageLink = ref('');
 const backstory = ref('');
+const model = ref('');
 
 const frameworks = [
   'Das Schwarze Auge',
@@ -147,6 +165,7 @@ async function submitCharacter() {
       creatorID: currentUser?.uid,
       backstory: backstory.value,
       description: description.value,
+      model: model.value,
     });
 
     const data = image.value;
@@ -274,5 +293,11 @@ function onReset() {
 fieldset {
   border: none;
   padding: 25px;
+}
+
+h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: -2rem;
 }
 </style>

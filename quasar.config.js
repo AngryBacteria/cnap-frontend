@@ -42,7 +42,7 @@ module.exports = configure(function (ctx) {
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-      'mdi-v6',
+      'mdi-v7',
       'ionicons-v4',
       'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
