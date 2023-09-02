@@ -5,18 +5,22 @@
     alt="Character Image"
   />
 
-  <h1 class="title">
-    The Boys
-  </h1>
+  <h1 class="title">The Boys</h1>
 
   <div v-if="coreMembers" class="coreMembers">
     <div v-for="member in coreMembers" :key="member.data">
       <router-link :to="'/' + member.data().uid">
         <q-card>
           <img
-            style="width: 200px; height: 200px; object-fit: cover; padding: 10px"
+            style="
+              width: 200px;
+              height: 200px;
+              object-fit: cover;
+              padding: 10px;
+            "
             :src="member.data().photoURL"
-            alt="Profile Picture"/>
+            alt="Profile Picture"
+          />
 
           <q-card-section>
             <div class="text-h6">{{ member.data().displayName }}</div>

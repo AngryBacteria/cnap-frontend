@@ -110,7 +110,7 @@ if (character.exists()) {
   if (character.data().creatorID == '') {
     userIsCreator = true;
   } else {
-    userIsCreator = (currentUserID == character.data().creatorID);
+    userIsCreator = currentUserID == character.data().creatorID;
   }
 } else {
   Notify.create({

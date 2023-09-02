@@ -488,6 +488,12 @@ export const queues: QueueDTO[] = [
     notes: null,
   },
   {
+    queueId: 1700,
+    map: 'Rings of Wrath',
+    description: 'Arena',
+    notes: null,
+  },
+  {
     queueId: 1900,
     map: "Summoner's Rift",
     description: 'Pick URF games',

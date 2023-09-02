@@ -5,19 +5,17 @@
       <q-badge
         v-if="coreMember"
         class="badge"
-        outline align="middle"
-        color="primary">
+        outline
+        align="middle"
+        color="primary"
+      >
         core
       </q-badge>
     </h1>
     <div class="charContainer">
       <div class="upperContainer">
         <div class="personalContainer">
-          <q-img
-            :src="photoURL"
-            alt="Profile Picture"
-            :fit="'contain'"
-          />
+          <q-img :src="photoURL" alt="Profile Picture" :fit="'contain'" />
           <q-btn
             class="button"
             v-if="userIsUser"
@@ -27,14 +25,10 @@
           />
         </div>
         <div class="descriptionContainer">
-          <h2>
-            Catchphrase
-          </h2>
+          <h2>Catchphrase</h2>
           {{ catchPhrase }}
-          <br/>
-          <h2>
-            About
-          </h2>
+          <br />
+          <h2>About</h2>
           {{ about }}
         </div>
       </div>
@@ -43,11 +37,11 @@
 </template>
 
 <script setup lang="ts">
-import {useRoute} from 'vue-router';
-import {doc, getDoc, getFirestore} from 'firebase/firestore';
-import {firebaseApp} from 'boot/firebase';
-import {ref} from 'vue';
-import {getCurrentUser} from 'vuefire';
+import { useRoute } from 'vue-router';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
+import { firebaseApp } from 'boot/firebase';
+import { ref } from 'vue';
+import { getCurrentUser } from 'vuefire';
 
 // General Variables
 const route = useRoute();
@@ -73,13 +67,11 @@ if (user.exists()) {
   catchPhrase.value = charData.catchPhrase;
   about.value = charData.about;
   coreMember.value = charData.coreMember;
-  userIsUser.value = (currentUserID == user.data().uid);
+  userIsUser.value = currentUserID == user.data().uid;
 }
-
 </script>
 
 <style>
-
 .small {
   padding: 2%;
 }
@@ -162,5 +154,4 @@ fieldset {
     width: 100%;
   }
 }
-
 </style>

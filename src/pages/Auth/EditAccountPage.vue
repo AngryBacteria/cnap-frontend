@@ -74,7 +74,7 @@
             color="primary"
             type="submit"
             :loading="loadingFlag"
-            >
+          >
             Update Profile
           </q-btn>
           <q-btn
