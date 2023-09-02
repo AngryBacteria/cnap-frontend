@@ -18,20 +18,17 @@
           :options="frameworks"
           :rules="[(val) => !!val || 'Field is required']"
         />
-
       </fieldset>
     </q-form>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
-
+import { ref } from 'vue';
 
 // Variables for Firestore entry
 const name = ref('');
-const framework = ref('')
-
+const framework = ref('');
 
 const frameworks = [
   'Das Schwarze Auge',
@@ -39,14 +36,12 @@ const frameworks = [
   'Stars Without Numbers',
 ];
 async function submitCharacter() {
-  console.log('submit')
+  console.log('submit');
 }
 
 function onReset() {
-  console.log('reset')
+  console.log('reset');
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

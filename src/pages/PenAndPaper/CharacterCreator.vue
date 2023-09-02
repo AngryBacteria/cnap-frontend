@@ -1,8 +1,6 @@
 <template>
   <q-card class="small" flat>
-    <h1>
-      Character Creator
-    </h1>
+    <h1>Character Creator</h1>
     <q-form @submit.prevent="submitCharacter" @reset="onReset">
       <fieldset>
         <q-input
@@ -39,7 +37,7 @@
           filled
         />
 
-        <br/>
+        <br />
 
         <q-input
           clearable
@@ -91,11 +89,7 @@
 
         <br />
 
-        <q-btn
-          type="submit"
-          color="primary"
-          label="Submit"
-        />
+        <q-btn type="submit" color="primary" label="Submit" />
         <q-btn
           type="reset"
           color="primary"
