@@ -9,7 +9,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const $q = useQuasar();
   const refUser = useCurrentUser();
   const isLoggedIn = ref(false);
-  const apiEndpoint = 'http://api.cnap.ch';
+  const apiEndpoint = 'https://api.cnap.ch';
 
   const matchData = ref<MatchDTO | null>();
 
