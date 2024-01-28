@@ -49,13 +49,6 @@ if (props.permission) {
             permissionFlag.value = true;
             return;
           }
-
-          //User needs specific permission
-          const token = await newUser.getIdTokenResult();
-          if (token.claims[props.permission] === true) {
-            permissionFlag.value = true;
-            return;
-          }
         }
       }
       permissionFlag.value = false;

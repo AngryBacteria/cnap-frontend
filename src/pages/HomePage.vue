@@ -1,15 +1,9 @@
 <template>
-  <q-img
-    class="banner"
-    src="https://placehold.co/1920x480"
-    alt="Character Image"
-  />
-
   <h1 class="title">The Boys</h1>
 
   <div v-if="coreMembers" class="coreMembers">
     <div v-for="member in coreMembers" :key="member.data">
-      <router-link :to="'/' + member.data().uid">
+      <router-link :to="'/user/' + member.data().uid">
         <q-card>
           <img
             style="
