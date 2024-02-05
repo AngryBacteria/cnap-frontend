@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.matchData">
+  <div v-if="store.matchData" class="surface shadow-1 rounded-borders">
     <div v-for="pair in pairs" :key="pair.key">
       <div v-if="pair.team1 && pair.team2" class="participant_summary">
         <div class="participant_info_left">
@@ -243,6 +243,7 @@ p {
       )
       minmax(100px, 1fr) minmax(100px, 1fr) minmax(150px, 1fr);
   }
+
   .items {
     display: none !important;
   }

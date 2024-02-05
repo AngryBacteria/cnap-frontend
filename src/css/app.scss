@@ -1,1 +1,21 @@
 // app global css in SCSS form
+.body--light {
+  background-color: #f9fafb;
+}
+
+.body--light .surface {
+  background-color: white;
+}
+
+.body--dark .surface {
+  background-color: $dark;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:visited {
+  color: inherit;
+}

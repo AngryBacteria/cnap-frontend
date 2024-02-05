@@ -8,7 +8,7 @@
       @click="router.push('/lol/match/' + match.match_id)"
       v-for="match in matches"
       :key="match.match_id"
-      class="match shadow-1"
+      class="match surface shadow-1"
       :class="{
         win: match.data_participant.win,
         loss: !match.data_participant.win,

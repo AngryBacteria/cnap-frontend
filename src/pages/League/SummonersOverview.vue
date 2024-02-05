@@ -95,8 +95,4 @@ async function searchForSummoner() {
   gap: 1rem;
   justify-content: center;
 }
-
-a {
-  text-decoration: none;
-}
 </style>

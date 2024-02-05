@@ -3,16 +3,6 @@
     <LaneSummary :data="store.matchData"></LaneSummary>
 
     <ParticipantTable :data="store.matchData"></ParticipantTable>
-
-    <q-tabs v-model="participant" class="text-teal">
-      <q-tab
-        v-for="participant in store.matchData?.info.participants"
-        :key="participant.summonerName"
-        :name="participant.championName"
-        :icon="`img:${rh.getChampionSquaredPortrait(participant.championId)}`"
-        :label="participant.summonerName"
-      />
-    </q-tabs>
   </div>
 </template>
 
@@ -20,15 +10,12 @@
 import { useRoute } from 'vue-router';
 import { useFetch } from '@vueuse/core';
 import { MatchDTO } from 'src/data/interfaces/MatchInterfaces';
-import { watch, computed, ref } from 'vue';
-import RiotHelper from 'src/plugins/RiotHelper';
+import { watch, computed } from 'vue';
 import ParticipantTable from 'src/components/League/Match/ParticipantTable.vue';
 import LaneSummary from 'src/components/League/Match/LaneSummary.vue';
 import { useSettingsStore } from 'stores/settingsStore';
 
 const route = useRoute();
-const participant = ref('');
-const rh = RiotHelper.getInstance();
 const store = useSettingsStore();
 
 const url = computed(() => {
