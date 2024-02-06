@@ -9,8 +9,8 @@ export const useSettingsStore = defineStore('settings', () => {
   const $q = useQuasar();
   const refUser = useCurrentUser();
   const isLoggedIn = ref(false);
-  //const apiEndpoint = 'https://cnapi.angrybacteria.ch';
-  const apiEndpoint = 'http://localhost:3000';
+  const apiEndpoint = 'https://cnapi.angrybacteria.ch';
+  // const apiEndpoint = 'http://localhost:3000';
 
   const currentMatch = ref<MatchV5DTO | null>();
   const currentSummoner = ref<SummonerDTO | null>();
