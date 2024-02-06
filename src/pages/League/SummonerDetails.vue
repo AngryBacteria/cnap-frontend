@@ -1,29 +1,31 @@
 <template>
-  <div v-if="!summoner">No Summoner data</div>
-  <div v-if="summoner">
-    <h3 style="margin-top: 0">{{ summoner.name }}</h3>
+  <div v-if="!store.currentSummoner">No Summoner data</div>
+  <div v-if="store.currentSummoner">
+    <h3 style="margin-top: 0">{{ store.currentSummoner.name }}</h3>
   </div>
   <div v-if="matches" class="matches">
     <div
-      @click="router.push('/lol/match/' + match.match_id)"
+      @click="router.push('/lol/match/' + match.metadata.matchId)"
       v-for="match in matches"
-      :key="match.match_id"
+      :key="match.metadata.matchId"
       class="match surface shadow-1"
       :class="{
-        win: match.data_participant.win,
-        loss: !match.data_participant.win,
+        win: match.info.participants[0].win,
+        loss: !match.info.participants[0].win,
       }"
     >
       <img
         width="50"
-        :src="rh.getChampionSquaredPortrait(match.data_participant.championId)"
+        :src="
+          rh.getChampionSquaredPortrait(match.info.participants[0].championId)
+        "
         alt="summoner1"
       />
-      <p>{{ rh.getQueueInfo(match.data_match.queueId)?.description }}</p>
+      <p>{{ rh.getQueueInfo(match.info.queueId)?.description }}</p>
       <p>
-        {{ match.data_participant.kills }} /
-        {{ match.data_participant.deaths }} /
-        {{ match.data_participant.assists }}
+        {{ match.info.participants[0].kills }} /
+        {{ match.info.participants[0].deaths }} /
+        {{ match.info.participants[0].assists }}
       </p>
     </div>
     <q-pagination
@@ -38,12 +40,11 @@
 
 <script setup lang="ts">
 import { useFetch } from '@vueuse/core';
-import { SummonerData } from 'src/data/interfaces/CustomInterfaces';
-import type { ParticipantMatch } from 'src/data/interfaces/ParticipantMatchInterfaces';
 import { useSettingsStore } from 'src/stores/settingsStore';
 import { useRoute, useRouter } from 'vue-router';
 import RiotHelper from 'src/plugins/RiotHelper';
 import { computed, ref, watch } from 'vue';
+import { MatchV5DTO, SummonerDTO } from 'src/data/interfaces/CustomInterfaces';
 
 const route = useRoute();
 const router = useRouter();
@@ -52,31 +53,34 @@ const rh = RiotHelper.getInstance();
 
 const puuid = route.params.puuid;
 const page = ref(1);
-const matches = ref<ParticipantMatch[]>();
+const matches = ref<MatchV5DTO[]>();
 
-const { data: summoner } = await useFetch(
-  `${store.apiEndpoint}/api/v1/summoner/puuid/${puuid}`
-)
-  .get()
-  .json<SummonerData>();
+if (!store.currentSummoner || store.currentSummoner.puuid !== puuid) {
+  const { data: summoner } = await useFetch(
+    `${store.apiEndpoint}/api/v1/summoner/puuid/${puuid}`,
+  )
+    .get()
+    .json<SummonerDTO>();
+  store.currentSummoner = summoner.value;
+}
 
 const matchesUrl = computed(() => {
-  return `${store.apiEndpoint}/api/v1/match/participant/puuid/${puuid}?page=${page.value}`;
+  return `${store.apiEndpoint}/api/v1/match/archive/puuid/${puuid}?page=${page.value}`;
 });
 
 watch(
   matchesUrl,
   async (newUrl) => {
-    const { data } = await useFetch(newUrl).get().json<ParticipantMatch[]>();
+    const { data } = await useFetch(newUrl).get().json<MatchV5DTO[]>();
     if (data.value) {
       matches.value = data.value;
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .loss {
   border-left: 5px solid $riot-red;
 }

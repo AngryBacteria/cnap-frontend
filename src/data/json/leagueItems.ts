@@ -1,5 +1,25 @@
-import { LeagueItem } from '../interfaces/CustomInterfaces';
+export interface LeagueItem {
+  id: number;
+  name: string;
+  description: string;
+  active: boolean;
+  inStore: boolean;
+  from?: (number | null)[] | null;
+  to?: (number | null)[] | null;
+  categories?: (string | null)[] | null;
+  maxStacks: number;
+  requiredChampion: string;
+  requiredAlly: string;
+  requiredBuffCurrencyName: string;
+  requiredBuffCurrencyCost: number;
+  specialRecipe: number;
+  isEnchantment: boolean;
+  price: number;
+  priceTotal: number;
+  iconPath: string;
+}
 
+//TODO: fix this
 export const leagueItems: LeagueItem[] = [
   {
     id: 1001,

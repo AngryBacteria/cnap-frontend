@@ -1,19 +1,19 @@
 <template>
-  <div v-if="store.matchData">
-    <LaneSummary :data="store.matchData"></LaneSummary>
+  <div v-if="store.currentMatch">
+    <LaneSummary :data="store.currentMatch"></LaneSummary>
 
-    <ParticipantTable :data="store.matchData"></ParticipantTable>
+    <ParticipantTable :data="store.currentMatch"></ParticipantTable>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { useFetch } from '@vueuse/core';
-import { MatchDTO } from 'src/data/interfaces/MatchInterfaces';
 import { watch, computed } from 'vue';
 import ParticipantTable from 'src/components/League/Match/ParticipantTable.vue';
 import LaneSummary from 'src/components/League/Match/LaneSummary.vue';
 import { useSettingsStore } from 'stores/settingsStore';
+import { MatchV5DTO } from 'src/data/interfaces/CustomInterfaces';
 
 const route = useRoute();
 const store = useSettingsStore();
@@ -28,14 +28,14 @@ const url = computed(() => {
 watch(
   url,
   async (newUrl) => {
-    const { data } = await useFetch(newUrl).get().json<MatchDTO>();
-    store.matchData = data.value;
+    const { data } = await useFetch(newUrl).get().json<MatchV5DTO>();
+    store.currentMatch = data.value;
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 
-<style>
+<style scoped>
 .q-tab__label {
   font-size: 1em;
 }

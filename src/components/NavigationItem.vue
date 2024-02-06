@@ -53,7 +53,7 @@ if (props.permission) {
       }
       permissionFlag.value = false;
     },
-    { immediate: true }
+    { immediate: true },
   );
 }
 </script>

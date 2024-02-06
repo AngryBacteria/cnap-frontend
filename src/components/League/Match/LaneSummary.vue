@@ -1,5 +1,5 @@
 <template>
-  <div v-if="store.matchData" class="surface shadow-1 rounded-borders">
+  <div v-if="store.currentMatch" class="surface shadow-1 rounded-borders">
     <div v-for="pair in pairs" :key="pair.key">
       <div v-if="pair.team1 && pair.team2" class="participant_summary">
         <div class="participant_info_left">
@@ -65,7 +65,7 @@
             {{
               Math.round(
                 ((pair.team1.kills + pair.team1.assists) / pair.team1.deaths) *
-                  10
+                  10,
               ) / 10
             }}
             KDA
@@ -99,7 +99,7 @@
             {{
               Math.round(
                 ((pair.team2.kills + pair.team2.assists) / pair.team2.deaths) *
-                  10
+                  10,
               ) / 10
             }}
             KDA
@@ -166,9 +166,9 @@
 
 <script setup lang="ts">
 import RiotHelper from 'src/plugins/RiotHelper';
-import { Participant } from 'src/data/interfaces/MatchInterfaces';
 import { computed } from 'vue';
 import { useSettingsStore } from 'stores/settingsStore';
+import { Participant } from 'src/data/interfaces/CustomInterfaces';
 
 interface Pair {
   key: string;
@@ -186,19 +186,19 @@ const bigIcons = '50';
 const positions = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY'];
 
 const pairs = computed(() => {
-  if (store.matchData) {
-    const team1 = store.matchData.info.participants.slice(0, 5);
-    const team2 = store.matchData.info.participants.slice(5);
+  if (store.currentMatch) {
+    const team1 = store.currentMatch.info.participants.slice(0, 5);
+    const team2 = store.currentMatch.info.participants.slice(5);
 
     const output: Pair[] = [];
     positions.forEach((position) => {
       output.push({
         key: position,
         team1: team1.find(
-          (participant) => participant.teamPosition === position
+          (participant) => participant.teamPosition === position,
         ),
         team2: team2.find(
-          (participant) => participant.teamPosition === position
+          (participant) => participant.teamPosition === position,
         ),
       });
     });

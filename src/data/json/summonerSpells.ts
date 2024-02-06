@@ -1,5 +1,14 @@
-import { SummonerSpell } from '../interfaces/CustomInterfaces';
+export interface SummonerSpell {
+  id: number;
+  name: string;
+  description: string;
+  summonerLevel: number;
+  cooldown: number;
+  gameModes: string[];
+  iconPath: string;
+}
 
+//TODO: fix this
 export const summonerSpells: SummonerSpell[] = [
   {
     id: 1,

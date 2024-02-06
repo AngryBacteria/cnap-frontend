@@ -107,7 +107,7 @@ async function register() {
       const user = await createUserWithEmailAndPassword(
         auth,
         email.value,
-        password.value
+        password.value,
       );
       if (photoURL.value.length == 0)
         photoURL.value = 'https://cdn.quasar.dev/img/boy-avatar.png';
@@ -146,10 +146,12 @@ async function register() {
   margin: auto;
   max-width: 1000px;
 }
+
 h3 {
   margin-top: 0;
   margin-bottom: 1rem;
 }
+
 a {
   padding-left: 1rem;
 }

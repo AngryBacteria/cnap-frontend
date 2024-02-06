@@ -1,11 +1,9 @@
-import { QueueDTO } from 'src/data/interfaces/CustomInterfaces';
 import { leagueItems } from 'src/data/json/leagueItems';
-import { queues } from 'src/data/json/queues';
+import { QueueDTO, queues } from 'src/data/json/queues';
 import { summonerSpells } from 'src/data/json/summonerSpells';
 
 export default class RiotHelper {
   private static INSTANCE: RiotHelper;
-  private static LATEST_PATCH = '13.4';
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}

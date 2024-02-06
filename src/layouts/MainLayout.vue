@@ -280,16 +280,8 @@ async function logout() {
 }
 </script>
 
-<style lang="sass" scoped>
-.my-div
-  body.screen--xl &
-    margin: 5% 5% 5% 5%
-  body.screen--lg &
-    margin: 5% 5% 5% 5%
-  body.screen--md &
-    margin: 5% 5% 5% 5%
-  body.screen--sm &
-    margin: 5% 5% 5% 5%
-  body.screen--xs &
-    margin: 5% 5% 5% 5%
+<style lang="scss" scoped>
+.my-div {
+  margin: 5% 5% 5% 5%;
+}
 </style>

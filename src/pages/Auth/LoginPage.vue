@@ -32,7 +32,7 @@
   </q-page>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { getCurrentUser, useFirebaseAuth } from 'vuefire';
 import { useRouter } from 'vue-router';
@@ -41,6 +41,7 @@ import { Notify } from 'quasar';
 
 const router = useRouter();
 const route = useRouter();
+const auth = useFirebaseAuth();
 
 const email = ref('');
 const password = ref('');
@@ -66,7 +67,6 @@ onMounted(async () => {
 });
 //Todo correct error reaction
 async function login() {
-  const auth = useFirebaseAuth();
   if (auth) {
     try {
       await signInWithEmailAndPassword(auth, email.value, password.value);
@@ -83,9 +83,8 @@ async function login() {
           : '/';
       await router.push(to);
     } catch (error) {
-      const errorCode = error.code;
       Notify.create({
-        message: errorCode.split('/')[1],
+        message: error ? `${error}` : 'Error while attempting to Log-In',
         color: 'red',
         position: 'top',
         icon: 'mdi-close-octagon-outline',

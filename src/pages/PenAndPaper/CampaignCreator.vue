@@ -1,5 +1,5 @@
 <template>
-  <q-card class="small" flat>
+  <q-card class="small">
     <q-form @submit.prevent="submitCharacter" @reset="onReset">
       <fieldset>
         <q-input

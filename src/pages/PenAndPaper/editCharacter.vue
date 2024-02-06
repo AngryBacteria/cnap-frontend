@@ -174,7 +174,7 @@ async function editCharacter() {
       },
       {
         merge: true,
-      }
+      },
     );
 
     const data = image.value;
@@ -197,7 +197,7 @@ async function editCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           if (!data2) {
             await router.push(`/pnp/${charid}`);
@@ -215,7 +215,7 @@ async function editCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           await router.push(`/pnp/${charid}`);
         });
@@ -249,7 +249,7 @@ async function editCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           await router.push(`/pnp/${charid}`);
         });
@@ -265,7 +265,7 @@ async function editCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           await router.push(`/pnp/${charid}`);
         });

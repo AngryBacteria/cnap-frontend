@@ -158,7 +158,7 @@ async function deleteCharacter() {
 }
 </script>
 
-<style>
+<style scoped>
 .badge {
   font-size: 1rem;
   height: 1.3rem;

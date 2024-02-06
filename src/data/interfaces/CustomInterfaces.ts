@@ -6,256 +6,249 @@ export enum Permissions {
   SWN = 'swn',
 }
 
-//Summoner data of postgres DB
-export interface SummonerDB {
+export interface SummonerDTO {
   id: string;
-  data: {
-    name?: string;
-    puuid: string;
-    accountId?: string;
-    revisionDate?: string;
-    profileIconId?: string;
-    summonerLevel?: string;
-  };
-}
-
-//Summoner data from riot
-export interface SummonerData {
   accountId: string;
+  puuid: string;
+  name: string;
   profileIconId: number;
   revisionDate: number;
-  name: string;
-  id: string;
-  puuid: string;
   summonerLevel: number;
 }
 
-//Champion info from the endpoint of cdragon
-//https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champions/{id}.json
-
-export interface CDragonChampionInfo {
-  id: number;
-  name: string;
-  alias: string;
-  title: string;
-  shortBio: string;
-  tacticalInfo: TacticalInfo;
-  playstyleInfo: PlaystyleInfo;
-  squarePortraitPath: string;
-  stingerSfxPath: string;
-  chooseVoPath: string;
-  banVoPath: string;
-  roles: string[];
-  recommendedItemDefaults: any[];
-  skins: Skin[];
-  passive: Passive;
-  spells: Spell[];
-}
-
-export interface Passive {
-  name: string;
-  abilityIconPath: string;
-  abilityVideoPath: string;
-  abilityVideoImagePath: string;
-  description: string;
-}
-
-export interface PlaystyleInfo {
-  damage: number;
-  durability: number;
-  crowdControl: number;
-  mobility: number;
-  utility: number;
-}
-
-export interface Skin {
-  id: number;
-  isBase: boolean;
-  name: string;
-  splashPath: string;
-  uncenteredSplashPath: string;
-  tilePath: string;
-  loadScreenPath: string;
-  skinType: string;
-  rarity: string;
-  isLegacy: boolean;
-  splashVideoPath: null;
-  collectionSplashVideoPath: null;
-  featuresText: null;
-  chromaPath: null | string;
-  emblems: null;
-  regionRarityId: number;
-  rarityGemPath: null;
-  skinLines: SkinLine[] | null;
-  description: null | string;
-  loadScreenVintagePath?: string;
-  chromas?: Chroma[];
-}
-
-export interface Chroma {
-  id: number;
-  name: Name;
-  chromaPath: string;
-  colors: string[];
-  descriptions: Description[];
-  rarities: Rarity[];
-}
-
-export interface Description {
-  region: Region;
-  description: string;
-}
-
-export enum Region {
-  Riot = 'riot',
-  Tencent = 'TENCENT',
-}
-
-export enum Name {
-  CafeCutiesAnnie = 'Cafe Cuties Annie',
-  FrightNightAnnie = 'Fright Night Annie',
-  LunarBeastAnnie = 'Lunar Beast Annie',
-}
-
-export interface Rarity {
-  region: Region;
-  rarity: number;
-}
-
-export interface SkinLine {
-  id: number;
-}
-
-export interface Spell {
-  spellKey: string;
-  name: string;
-  abilityIconPath: string;
-  abilityVideoPath: string;
-  abilityVideoImagePath: string;
-  cost: string;
-  cooldown: string;
-  description: string;
-  dynamicDescription: string;
-  range: number[];
-  costCoefficients: number[];
-  cooldownCoefficients: number[];
-  coefficients: Coefficients;
-  effectAmounts: { [key: string]: number[] };
-  ammo: Ammo;
-  maxLevel: number;
-}
-
-export interface Ammo {
-  ammoRechargeTime: number[];
-  maxAmmo: number[];
-}
-
-export interface Coefficients {
-  coefficient1: number;
-  coefficient2: number;
-}
-
-export interface TacticalInfo {
-  style: number;
-  difficulty: number;
-  damageType: string;
-}
-
-//Summoner spell / summonerspell
-export interface SummonerSpell {
-  id: number;
-  name: string;
-  description: string;
-  summonerLevel: number;
-  cooldown: number;
-  gameModes: string[];
-  iconPath: string;
-}
-
-//League Item / Leagueitem
-export interface LeagueItem {
-  id: number;
-  name: string;
-  description: string;
-  active: boolean;
-  inStore: boolean;
-  from?: (number | null)[] | null;
-  to?: (number | null)[] | null;
-  categories?: (string | null)[] | null;
-  maxStacks: number;
-  requiredChampion: string;
-  requiredAlly: string;
-  requiredBuffCurrencyName: string;
-  requiredBuffCurrencyCost: number;
-  specialRecipe: number;
-  isEnchantment: boolean;
-  price: number;
-  priceTotal: number;
-  iconPath: string;
-}
-
-//https://static.developer.riotgames.com/docs/lol/queues.json
-export interface QueueDTO {
-  queueId: number;
-  map: string;
-  description: null | string;
-  notes: null | string;
-}
-
-//https://developer.riotgames.com/docs/lol#data-dragon_champions
-export interface ChampionDTO {
-  version: Version;
-  id: string;
-  key: string;
-  name: string;
-  title: string;
-  blurb: string;
+export interface MatchV5DTO {
   info: Info;
-  image: Image;
-  tags: Tag[];
-  partype: string;
-  stats: { [key: string]: number };
-}
-
-export interface Image {
-  full: string;
-  sprite: Sprite;
-  group: Group;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
-export enum Group {
-  Champion = 'champion',
-}
-
-export enum Sprite {
-  Champion0PNG = 'champion0.png',
-  Champion1PNG = 'champion1.png',
-  Champion2PNG = 'champion2.png',
-  Champion3PNG = 'champion3.png',
-  Champion4PNG = 'champion4.png',
-  Champion5PNG = 'champion5.png',
+  metadata: Metadata;
 }
 
 export interface Info {
-  attack: number;
+  mapId: number;
+  teams: Team[];
+  gameId: number;
+  queueId: number;
+  gameMode: string;
+  gameName: string;
+  gameType: string;
+  platformId: string;
+  gameVersion: string;
+  gameCreation: number;
+  gameDuration: number;
+  participants: Participant[];
+  tournamentCode: string;
+  gameEndTimestamp: number;
+  gameStartTimestamp: number;
+}
+
+export interface Participant {
+  win: boolean;
+  lane: string;
+  role: string;
+  item0: number;
+  item1: number;
+  item2: number;
+  item3: number;
+  item4: number;
+  item5: number;
+  item6: number;
+  kills: number;
+  perks: Perks;
+  puuid: string;
+  deaths: number;
+  teamId: number;
+  assists: number;
+  missions: { [key: string]: number };
+  baitPings: number;
+  goldSpent: number;
+  holdPings: number;
+  nexusLost: number;
+  placement: number;
+  pushPings: number;
+  totalHeal: number;
+  allInPings: number;
+  baronKills: number;
+  basicPings: number;
+  challenges: { [key: string]: number };
+  champLevel: number;
+  championId: number;
+  goldEarned: number;
+  nexusKills: number;
+  pentaKills: number;
+  summonerId: string;
+  timePlayed: number;
+  bountyLevel: number;
+  dangerPings: number;
+  doubleKills: number;
+  dragonKills: number;
+  profileIcon: number;
+  quadraKills: number;
+  spell1Casts: number;
+  spell2Casts: number;
+  spell3Casts: number;
+  spell4Casts: number;
+  summoner1Id: number;
+  summoner2Id: number;
+  tripleKills: number;
+  turretKills: number;
+  turretsLost: number;
+  unrealKills: number;
+  visionScore: number;
+  wardsKilled: number;
+  wardsPlaced: number;
+  championName: string;
+  commandPings: number;
+  getBackPings: number;
+  onMyWayPings: number;
+  playerScore0: number;
+  playerScore1: number;
+  playerScore2: number;
+  playerScore3: number;
+  playerScore4: number;
+  playerScore5: number;
+  playerScore6: number;
+  playerScore7: number;
+  playerScore8: number;
+  playerScore9: number;
+  summonerName: string;
+  teamPosition: string;
+  assistMePings: number;
+  killingSprees: number;
+  participantId: number;
+  playerScore10: number;
+  playerScore11: number;
+  riotIdTagline: string;
+  summonerLevel: number;
+  firstBloodKill: boolean;
+  firstTowerKill: boolean;
+  inhibitorKills: number;
+  inhibitorsLost: number;
+  itemsPurchased: number;
+  nexusTakedowns: number;
+  playerAugment1: number;
+  playerAugment2: number;
+  playerAugment3: number;
+  playerAugment4: number;
+  riotIdGameName: string;
+  summoner1Casts: number;
+  summoner2Casts: number;
+  champExperience: number;
+  needVisionPings: number;
+  playerSubteamId: number;
+  timeCCingOthers: number;
+  trueDamageDealt: number;
+  trueDamageTaken: number;
+  turretTakedowns: number;
+  enemyVisionPings: number;
+  firstBloodAssist: boolean;
+  firstTowerAssist: boolean;
+  largestMultiKill: number;
+  magicDamageDealt: number;
+  magicDamageTaken: number;
+  objectivesStolen: number;
+  subteamPlacement: number;
+  totalDamageDealt: number;
+  totalDamageTaken: number;
+  totalTimeCCDealt: number;
+  totalUnitsHealed: number;
+  championTransform: number;
+  enemyMissingPings: number;
+  individualPosition: string;
+  inhibitorTakedowns: number;
+  totalMinionsKilled: number;
+  totalTimeSpentDead: number;
+  visionClearedPings: number;
+  damageSelfMitigated: number;
+  detectorWardsPlaced: number;
+  largestKillingSpree: number;
+  physicalDamageDealt: number;
+  physicalDamageTaken: number;
+  consumablesPurchased: number;
+  damageDealtToTurrets: number;
+  gameEndedInSurrender: boolean;
+  neutralMinionsKilled: number;
+  teamEarlySurrendered: boolean;
+  largestCriticalStrike: number;
+  totalHealsOnTeammates: number;
+  damageDealtToBuildings: number;
+  eligibleForProgression: boolean;
+  longestTimeSpentLiving: number;
+  sightWardsBoughtInGame: number;
+  damageDealtToObjectives: number;
+  objectivesStolenAssists: number;
+  visionWardsBoughtInGame: number;
+  gameEndedInEarlySurrender: boolean;
+  trueDamageDealtToChampions: number;
+  magicDamageDealtToChampions: number;
+  totalDamageDealtToChampions: number;
+  totalAllyJungleMinionsKilled: number;
+  totalEnemyJungleMinionsKilled: number;
+  physicalDamageDealtToChampions: number;
+  totalDamageShieldedOnTeammates: number;
+}
+
+export interface Perks {
+  styles: Style[];
+  statPerks: StatPerks;
+}
+
+export interface StatPerks {
+  flex: number;
   defense: number;
-  magic: number;
-  difficulty: number;
+  offense: number;
 }
 
-export enum Tag {
-  Assassin = 'Assassin',
-  Fighter = 'Fighter',
-  Mage = 'Mage',
-  Marksman = 'Marksman',
-  Support = 'Support',
-  Tank = 'Tank',
+export interface Style {
+  style: number;
+  selections: Selection[];
+  description: Description;
 }
 
-export enum Version {
-  The13171 = '13.17.1',
+export enum Description {
+  PrimaryStyle = 'primaryStyle',
+  SubStyle = 'subStyle',
+}
+
+export interface Selection {
+  perk: number;
+  var1: number;
+  var2: number;
+  var3: number;
+}
+
+export interface Team {
+  win: boolean;
+  bans: Ban[];
+  teamId: number;
+  objectives: Objectives;
+}
+
+export interface Ban {
+  pickTurn: number;
+  championId: number;
+}
+
+export interface Objectives {
+  baron: Baron;
+  horde: Baron;
+  tower: Baron;
+  dragon: Baron;
+  champion: Baron;
+  inhibitor: Baron;
+  riftHerald: Baron;
+}
+
+export interface Baron {
+  first: boolean;
+  kills: number;
+}
+
+export interface Metadata {
+  matchId: string;
+  dataVersion: string;
+  participants: string[];
+}
+
+export interface AccountDto {
+  puuid: string;
+  gameName: string;
+  tagLine: string;
 }

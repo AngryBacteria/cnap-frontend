@@ -16,19 +16,17 @@
     </q-form>
   </div>
 
-  <div v-if="data" class="summoners">
+  <div v-if="summoners" class="summoners">
     <div v-for="summoner in computedSummoners" :key="summoner.id">
-      <router-link :to="'/lol/summoners/' + summoner.data.puuid">
+      <router-link :to="'/lol/summoners/' + summoner.puuid">
         <q-card>
           <img
             style="width: 200px"
-            :src="rh.getProfileIcon(Number(summoner.data.profileIconId))"
+            :src="rh.getProfileIcon(Number(summoner.profileIconId))"
           />
           <q-card-section>
-            <div class="text-h6">{{ summoner.data.name }}</div>
-            <div class="text-subtitle2">
-              Level {{ summoner.data.summonerLevel }}
-            </div>
+            <div class="text-h6">{{ summoner.name }}</div>
+            <div class="text-subtitle2">Level {{ summoner.summonerLevel }}</div>
           </q-card-section>
         </q-card>
       </router-link>
@@ -38,8 +36,7 @@
 
 <script setup lang="ts">
 import { useFetch } from '@vueuse/core';
-import { Notify } from 'quasar';
-import { SummonerDB, SummonerData } from 'src/data/interfaces/CustomInterfaces';
+import { SummonerDTO } from 'src/data/interfaces/CustomInterfaces';
 import RiotHelper from 'src/plugins/RiotHelper';
 import { useSettingsStore } from 'src/stores/settingsStore';
 import { computed, ref } from 'vue';
@@ -52,42 +49,30 @@ const router = useRouter();
 const summonerSearch = ref('');
 const loadingFlag = ref(false);
 
-const { data } = await useFetch(`${store.apiEndpoint}/api/v1/summoner`)
+const { data: summoners } = await useFetch(
+  `${store.apiEndpoint}/api/v1/summoner`,
+)
   .get()
-  .json<SummonerDB[]>();
+  .json<SummonerDTO[]>();
 
 const computedSummoners = computed(() => {
-  return data.value?.filter((summoner) =>
-    summoner.data.name
-      ?.toLowerCase()
-      .includes(summonerSearch.value.toLowerCase())
+  return summoners.value?.filter((summoner) =>
+    summoner.name?.toLowerCase().includes(summonerSearch.value.toLowerCase()),
   );
 });
 
 async function searchForSummoner() {
-  if (summonerSearch.value.length > 3) {
-    const { data, error } = await useFetch(
-      `${store.apiEndpoint}/api/v1/summoner/name/${summonerSearch.value}`
-    )
-      .get()
-      .json<SummonerData>();
-    if (data) {
-      router.push(`/lol/summoners/${data.value?.puuid}`);
-    }
-    if (error.value) {
-      console.log(error.value);
-      Notify.create({
-        message: 'No Summoner available with that name',
-        color: 'red',
-        position: 'top',
-        icon: 'mdi-close-octagon-outline',
-      });
+  if (summonerSearch.value.length > 3 && computedSummoners.value) {
+    const summoner = computedSummoners.value[0];
+    if (summoner?.puuid) {
+      store.currentSummoner = summoner;
+      router.push(`/lol/summoners/${summoner?.puuid}`);
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .summoners {
   display: flex;
   flex-direction: row;

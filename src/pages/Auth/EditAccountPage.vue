@@ -180,7 +180,7 @@ const summoner = ref<SummonerData | null>(null);
 
 const docReference = doc(
   collection(getFirestore(firebaseApp), 'members'),
-  user?.uid
+  user?.uid,
 );
 
 await initLoad();
@@ -201,7 +201,7 @@ async function initLoad() {
 async function loadSummonerByPuuid() {
   if (memberData.value.riot_puuid) {
     const { data } = await useFetch(
-      `${store.apiEndpoint}/api/v1/summoner/puuid/${memberData.value.riot_puuid}`
+      `${store.apiEndpoint}/api/v1/summoner/puuid/${memberData.value.riot_puuid}`,
     )
       .get()
       .json<SummonerData>();
@@ -214,7 +214,7 @@ async function loadSummonerByPuuid() {
 async function loadSummonerByName() {
   if (summonerName.value.length > 3) {
     const { data } = await useFetch(
-      `${store.apiEndpoint}/api/v1/summoner/name/${summonerName.value}`
+      `${store.apiEndpoint}/api/v1/summoner/name/${summonerName.value}`,
     )
       .get()
       .json<SummonerData>();

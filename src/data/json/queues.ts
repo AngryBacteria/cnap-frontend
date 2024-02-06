@@ -1,5 +1,11 @@
-import { QueueDTO } from '../interfaces/CustomInterfaces';
+export interface QueueDTO {
+  queueId: number;
+  map: string;
+  description?: string | null;
+  notes?: string | null;
+}
 
+//TODO: fix this
 export const queues: QueueDTO[] = [
   {
     queueId: 0,

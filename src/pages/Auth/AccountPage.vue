@@ -71,7 +71,7 @@ if (user.exists()) {
 }
 </script>
 
-<style>
+<style scoped>
 .small {
   padding: 2%;
 }

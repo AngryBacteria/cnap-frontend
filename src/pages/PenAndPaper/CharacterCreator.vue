@@ -1,5 +1,5 @@
 <template>
-  <q-card class="small" flat>
+  <q-card class="small shadow-1">
     <h1>Character Creator</h1>
     <q-form @submit.prevent="submitCharacter" @reset="onReset">
       <fieldset>
@@ -171,11 +171,11 @@ async function submitCharacter() {
 
     const fileRef = storageRef(
       storage,
-      'pnp_characters/' + docRef.id + 'Image'
+      'pnp_characters/' + docRef.id + 'Image',
     );
     const fileRef2 = storageRef(
       storage,
-      'pnp_characters/' + docRef.id + 'Sheet'
+      'pnp_characters/' + docRef.id + 'Sheet',
     );
 
     if (data) {
@@ -188,7 +188,7 @@ async function submitCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           if (!data2) {
             await router.push(`/pnp/${docRef.id}`);
@@ -206,7 +206,7 @@ async function submitCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           await router.push(`/pnp/${docRef.id}`);
         });
@@ -229,11 +229,11 @@ async function submitCharacter() {
 
     const fileRef = storageRef(
       storage,
-      'pnp_characters/' + docRef.id + 'Image'
+      'pnp_characters/' + docRef.id + 'Image',
     );
     const fileRef2 = storageRef(
       storage,
-      'pnp_characters/' + docRef.id + 'Sheet'
+      'pnp_characters/' + docRef.id + 'Sheet',
     );
 
     if (data) {
@@ -246,7 +246,7 @@ async function submitCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           await router.push(`/pnp/${docRef.id}`);
         });
@@ -262,7 +262,7 @@ async function submitCharacter() {
             },
             {
               merge: true,
-            }
+            },
           );
           await router.push(`/pnp/${docRef.id}`);
         });
@@ -283,7 +283,7 @@ function onReset() {
 }
 </script>
 
-<style>
+<style scoped>
 fieldset {
   border: none;
   padding: 25px;

@@ -37,8 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import { Participant } from 'src/data/interfaces/MatchInterfaces';
 import { QTableProps } from 'quasar';
+import { Participant } from 'src/data/interfaces/CustomInterfaces';
 import RiotHelper from 'src/plugins/RiotHelper';
 import { useSettingsStore } from 'stores/settingsStore';
 import { computed } from 'vue';
@@ -48,7 +48,7 @@ const store = useSettingsStore();
 const initialPagination = { page: 1, rowsPerPage: 25 };
 
 const columns = computed(() => {
-  if (!store.matchData) {
+  if (!store.currentMatch) {
     return undefined;
   }
 
@@ -65,7 +65,7 @@ const columns = computed(() => {
   ];
 
   //Every Participant has a column
-  store.matchData.info.participants.forEach((participant) => {
+  store.currentMatch.info.participants.forEach((participant) => {
     columns.push({
       name: participant.summonerName,
       align: 'center',
@@ -101,17 +101,19 @@ const rows = computed(() => {
   const output: any[] = [];
 
   stats.forEach((stat) => {
-    if (store.matchData) {
+    if (store.currentMatch) {
       const row: any = {};
       row['name'] = stat;
       //For every participant add the current stat
       for (
         let index = 0;
-        index < store.matchData.info.participants.length;
+        index < store.currentMatch.info.participants.length;
         index++
       ) {
-        row[store.matchData.info.participants[index].summonerName] =
-          store.matchData.info.participants[index][stat as keyof Participant];
+        row[store.currentMatch.info.participants[index].summonerName] =
+          store.currentMatch.info.participants[index][
+            stat as keyof Participant
+          ];
       }
       output.push(row);
     }
@@ -120,4 +122,4 @@ const rows = computed(() => {
 });
 </script>
 
-<style></style>
+<style scoped></style>

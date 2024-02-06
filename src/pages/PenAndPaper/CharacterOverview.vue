@@ -52,7 +52,7 @@ const characters = computed(() => {
     character
       .data()
       .name?.toLowerCase()
-      .includes(characterSearch.value.toLowerCase())
+      .includes(characterSearch.value.toLowerCase()),
   );
 });
 
@@ -62,7 +62,7 @@ async function searchForCharacters() {
 }
 </script>
 
-<style>
+<style scoped>
 .characters {
   display: flex;
   flex-direction: row;
