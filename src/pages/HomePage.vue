@@ -5,16 +5,12 @@
     <div v-for="member in coreMembers" :key="member.data">
       <router-link :to="'/user/' + member.data().uid">
         <q-card>
-          <img
-            style="
+          <img style="
               width: 200px;
               height: 200px;
               object-fit: cover;
               padding: 10px;
-            "
-            :src="member.data().photoURL"
-            alt="Profile Picture"
-          />
+            " :src="member.data().photoURL" alt="Profile Picture" />
 
           <q-card-section>
             <div class="text-h6">{{ member.data().displayName }}</div>
@@ -50,8 +46,7 @@ const coreMembers = computed(() => {
   justify-content: center;
 }
 
-.banner {
-}
+.banner {}
 
 .title {
   font-size: 4rem;
