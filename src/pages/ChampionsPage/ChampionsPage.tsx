@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ShortChampionData, Tag } from '../../model/ShortChampionData.ts';
 import { RiotAssetsUtil } from '../../utils/RiotAssetsUtil.ts';
-import './ChampionsPage.css';
 import { MultiSelect, TextInput } from '@mantine/core';
 import ChampionCard from '../../components/ChampionCard/ChampionCard.tsx';
+import styles from './ChampionsPage.module.css';
 
 export function ChampionsPage() {
   const [championData, setChampionData] = useState<ShortChampionData[]>([]);
@@ -45,12 +45,10 @@ export function ChampionsPage() {
     [championData, nameSearch, tags],
   );
 
-  console.log(filteredChampions);
   return (
     <>
       <h1>League of legends Champions</h1>
-
-      <section className={'filters'}>
+      <section className={styles.filters}>
         <TextInput placeholder="Champion Name" onChange={updateNameChange} />
         <MultiSelect
           placeholder="Class"
@@ -59,7 +57,7 @@ export function ChampionsPage() {
         />
       </section>
 
-      <section className={'champions'}>
+      <section className={styles.champions}>
         {filteredChampions.map((champion) => {
           return <ChampionCard champion={champion} key={champion.key} />;
         })}

@@ -1,0 +1,28 @@
+.championCard {
+    max-width: 350px;
+}
+
+.championCard {
+    &:hover {
+        border-color: var(--mantine-color-teal-6);
+    }
+}
+
+.championName {
+    text-align: center;
+    text-wrap: wrap;
+}
+
+.championName p {
+    margin: var(--mantine-spacing-xs);
+}
+
+.championName h2 {
+    margin-bottom: 0;
+    margin-top: var(--mantine-spacing-xs);
+}
+
+.championName h5 {
+    margin: 0;
+    color: var(--mantine-color-dimmed);
+}

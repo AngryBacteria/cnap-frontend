@@ -1,0 +1,14 @@
+.filters {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1rem;
+}
+
+.champions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--mantine-spacing-md);
+    justify-items: center;   /* Centers items horizontally within their grid cells */
+}
