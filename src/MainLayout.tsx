@@ -4,15 +4,19 @@ import {
   Burger,
   Button,
   Group,
+  useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core';
-import { ChampionsPage } from './pages/ChampionsPage/ChampionsPage.tsx';
 import { IconMoon, IconSun } from '@tabler/icons-react';
+import { Outlet } from 'react-router-dom';
+import { memo } from 'react';
+import SidebarNavigation from './components/SidebarNavigation/SidebarNavigation.tsx';
 
-export function MainLayout() {
+const MainLayout = memo(function MainLayout() {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure(false);
-  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(false);
-  const { setColorScheme, colorScheme } = useMantineColorScheme();
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+  const computedColorScheme = useComputedColorScheme('dark');
+  const { setColorScheme } = useMantineColorScheme();
 
   return (
     <AppShell
@@ -38,19 +42,28 @@ export function MainLayout() {
             visibleFrom="sm"
             size="sm"
           />
-          <Button size={'xs'}>
-            {colorScheme == 'dark' ? (
-              <IconMoon size={20} onClick={() => setColorScheme('light')} />
+          <Button
+            size={'xs'}
+            onClick={() =>
+              setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
+            }
+          >
+            {computedColorScheme == 'dark' ? (
+              <IconMoon size={20} />
             ) : (
-              <IconSun size={20} onClick={() => setColorScheme('dark')} />
+              <IconSun size={20} />
             )}
           </Button>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
+      <AppShell.Navbar p="md">
+        <SidebarNavigation />
+      </AppShell.Navbar>
       <AppShell.Main>
-        <ChampionsPage />
+        <Outlet />
       </AppShell.Main>
     </AppShell>
   );
-}
+});
+
+export default MainLayout;

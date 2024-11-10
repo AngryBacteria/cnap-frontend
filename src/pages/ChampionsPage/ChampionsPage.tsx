@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { ShortChampionData, Tag } from '../../model/ShortChampionData.ts';
 import { RiotAssetsUtil } from '../../utils/RiotAssetsUtil.ts';
 import { MultiSelect, TextInput } from '@mantine/core';
 import ChampionCard from '../../components/ChampionCard/ChampionCard.tsx';
 import styles from './ChampionsPage.module.css';
 
-export function ChampionsPage() {
+const ChampionsPage = memo(function ChampionsPage() {
   const [championData, setChampionData] = useState<ShortChampionData[]>([]);
   const [nameSearch, setNameSearch] = useState<string>('');
   const [tags, setTags] = useState<Tag[]>([]);
@@ -64,4 +64,6 @@ export function ChampionsPage() {
       </section>
     </>
   );
-}
+});
+
+export default ChampionsPage;

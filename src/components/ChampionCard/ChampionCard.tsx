@@ -8,7 +8,9 @@ interface ChampionCardProps {
   champion: ShortChampionData;
 }
 
-const ChampionCard = memo(function Greeting({ champion }: ChampionCardProps) {
+const ChampionCard = memo(function ChampionCard({
+  champion,
+}: ChampionCardProps) {
   const util = RiotAssetsUtil.getInstance();
 
   return (
