@@ -1,31 +1,28 @@
 import { memo } from 'react';
-import { RiotAssetsUtil } from '../../utils/RiotAssetsUtil.ts';
-import { ShortChampionData } from '../../model/ShortChampionData.ts';
 import { Card, Image } from '@mantine/core';
 import styles from './ChampionCard.module.css';
+import { ChampionReduced } from '../../model/GameDataReduced.ts';
+import { capitalizeFirstLetter, truncateText } from '../../utils/GeneralUtil.ts';
 
 interface ChampionCardProps {
-  champion: ShortChampionData;
+  champion: ChampionReduced;
 }
 
 const ChampionCard = memo(function ChampionCard({
   champion,
 }: ChampionCardProps) {
-  const util = RiotAssetsUtil.getInstance();
 
   return (
     <Card withBorder className={styles.championCard} shadow="sm">
       <Card.Section>
-        <Image
-          src={util.getChampionSplashArtCentered(Number.parseInt(champion.key))}
-        />
+        <Image src={champion.skins[0]?.splashPath} />
       </Card.Section>
 
-      <Card.Section className={styles.championName}>
+      <section className={styles.championName}>
         <h2>{champion.name}</h2>
-        <h5>{champion.title}</h5>
-        <p>{champion.blurb}</p>
-      </Card.Section>
+        <h5>{capitalizeFirstLetter(champion.title)}</h5>
+        <p>{truncateText(champion.lore, 100)}</p>
+      </section>
     </Card>
   );
 });

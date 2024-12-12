@@ -25,7 +25,7 @@ const router = createBrowserRouter([
       {
         path: '/champions',
         element: <ChampionsPage />,
-      },
+      }
     ],
   },
 ]);

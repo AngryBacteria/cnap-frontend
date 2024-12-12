@@ -12,3 +12,9 @@
     gap: var(--mantine-spacing-md);
     justify-items: center;   /* Centers items horizontally within their grid cells */
 }
+
+@media (max-width: 750px) {
+    .champions {
+        grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    }
+}
