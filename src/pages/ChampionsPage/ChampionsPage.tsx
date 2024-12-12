@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Alert, Loader, Select, TextInput } from '@mantine/core';
+import { Alert, Loader, Select, TextInput, Title } from '@mantine/core';
 import ChampionCard from '../../components/ChampionCard/ChampionCard.tsx';
 import styles from './ChampionsPage.module.css';
 import { ChampionReduced } from '../../model/GameDataReduced.ts';
@@ -79,7 +79,7 @@ const ChampionsPage = memo(function ChampionsPage() {
   return (
     <>
       <section>
-        <h1>League of legends Champions</h1>
+        <Title order={1} pb={'sm'}>League of legends Champions</Title>
         <section className={styles.filters}>
           <TextInput
             placeholder="Champion Name"

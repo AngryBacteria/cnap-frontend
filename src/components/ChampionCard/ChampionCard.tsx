@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Card, Image } from '@mantine/core';
+import { Card, Image, Text, Title } from '@mantine/core';
 import styles from './ChampionCard.module.css';
 import { ChampionReduced } from '../../model/GameDataReduced.ts';
 import {
@@ -32,9 +32,9 @@ const ChampionCard = memo(function ChampionCard({
       </Card.Section>
 
       <section className={styles.championName}>
-        <h2>{champion.name}</h2>
-        <h5>{capitalizeFirstLetter(champion.title)}</h5>
-        <p>{truncateText(champion.lore, 100)}</p>
+        <Title order={2} pt={'xs'} ta={'center'}>{champion.name}</Title>
+        <Title order={5} c={'dimmed'} pb={'sm'} ta={'center'}>{capitalizeFirstLetter(champion.title)}</Title>
+        <Text ta={'center'}>{truncateText(champion.lore, 100)}</Text>
       </section>
     </Card>
   );

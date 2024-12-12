@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Champion } from '../../model/GameData.ts';
 import { getChampionData } from '../../utils/RiotUtil.ts';
-import { Alert, Image, Loader } from '@mantine/core';
+import { Alert, Image, Loader, Title } from '@mantine/core';
 import styles from './ChampionDetailPage.module.css';
 
 const ChampionDetailPage = memo(function ChampionsPage() {
@@ -43,7 +43,7 @@ const ChampionDetailPage = memo(function ChampionsPage() {
           className={styles.backgroundImage}
         />
         <section className={styles.championNameLayout}>
-          <h1>Champion Page: {championKey}</h1>
+          <Title order={1}>Champion Page: {championKey}</Title>
         </section>
       </section>
 
