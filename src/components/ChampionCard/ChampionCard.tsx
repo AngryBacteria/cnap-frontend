@@ -2,7 +2,11 @@ import { memo } from 'react';
 import { Card, Image } from '@mantine/core';
 import styles from './ChampionCard.module.css';
 import { ChampionReduced } from '../../model/GameDataReduced.ts';
-import { capitalizeFirstLetter, truncateText } from '../../utils/GeneralUtil.ts';
+import {
+  capitalizeFirstLetter,
+  truncateText,
+} from '../../utils/GeneralUtil.ts';
+import { useNavigate } from 'react-router-dom';
 
 interface ChampionCardProps {
   champion: ChampionReduced;
@@ -11,9 +15,18 @@ interface ChampionCardProps {
 const ChampionCard = memo(function ChampionCard({
   champion,
 }: ChampionCardProps) {
+  const navigate = useNavigate();
+  const goToChampionDetail = () => {
+    navigate(`/champions/${champion.key}`);
+  };
 
   return (
-    <Card withBorder className={styles.championCard} shadow="sm">
+    <Card
+      withBorder
+      className={styles.championCard}
+      shadow="sm"
+      onClick={goToChampionDetail}
+    >
       <Card.Section>
         <Image src={champion.skins[0]?.splashPath} />
       </Card.Section>

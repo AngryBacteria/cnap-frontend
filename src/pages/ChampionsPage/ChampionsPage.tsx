@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { Loader, Select, TextInput } from '@mantine/core';
+import { Alert, Loader, Select, TextInput } from '@mantine/core';
 import ChampionCard from '../../components/ChampionCard/ChampionCard.tsx';
 import styles from './ChampionsPage.module.css';
 import { ChampionReduced } from '../../model/GameDataReduced.ts';
@@ -8,10 +8,7 @@ import { capitalizeFirstLetter } from '../../utils/GeneralUtil.ts';
 
 const ChampionsPage = memo(function ChampionsPage() {
   const [championData, setChampionData] = useState<ChampionReduced[]>([]);
-  const [loadingState, setLoadingState] = useState<
-    'error' | 'loading' | 'available'
-  >('error');
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [nameSearch, setNameSearch] = useState<string>('');
   const [factionSearch, setFactionSearch] = useState<string | null>('');
 
@@ -21,15 +18,14 @@ const ChampionsPage = memo(function ChampionsPage() {
   useEffect(() => {
     const fetchData = async () => {
       setChampionData(await getChampionDataReduced());
-      setLoadingState('available');
     };
-    setLoadingState('loading');
+    setIsLoading(true);
     fetchData()
-      .then(() => setLoadingState('available'))
       .catch((error) => {
-        setLoadingState('error');
+        setChampionData([]);
         console.error('Error:', error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   /**
@@ -37,24 +33,25 @@ const ChampionsPage = memo(function ChampionsPage() {
    */
   const filteredChampions = useMemo(
     () =>
-      championData.filter((champion) => {
-        // Check if faction matches
-        let factionMatch: boolean;
-        if (!factionSearch) {
-          factionMatch = true;
-        } else {
-          factionMatch = champion.faction
-            .toLowerCase()
-            .includes(factionSearch.toLowerCase());
-        }
+      championData
+        .filter((champion) => {
+          // Check if faction matches
+          let factionMatch: boolean;
+          if (!factionSearch) {
+            factionMatch = true;
+          } else {
+            factionMatch = champion.faction
+              .toLowerCase()
+              .includes(factionSearch.toLowerCase());
+          }
 
-        // Check if name or title matches
-        const championMatch =
-          champion.name.toLowerCase().includes(nameSearch.toLowerCase()) ||
-          champion.title.toLowerCase().includes(nameSearch.toLowerCase());
+          // Check if name or title matches
+          const championMatch =
+            champion.name.toLowerCase().includes(nameSearch.toLowerCase()) ||
+            champion.title.toLowerCase().includes(nameSearch.toLowerCase());
 
-        return factionMatch && championMatch;
-      })
+          return factionMatch && championMatch;
+        })
         .sort((a, b) => a.name.localeCompare(b.name)),
     [championData, nameSearch, factionSearch],
   );
@@ -67,32 +64,40 @@ const ChampionsPage = memo(function ChampionsPage() {
     );
   }, [championData]);
 
+  if (championData.length === 0 && !isLoading) {
+    return (
+      <Alert title={'No champions found'} variant={'light'}>
+        Right now no champions are available.
+      </Alert>
+    );
+  }
+
+  if (isLoading) {
+    return <Loader color={'teal'} />;
+  }
+
   return (
     <>
-      {loadingState === 'error' && <h1>Failed to load data</h1>}
-      {loadingState === 'loading' && <Loader color="teal" />}
-      {loadingState === 'available' && (
-        <section>
-          <h1>League of legends Champions</h1>
-          <section className={styles.filters}>
-            <TextInput
-              placeholder="Champion Name"
-              onChange={(event) => setNameSearch(event.currentTarget.value)}
-            />
-            <Select
-              onChange={setFactionSearch}
-              placeholder="Faction"
-              data={uniqueFactions}
-            />
-          </section>
-
-          <section className={styles.champions}>
-            {filteredChampions.map((champion) => {
-              return <ChampionCard champion={champion} key={champion.key} />;
-            })}
-          </section>
+      <section>
+        <h1>League of legends Champions</h1>
+        <section className={styles.filters}>
+          <TextInput
+            placeholder="Champion Name"
+            onChange={(event) => setNameSearch(event.currentTarget.value)}
+          />
+          <Select
+            onChange={setFactionSearch}
+            placeholder="Faction"
+            data={uniqueFactions}
+          />
         </section>
-      )}
+
+        <section className={styles.champions}>
+          {filteredChampions.map((champion) => {
+            return <ChampionCard champion={champion} key={champion.key} />;
+          })}
+        </section>
+      </section>
     </>
   );
 });

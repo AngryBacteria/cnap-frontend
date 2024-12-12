@@ -8,6 +8,7 @@ import '@mantine/notifications/styles.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ChampionsPage from './pages/ChampionsPage/ChampionsPage.tsx';
 import MainLayout from './MainLayout.tsx';
+import ChampionDetailPage from './pages/ChampionDetailPage/ChampionDetailPage.tsx';
 
 const theme = createTheme({
   primaryColor: 'teal',
@@ -25,7 +26,11 @@ const router = createBrowserRouter([
       {
         path: '/champions',
         element: <ChampionsPage />,
-      }
+      },
+      {
+        path: '/champions/:championKey',
+        element: <ChampionDetailPage />,
+      },
     ],
   },
 ]);

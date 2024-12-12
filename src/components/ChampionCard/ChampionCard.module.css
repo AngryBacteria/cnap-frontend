@@ -2,10 +2,6 @@
     max-width: 350px;
 }
 
-.championCard:hover {
-    border-color: var(--mantine-color-teal-6);
-}
-
 .championName {
     text-align: center;
     text-wrap: wrap;
