@@ -2,10 +2,14 @@ import { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Champion } from '../../model/GameData.ts';
 import { getChampionData } from '../../utils/RiotUtil.ts';
-import { Alert, Image, Loader, Title } from '@mantine/core';
-import styles from './ChampionDetailPage.module.css';
+import {
+  Alert,
+  Loader
+} from '@mantine/core';
+import styles from './ChampionPage.module.css';
+import ChampionHeader from '../../components/Champion/ChampionHeader/ChampionHeader.tsx';
 
-const ChampionDetailPage = memo(function ChampionsPage() {
+const ChampionPage = memo(function ChampionsPage() {
   const { championKey } = useParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [championData, setChampionData] = useState<Champion | null>(null);
@@ -37,16 +41,7 @@ const ChampionDetailPage = memo(function ChampionsPage() {
 
   return (
     <>
-      <section className={styles.championNameWrapper}>
-        <Image
-          src={championData.skins[0].splashPath}
-          className={styles.backgroundImage}
-        />
-        <section className={styles.championNameLayout}>
-          <Title order={1}>Champion Page: {championKey}</Title>
-        </section>
-      </section>
-
+      <ChampionHeader champion={championData} />
       <p className={styles.jsonWrapper}>
         {JSON.stringify(championData, null, 4)}
       </p>
@@ -54,4 +49,4 @@ const ChampionDetailPage = memo(function ChampionsPage() {
   );
 });
 
-export default ChampionDetailPage;
+export default ChampionPage;

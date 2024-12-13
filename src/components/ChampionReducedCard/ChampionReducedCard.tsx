@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Card, Image, Text, Title } from '@mantine/core';
-import styles from './ChampionCard.module.css';
+import styles from './ChampionReducedCard.module.css';
 import { ChampionReduced } from '../../model/GameDataReduced.ts';
 import {
   capitalizeFirstLetter,
@@ -12,7 +12,7 @@ interface ChampionCardProps {
   champion: ChampionReduced;
 }
 
-const ChampionCard = memo(function ChampionCard({
+const ChampionReducedCard = memo(function ChampionCard({
   champion,
 }: ChampionCardProps) {
   const navigate = useNavigate();
@@ -32,12 +32,16 @@ const ChampionCard = memo(function ChampionCard({
       </Card.Section>
 
       <section className={styles.championName}>
-        <Title order={2} pt={'xs'} ta={'center'}>{champion.name}</Title>
-        <Title order={5} c={'dimmed'} pb={'sm'} ta={'center'}>{capitalizeFirstLetter(champion.title)}</Title>
+        <Title order={2} pt={'xs'} ta={'center'}>
+          {champion.name}
+        </Title>
+        <Title order={5} c={'dimmed'} pb={'sm'} ta={'center'}>
+          {capitalizeFirstLetter(champion.title)}
+        </Title>
         <Text ta={'center'}>{truncateText(champion.lore, 100)}</Text>
       </section>
     </Card>
   );
 });
 
-export default ChampionCard;
+export default ChampionReducedCard;
