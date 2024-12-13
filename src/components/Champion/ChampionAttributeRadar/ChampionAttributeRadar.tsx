@@ -6,7 +6,7 @@ interface Props {
   champion: Champion;
 }
 
-const ChampionAttributeRadar = memo(function ChampionCard({ champion }: Props) {
+const ChampionAttributeRadar = memo(function ChampionAttributeRadar({ champion }: Props) {
   const chartData = useMemo(() => {
     return Object.entries(champion.attributeRatings)
       .map(([key, value]) => {

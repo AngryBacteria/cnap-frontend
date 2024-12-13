@@ -2,12 +2,9 @@ import { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Champion } from '../../model/GameData.ts';
 import { getChampionData } from '../../utils/RiotUtil.ts';
-import {
-  Alert,
-  Loader
-} from '@mantine/core';
-import styles from './ChampionPage.module.css';
+import { Alert, Flex, Loader } from '@mantine/core';
 import ChampionHeader from '../../components/Champion/ChampionHeader/ChampionHeader.tsx';
+import ChampionAbilitiesTabs from '../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx';
 
 const ChampionPage = memo(function ChampionsPage() {
   const { championKey } = useParams();
@@ -41,10 +38,10 @@ const ChampionPage = memo(function ChampionsPage() {
 
   return (
     <>
-      <ChampionHeader champion={championData} />
-      <p className={styles.jsonWrapper}>
-        {JSON.stringify(championData, null, 4)}
-      </p>
+      <Flex direction={'column'} gap={'md'}>
+        <ChampionHeader champion={championData} />
+        <ChampionAbilitiesTabs champion={championData} />
+      </Flex>
     </>
   );
 });
