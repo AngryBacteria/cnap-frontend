@@ -76,8 +76,8 @@ const ChampionAbilityStats = memo(function ChampionHeader({
         )}
 
       {championAbility.effectRadius && (
-        <Text c={'dimmed'}>
-          <strong>Radius:</strong> {championAbility.effectRadius}
+        <Text fw={700} c={'dimmed'}>
+          Radius: {championAbility.effectRadius}
         </Text>
       )}
 
