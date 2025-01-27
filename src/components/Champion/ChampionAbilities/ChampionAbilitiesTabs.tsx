@@ -7,13 +7,13 @@ interface Props {
   champion: Champion;
 }
 
-const ChampionAbilitiesTabs = memo(function ChampionHeader({
+const ChampionAbilitiesTabs = memo(function ChampionAbilitiesTabs({
   champion,
 }: Props) {
   return (
     <>
       <Card shadow={'md'} withBorder>
-        <Tabs defaultValue="Q">
+        <Tabs defaultValue="Q" keepMounted={false}>
           <Tabs.List>
             <Tabs.Tab value="P">P</Tabs.Tab>
             <Tabs.Tab value="Q">Q</Tabs.Tab>

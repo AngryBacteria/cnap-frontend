@@ -5,11 +5,10 @@ import { Flex, Text } from '@mantine/core';
 interface Props {
   championAbility: E;
 }
-// TODO damage
-// TODO popover
-// TODO Notes
-// TODO Misc stats
-const ChampionAbilityStats = memo(function ChampionHeader({
+// TODO damage number per effect (quite complex)
+// TODO: skins
+// TODO: basic champion stats (health, mana, and so on)
+const ChampionAbilityStats = memo(function ChampionAbilityStats({
   championAbility,
 }: Props) {
   const abilityCooldowns = useMemo(() => {
@@ -47,7 +46,7 @@ const ChampionAbilityStats = memo(function ChampionHeader({
     return null;
   }
   return (
-    <Flex gap={'lg'} wrap={'wrap'}>
+    <Flex gap={'md'} wrap={'wrap'} rowGap={'xs'} justify={'center'}>
       {abilityCooldowns.length > 0 ? (
         <Text fw={700} c={'dimmed'}>
           Cooldown: {abilityCooldowns.join(' / ')}
