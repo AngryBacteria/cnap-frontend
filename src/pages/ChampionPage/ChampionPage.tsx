@@ -1,49 +1,49 @@
-import { memo, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Champion } from '../../model/GameData.ts';
-import { getChampionData } from '../../utils/RiotUtil.ts';
-import { Alert, Flex, Loader } from '@mantine/core';
-import ChampionHeader from '../../components/Champion/ChampionHeader/ChampionHeader.tsx';
-import ChampionAbilitiesTabs from '../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx';
+import { Alert, Flex, Loader } from "@mantine/core";
+import { memo, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import ChampionAbilitiesTabs from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
+import ChampionHeader from "../../components/Champion/ChampionHeader/ChampionHeader.tsx";
+import type { Champion } from "../../model/GameData.ts";
+import { getChampionData } from "../../utils/RiotUtil.ts";
 
 const ChampionPage = memo(function ChampionsPage() {
-  const { championKey } = useParams();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [championData, setChampionData] = useState<Champion | null>(null);
+	const { championKey } = useParams();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [championData, setChampionData] = useState<Champion | null>(null);
 
-  /**
-   * Fetch champion data from API
-   */
-  useEffect(() => {
-    setIsLoading(true);
-    getChampionData(championKey ?? '')
-      .then((data) => {
-        setChampionData(data);
-      })
-      .catch((error) => console.error('Error:', error))
-      .finally(() => setIsLoading(false));
-  }, [championKey]);
+	/**
+	 * Fetch champion data from API
+	 */
+	useEffect(() => {
+		setIsLoading(true);
+		getChampionData(championKey ?? "")
+			.then((data) => {
+				setChampionData(data);
+			})
+			.catch((error) => console.error("Error:", error))
+			.finally(() => setIsLoading(false));
+	}, [championKey]);
 
-  if (isLoading) {
-    return <Loader color={'teal'} />;
-  }
+	if (isLoading) {
+		return <Loader color={"teal"} />;
+	}
 
-  if (!championData) {
-    return (
-      <Alert title={'No champions found'} variant={'light'}>
-        The Champion with key {championKey} does not exist.
-      </Alert>
-    );
-  }
+	if (!championData) {
+		return (
+			<Alert title={"No champions found"} variant={"light"}>
+				The Champion with key {championKey} does not exist.
+			</Alert>
+		);
+	}
 
-  return (
-    <>
-      <Flex direction={'column'} gap={'md'}>
-        <ChampionHeader champion={championData} />
-        <ChampionAbilitiesTabs champion={championData} />
-      </Flex>
-    </>
-  );
+	return (
+		<>
+			<Flex direction={"column"} gap={"md"}>
+				<ChampionHeader champion={championData} />
+				<ChampionAbilitiesTabs champion={championData} />
+			</Flex>
+		</>
+	);
 });
 
 export default ChampionPage;

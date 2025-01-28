@@ -1,16 +1,16 @@
-import { ItemStat } from '../../../model/GameData.ts';
-import { memo } from 'react';
+import { memo } from "react";
+import type { ItemStat } from "../../../model/GameData.ts";
 
 interface Props {
-  championStats: Record<string, ItemStat>;
+	championStats: Record<string, ItemStat>;
 }
 const ChampionStatsTable = memo(function ChampionStatsTable({
-  championStats,
+	championStats,
 }: Props) {
-  //TODO
-  console.log(championStats);
+	//TODO
+	console.log(championStats);
 
-  return <></>;
+	return <></>;
 });
 
 export default ChampionStatsTable;
