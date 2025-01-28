@@ -1,10 +1,9 @@
 import { Divider } from "@mantine/core";
 import { IconHelmet, IconHome } from "@tabler/icons-react";
-import { memo } from "react";
 import { NavLink } from "react-router-dom";
 import styles from "./SidebarNavigation.module.css";
 
-const SidebarNavigation = memo(function SidebarNavigation() {
+export function SidebarNavigation() {
 	return (
 		<section className={styles.navigationItems}>
 			<NavLink
@@ -30,6 +29,4 @@ const SidebarNavigation = memo(function SidebarNavigation() {
 			</NavLink>
 		</section>
 	);
-});
-
-export default SidebarNavigation;
+}

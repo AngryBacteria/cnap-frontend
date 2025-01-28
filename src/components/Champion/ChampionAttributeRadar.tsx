@@ -1,14 +1,12 @@
 import { RadarChart } from "@mantine/charts";
-import { memo, useMemo } from "react";
-import type { Champion } from "../../../model/GameData.ts";
+import { useMemo } from "react";
+import type { Champion } from "../../model/GameData.ts";
 
 interface Props {
 	champion: Champion;
 }
 
-const ChampionAttributeRadar = memo(function ChampionAttributeRadar({
-	champion,
-}: Props) {
+export function ChampionAttributeRadar({ champion }: Props) {
 	const chartData = useMemo(() => {
 		return Object.entries(champion.attributeRatings)
 			.map(([key, value]) => {
@@ -29,6 +27,4 @@ const ChampionAttributeRadar = memo(function ChampionAttributeRadar({
 			series={[{ name: "value", color: "teal", opacity: 0.5 }]}
 		/>
 	);
-});
-
-export default ChampionAttributeRadar;
+}

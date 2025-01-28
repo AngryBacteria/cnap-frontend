@@ -1,13 +1,12 @@
 import { Badge, Card, Flex, Grid, Image, Text, Title } from "@mantine/core";
-import { memo } from "react";
-import type { Champion } from "../../../model/GameData.ts";
-import ChampionAttributeRadar from "../ChampionAttributeRadar/ChampionAttributeRadar.tsx";
+import type { Champion } from "../../model/GameData.ts";
+import { ChampionAttributeRadar } from "./ChampionAttributeRadar.tsx";
 
 interface Props {
 	champion: Champion;
 }
 
-const ChampionHeader = memo(function ChampionHeader({ champion }: Props) {
+export function ChampionHeader({ champion }: Props) {
 	return (
 		<Card shadow={"md"} withBorder>
 			<Grid justify="space-between" gutter={"xs"}>
@@ -49,6 +48,4 @@ const ChampionHeader = memo(function ChampionHeader({ champion }: Props) {
 			</Grid>
 		</Card>
 	);
-});
-
-export default ChampionHeader;
+}

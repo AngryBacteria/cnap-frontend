@@ -1,14 +1,12 @@
 import { Badge, Flex } from "@mantine/core";
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 import type { E } from "../../../model/GameData.ts";
 import { capitalizeFirstLetter } from "../../../utils/GeneralUtil.ts";
 
 interface Props {
 	championAbility: E;
 }
-const ChampionAbilityTags = memo(function ChampionAbilityTags({
-	championAbility,
-}: Props) {
+export function ChampionAbilityTags({ championAbility }: Props) {
 	const abilityTags = useMemo(() => {
 		const tags = [];
 		if (championAbility.damageType) {
@@ -32,6 +30,4 @@ const ChampionAbilityTags = memo(function ChampionAbilityTags({
 			})}
 		</Flex>
 	);
-});
-
-export default ChampionAbilityTags;
+}

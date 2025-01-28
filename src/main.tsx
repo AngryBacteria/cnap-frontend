@@ -6,9 +6,9 @@ import "@mantine/dates/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/notifications/styles.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import MainLayout from "./MainLayout.tsx";
-import ChampionPage from "./pages/ChampionPage/ChampionPage.tsx";
-import ChampionsPage from "./pages/ChampionsPage/ChampionsPage.tsx";
+import { MainLayout } from "./MainLayout.tsx";
+import { ChampionPage } from "./pages/ChampionPage/ChampionPage.tsx";
+import { ChampionsPage } from "./pages/ChampionsPage/ChampionsPage.tsx";
 
 const theme = createTheme({
 	primaryColor: "teal",

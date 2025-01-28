@@ -1,5 +1,5 @@
 import { Flex, Text } from "@mantine/core";
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 import type { E } from "../../../model/GameData.ts";
 
 interface Props {
@@ -8,9 +8,7 @@ interface Props {
 // TODO damage number per effect (quite complex)
 // TODO: skins
 // TODO: basic champion stats (health, mana, and so on)
-const ChampionAbilityStats = memo(function ChampionAbilityStats({
-	championAbility,
-}: Props) {
+export function ChampionAbilityStats({ championAbility }: Props) {
 	const abilityCooldowns = useMemo(() => {
 		if (!championAbility.cooldown) {
 			return [];
@@ -87,6 +85,4 @@ const ChampionAbilityStats = memo(function ChampionAbilityStats({
 			)}
 		</Flex>
 	);
-});
-
-export default ChampionAbilityStats;
+}

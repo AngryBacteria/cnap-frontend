@@ -1,5 +1,4 @@
 import { Card, Image, Text, Title } from "@mantine/core";
-import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ChampionReduced } from "../../model/GameDataReduced.ts";
 import {
@@ -12,9 +11,7 @@ interface ChampionCardProps {
 	champion: ChampionReduced;
 }
 
-const ChampionReducedCard = memo(function ChampionCard({
-	champion,
-}: ChampionCardProps) {
+export function ChampionReducedCard({ champion }: ChampionCardProps) {
 	const navigate = useNavigate();
 	const goToChampionDetail = () => {
 		navigate(`/champions/${champion.key}`);
@@ -42,6 +39,4 @@ const ChampionReducedCard = memo(function ChampionCard({
 			</section>
 		</Card>
 	);
-});
-
-export default ChampionReducedCard;
+}

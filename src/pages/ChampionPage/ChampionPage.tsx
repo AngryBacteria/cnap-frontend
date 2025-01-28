@@ -1,12 +1,12 @@
 import { Alert, Flex, Loader } from "@mantine/core";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ChampionAbilitiesTabs from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
-import ChampionHeader from "../../components/Champion/ChampionHeader/ChampionHeader.tsx";
+import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
+import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import type { Champion } from "../../model/GameData.ts";
 import { getChampionData } from "../../utils/RiotUtil.ts";
 
-const ChampionPage = memo(function ChampionsPage() {
+export function ChampionPage() {
 	const { championKey } = useParams();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [championData, setChampionData] = useState<Champion | null>(null);
@@ -44,6 +44,4 @@ const ChampionPage = memo(function ChampionsPage() {
 			</Flex>
 		</>
 	);
-});
-
-export default ChampionPage;
+}

@@ -1,15 +1,12 @@
 import { Card, Tabs } from "@mantine/core";
-import { memo } from "react";
 import type { Champion } from "../../../model/GameData.ts";
-import ChampionAbility from "./ChampionAbility.tsx";
+import { ChampionAbility } from "./ChampionAbility.tsx";
 
 interface Props {
 	champion: Champion;
 }
 
-const ChampionAbilitiesTabs = memo(function ChampionAbilitiesTabs({
-	champion,
-}: Props) {
+export function ChampionAbilitiesTabs({ champion }: Props) {
 	return (
 		<>
 			<Card shadow={"md"} withBorder>
@@ -41,6 +38,4 @@ const ChampionAbilitiesTabs = memo(function ChampionAbilitiesTabs({
 			</Card>
 		</>
 	);
-});
-
-export default ChampionAbilitiesTabs;
+}

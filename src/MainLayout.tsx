@@ -8,11 +8,10 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconMoon, IconSun } from "@tabler/icons-react";
-import { memo } from "react";
 import { Outlet } from "react-router-dom";
-import SidebarNavigation from "./components/SidebarNavigation/SidebarNavigation.tsx";
+import { SidebarNavigation } from "./components/SidebarNavigation/SidebarNavigation.tsx";
 
-const MainLayout = memo(function MainLayout() {
+export function MainLayout() {
 	const [mobileOpened, { toggle: toggleMobile }] = useDisclosure(false);
 	const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
 	const computedColorScheme = useComputedColorScheme("dark");
@@ -64,6 +63,4 @@ const MainLayout = memo(function MainLayout() {
 			</AppShell.Main>
 		</AppShell>
 	);
-});
-
-export default MainLayout;
+}

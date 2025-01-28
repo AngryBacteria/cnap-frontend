@@ -1,15 +1,12 @@
 import { Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconInfoCircle } from "@tabler/icons-react";
-import { memo } from "react";
 import type { E } from "../../../model/GameData.ts";
 
 interface Props {
 	ability: E;
 }
-const ChampionAbilityNoteModal = memo(function ChampionAbilityNoteModal({
-	ability,
-}: Props) {
+export function ChampionAbilityNoteModal({ ability }: Props) {
 	const [opened, { open, close }] = useDisclosure(false);
 
 	return (
@@ -29,6 +26,4 @@ const ChampionAbilityNoteModal = memo(function ChampionAbilityNoteModal({
 			</Modal>
 		</>
 	);
-});
-
-export default ChampionAbilityNoteModal;
+}

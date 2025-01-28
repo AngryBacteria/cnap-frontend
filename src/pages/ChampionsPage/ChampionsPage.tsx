@@ -1,12 +1,12 @@
 import { Alert, Loader, Select, TextInput, Title } from "@mantine/core";
-import { memo, useEffect, useMemo, useState } from "react";
-import ChampionReducedCard from "../../components/ChampionReducedCard/ChampionReducedCard.tsx";
+import { useEffect, useMemo, useState } from "react";
+import { ChampionReducedCard } from "../../components/ChampionReducedCard/ChampionReducedCard.tsx";
 import type { ChampionReduced } from "../../model/GameDataReduced.ts";
 import { capitalizeFirstLetter } from "../../utils/GeneralUtil.ts";
 import { getChampionDataReduced } from "../../utils/RiotUtil.ts";
 import styles from "./ChampionsPage.module.css";
 
-const ChampionsPage = memo(function ChampionsPage() {
+export function ChampionsPage() {
 	const [championData, setChampionData] = useState<ChampionReduced[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [nameSearch, setNameSearch] = useState<string>("");
@@ -104,6 +104,4 @@ const ChampionsPage = memo(function ChampionsPage() {
 			</section>
 		</>
 	);
-});
-
-export default ChampionsPage;
+}

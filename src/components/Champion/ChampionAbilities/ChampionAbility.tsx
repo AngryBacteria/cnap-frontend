@@ -1,17 +1,14 @@
 import { Divider, Flex, Image, Text, Title } from "@mantine/core";
-import { memo } from "react";
 import type { E } from "../../../model/GameData.ts";
-import ChampionAbilityNoteModal from "./ChampionAbilityNoteModal.tsx";
-import ChampionAbilityStats from "./ChampionAbilityStats.tsx";
-import ChampionAbilityTags from "./ChampionAbilityTags.tsx";
+import { ChampionAbilityNoteModal } from "./ChampionAbilityNoteModal.tsx";
+import { ChampionAbilityStats } from "./ChampionAbilityStats.tsx";
+import { ChampionAbilityTags } from "./ChampionAbilityTags.tsx";
 
 interface Props {
 	championAbility: E[];
 }
 
-const ChampionAbility = memo(function ChampionAbility({
-	championAbility,
-}: Props) {
+export function ChampionAbility({ championAbility }: Props) {
 	return (
 		<section>
 			{championAbility.map((ability, index) => {
@@ -54,6 +51,4 @@ const ChampionAbility = memo(function ChampionAbility({
 			})}
 		</section>
 	);
-});
-
-export default ChampionAbility;
+}
