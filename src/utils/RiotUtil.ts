@@ -18,12 +18,12 @@ export async function getChampionDataReduced(): Promise<ChampionReduced[]> {
 	throw new Error("Failed to load champion data");
 }
 
-export async function getChampionData(championKey: string): Promise<Champion> {
+export async function getChampionData(championId: number): Promise<Champion> {
 	const response = await fetch(
-		`http://localhost:8000/static/champion/${championKey}`,
+		`http://localhost:8000/static/champions/${championId}`,
 	);
 	const data = (await response.json()) as Champion;
-	if (data && data.key === championKey) {
+	if (data && data.id === championId) {
 		return data;
 	}
 	throw new Error("Failed to load champion data");

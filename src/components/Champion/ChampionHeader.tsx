@@ -26,7 +26,7 @@ export function ChampionHeader({ champion }: Props) {
 								wrap={"wrap"}
 								pb={"xs"}
 							>
-								<Title order={1}>{champion.key}</Title>
+								<Title order={1}>{champion.name}</Title>
 								{champion.roles.map((role) => {
 									return (
 										<Badge color="teal" key={role}>
@@ -38,7 +38,7 @@ export function ChampionHeader({ champion }: Props) {
 							<Text tt={"capitalize"} c={"dimmed"}>
 								{champion.title}
 							</Text>
-							<Text>{champion.lore}</Text>
+							<Text>{champion.shortBio}</Text>
 						</Flex>
 					</Flex>
 				</Grid.Col>

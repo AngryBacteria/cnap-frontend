@@ -7,7 +7,7 @@ import type { Champion } from "../../model/GameData.ts";
 import { getChampionData } from "../../utils/RiotUtil.ts";
 
 export function ChampionPage() {
-	const { championKey } = useParams();
+	const { championId } = useParams();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [championData, setChampionData] = useState<Champion | null>(null);
 
@@ -16,13 +16,13 @@ export function ChampionPage() {
 	 */
 	useEffect(() => {
 		setIsLoading(true);
-		getChampionData(championKey ?? "")
+		getChampionData(championId ? Number.parseInt(championId) : 0)
 			.then((data) => {
 				setChampionData(data);
 			})
 			.catch((error) => console.error("Error:", error))
 			.finally(() => setIsLoading(false));
-	}, [championKey]);
+	}, [championId]);
 
 	if (isLoading) {
 		return <Loader color={"teal"} />;
@@ -31,7 +31,7 @@ export function ChampionPage() {
 	if (!championData) {
 		return (
 			<Alert title={"No champions found"} variant={"light"}>
-				The Champion with key {championKey} does not exist.
+				The Champion with ID {championId} does not exist.
 			</Alert>
 		);
 	}

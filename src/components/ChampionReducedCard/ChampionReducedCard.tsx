@@ -14,7 +14,7 @@ interface ChampionCardProps {
 export function ChampionReducedCard({ champion }: ChampionCardProps) {
 	const navigate = useNavigate();
 	const goToChampionDetail = () => {
-		navigate(`/champions/${champion.key}`);
+		navigate(`/champions/${champion.id}`);
 	};
 
 	return (
@@ -25,7 +25,7 @@ export function ChampionReducedCard({ champion }: ChampionCardProps) {
 			onClick={goToChampionDetail}
 		>
 			<Card.Section>
-				<Image src={champion.skins[0]?.splashPath} />
+				<Image src={champion.uncenteredSplashPath} />
 			</Card.Section>
 
 			<section className={styles.championName}>
@@ -35,7 +35,7 @@ export function ChampionReducedCard({ champion }: ChampionCardProps) {
 				<Title order={5} c={"dimmed"} pb={"sm"} ta={"center"}>
 					{capitalizeFirstLetter(champion.title)}
 				</Title>
-				<Text ta={"center"}>{truncateText(champion.lore, 100)}</Text>
+				<Text ta={"center"}>{truncateText(champion.shortBio, 100)}</Text>
 			</section>
 		</Card>
 	);

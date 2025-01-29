@@ -1,6 +1,8 @@
-import { Card, Tabs } from "@mantine/core";
+import { Card, Flex, Tabs } from "@mantine/core";
 import type { Champion } from "../../../model/GameData.ts";
+import { capitalizeFirstLetter } from "../../../utils/GeneralUtil.ts";
 import { ChampionAbility } from "./ChampionAbility.tsx";
+import { ChampionAbilityStats } from "./ChampionAbilityStats.tsx";
 
 interface Props {
 	champion: Champion;
@@ -10,30 +12,32 @@ export function ChampionAbilitiesTabs({ champion }: Props) {
 	return (
 		<>
 			<Card shadow={"md"} withBorder>
-				<Tabs defaultValue="Q" keepMounted={false}>
+				<Tabs defaultValue="P">
 					<Tabs.List>
 						<Tabs.Tab value="P">P</Tabs.Tab>
-						<Tabs.Tab value="Q">Q</Tabs.Tab>
-						<Tabs.Tab value="W">W</Tabs.Tab>
-						<Tabs.Tab value="E">E</Tabs.Tab>
-						<Tabs.Tab value="R">R</Tabs.Tab>
+						{champion.spells.map((spell) => {
+							return (
+								<Tabs.Tab key={spell.spellKey} value={spell.spellKey}>
+									{capitalizeFirstLetter(spell.spellKey)}
+								</Tabs.Tab>
+							);
+						})}
 					</Tabs.List>
 
 					<Tabs.Panel value="P">
-						<ChampionAbility championAbility={champion.abilities.P} />
+						<ChampionAbility championAbility={champion.passive} />
 					</Tabs.Panel>
-					<Tabs.Panel value="Q">
-						<ChampionAbility championAbility={champion.abilities.Q} />
-					</Tabs.Panel>
-					<Tabs.Panel value="W">
-						<ChampionAbility championAbility={champion.abilities.W} />
-					</Tabs.Panel>
-					<Tabs.Panel value="E">
-						<ChampionAbility championAbility={champion.abilities.E} />
-					</Tabs.Panel>
-					<Tabs.Panel value="R">
-						<ChampionAbility championAbility={champion.abilities.R} />
-					</Tabs.Panel>
+
+					{champion.spells.map((spell) => {
+						return (
+							<Tabs.Panel value={spell.spellKey} key={spell.name}>
+								<Flex direction={"column"} gap={"md"}>
+									<ChampionAbility championAbility={spell} />
+									<ChampionAbilityStats championAbility={spell} />
+								</Flex>
+							</Tabs.Panel>
+						);
+					})}
 				</Tabs>
 			</Card>
 		</>

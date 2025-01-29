@@ -6,9 +6,10 @@ interface Props {
 	champion: Champion;
 }
 
+//TODO add difficulty from tacticalInfo
 export function ChampionAttributeRadar({ champion }: Props) {
 	const chartData = useMemo(() => {
-		return Object.entries(champion.attributeRatings)
+		return Object.entries(champion.playstyleInfo)
 			.map(([key, value]) => {
 				return {
 					attribute: key,
