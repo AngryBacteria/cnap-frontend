@@ -1,34 +1,32 @@
 import { Alert, Flex, Loader } from "@mantine/core";
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import type { Champion } from "../../model/GameData.ts";
-import { getChampionData } from "../../utils/RiotUtil.ts";
+import { useQuery } from '@tanstack/react-query';
 
 export function ChampionPage() {
 	const { championId } = useParams();
-	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [championData, setChampionData] = useState<Champion | null>(null);
 
-	/**
-	 * Fetch champion data from API
-	 */
-	useEffect(() => {
-		setIsLoading(true);
-		getChampionData(championId ? Number.parseInt(championId) : 0)
-			.then((data) => {
-				setChampionData(data);
-			})
-			.catch((error) => console.error("Error:", error))
-			.finally(() => setIsLoading(false));
-	}, [championId]);
+		const query = useQuery({
+		queryKey: ["champion", championId],
+		queryFn: async () => {
+			const response = await fetch(
+				`http://localhost:8000/static/champions/${championId}`,
+			);
+			if (!response.ok) {
+				throw new Error("Failed to load champion data");
+			}
 
-	if (isLoading) {
+			return (await response.json()) as Champion;
+		},
+	});
+
+	if (query.status === 'pending') {
 		return <Loader color={"teal"} />;
 	}
 
-	if (!championData) {
+	if (query.status === 'error') {
 		return (
 			<Alert title={"No champions found"} variant={"light"}>
 				The Champion with ID {championId} does not exist.
@@ -39,8 +37,8 @@ export function ChampionPage() {
 	return (
 		<>
 			<Flex direction={"column"} gap={"md"}>
-				<ChampionHeader champion={championData} />
-				<ChampionAbilitiesTabs champion={championData} />
+				<ChampionHeader champion={query.data} />
+				<ChampionAbilitiesTabs champion={query.data} />
 			</Flex>
 		</>
 	);

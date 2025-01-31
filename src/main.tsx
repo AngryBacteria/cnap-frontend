@@ -9,11 +9,14 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { MainLayout } from "./MainLayout.tsx";
 import { ChampionPage } from "./pages/ChampionPage/ChampionPage.tsx";
 import { ChampionsPage } from "./pages/ChampionsPage/ChampionsPage.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+// Mantine theme
 const theme = createTheme({
 	primaryColor: "teal",
 });
 
+// Router config
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -35,14 +38,26 @@ const router = createBrowserRouter([
 	},
 ]);
 
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			staleTime: 60 * 60 * 1000, // 1 hour,
+			retry: 2,
+		},
+	},
+});
+
+// React startup
 const rootElement = document.getElementById("root");
 if (!rootElement) {
 	throw new Error("Failed to find root element");
 }
 createRoot(rootElement).render(
 	<StrictMode>
-		<MantineProvider theme={theme} defaultColorScheme="auto">
-			<RouterProvider router={router} />
-		</MantineProvider>
+		<QueryClientProvider client={queryClient}>
+			<MantineProvider theme={theme} defaultColorScheme="auto">
+				<RouterProvider router={router} />
+			</MantineProvider>
+		</QueryClientProvider>
 	</StrictMode>,
 );

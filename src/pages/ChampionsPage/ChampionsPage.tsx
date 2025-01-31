@@ -1,37 +1,40 @@
 import { Alert, Loader, TextInput, Title } from "@mantine/core";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChampionReducedCard } from "../../components/ChampionReducedCard/ChampionReducedCard.tsx";
 import type { ChampionReduced } from "../../model/GameDataReduced.ts";
-import { getChampionDataReduced } from "../../utils/RiotUtil.ts";
 import styles from "./ChampionsPage.module.css";
+import { useQuery } from "@tanstack/react-query";
 
 export function ChampionsPage() {
-	const [championData, setChampionData] = useState<ChampionReduced[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [nameSearch, setNameSearch] = useState<string>("");
 
-	/**
-	 * Fetch champion data from our api on component mount
-	 */
-	useEffect(() => {
-		const fetchData = async () => {
-			setChampionData(await getChampionDataReduced());
-		};
-		setIsLoading(true);
-		fetchData()
-			.catch((error) => {
-				setChampionData([]);
-				console.error("Error:", error);
-			})
-			.finally(() => setIsLoading(false));
-	}, []);
+	const query = useQuery({
+		queryKey: ["champions"],
+		queryFn: async () => {
+			const response = await fetch(
+				"http://localhost:8000/static/champions/reduced",
+			);
+			if (!response.ok) {
+				throw new Error("Failed to load champion data");
+			}
+
+			const data = (await response.json()) as ChampionReduced[];
+			if (data && data.length > 0) {
+				return data;
+			}
+		},
+	});
 
 	/**
 	 * Filter the champions based on the name search
 	 */
 	const filteredChampions = useMemo(
-		() =>
-			championData
+		() => {
+			if (!query.data) {
+				return [];
+			}
+
+			return query.data
 				.filter((champion) => {
 					// Check if name or title matches
 					if (champion.id === -1) {
@@ -42,20 +45,21 @@ export function ChampionsPage() {
 						champion.title.toLowerCase().includes(nameSearch.toLowerCase())
 					);
 				})
-				.sort((a, b) => a.name.localeCompare(b.name)),
-		[championData, nameSearch],
+				.sort((a, b) => a.name.localeCompare(b.name));
+		},
+		[query.data, nameSearch]
 	);
 
-	if (championData.length === 0 && !isLoading) {
-		return (
-			<Alert title={"No champions found"} variant={"light"}>
-				Right now no champions are available.
-			</Alert>
-		);
+	if (query.status === 'pending') {
+		return <Loader color={"teal"} />;
 	}
 
-	if (isLoading) {
-		return <Loader color={"teal"} />;
+		if (query.status === 'error') {
+		return (
+			<Alert title={"No champions found"} variant={"light"}>
+				Right now no champions are available. Try again later.
+			</Alert>
+		);
 	}
 
 	return (
