@@ -1,14 +1,18 @@
 import { Alert, Flex, Loader } from "@mantine/core";
-import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import type { Champion } from "../../model/GameData.ts";
-import { useQuery } from '@tanstack/react-query';
+
+export const Route = createFileRoute("/champions/$championId")({
+	component: ChampionPage,
+});
 
 export function ChampionPage() {
-	const { championId } = useParams();
+	const { championId } = Route.useParams();
 
-		const query = useQuery({
+	const query = useQuery({
 		queryKey: ["champion", championId],
 		queryFn: async () => {
 			const response = await fetch(
@@ -22,11 +26,11 @@ export function ChampionPage() {
 		},
 	});
 
-	if (query.status === 'pending') {
+	if (query.status === "pending") {
 		return <Loader color={"teal"} />;
 	}
 
-	if (query.status === 'error') {
+	if (query.status === "error") {
 		return (
 			<Alert title={"No champions found"} variant={"light"}>
 				The Champion with ID {championId} does not exist.

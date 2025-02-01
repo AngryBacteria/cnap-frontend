@@ -1,42 +1,17 @@
 import { MantineProvider, createTheme } from "@mantine/core";
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/notifications/styles.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { MainLayout } from "./MainLayout.tsx";
-import { ChampionPage } from "./pages/ChampionPage/ChampionPage.tsx";
-import { ChampionsPage } from "./pages/ChampionsPage/ChampionsPage.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
 
 // Mantine theme
 const theme = createTheme({
 	primaryColor: "teal",
 });
-
-// Router config
-const router = createBrowserRouter([
-	{
-		path: "/",
-		element: <MainLayout />,
-		children: [
-			{
-				path: "/",
-				element: <h2>Home</h2>,
-			},
-			{
-				path: "/champions",
-				element: <ChampionsPage />,
-			},
-			{
-				path: "/champions/:championId",
-				element: <ChampionPage />,
-			},
-		],
-	},
-]);
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -47,17 +22,31 @@ const queryClient = new QueryClient({
 	},
 });
 
-// React startup
+// Import the generated route tree
+import { routeTree } from "./routeTree.gen";
+
+// Create a new router instance
+const router = createRouter({ routeTree });
+
+// Register the router instance for type safety
+declare module "@tanstack/react-router" {
+	interface Register {
+		router: typeof router;
+	}
+}
+
+// Render the app
 const rootElement = document.getElementById("root");
 if (!rootElement) {
-	throw new Error("Failed to find root element");
+	throw new Error("Root element not found");
 }
-createRoot(rootElement).render(
+const root = ReactDOM.createRoot(rootElement);
+root.render(
 	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<MantineProvider theme={theme} defaultColorScheme="auto">
+		<MantineProvider theme={theme}>
+			<QueryClientProvider client={queryClient}>
 				<RouterProvider router={router} />
-			</MantineProvider>
-		</QueryClientProvider>
+			</QueryClientProvider>
+		</MantineProvider>
 	</StrictMode>,
 );

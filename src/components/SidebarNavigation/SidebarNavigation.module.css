@@ -16,10 +16,6 @@ a {
 	text-decoration: none;
 }
 
-.active {
+a[data-status="active"] {
 	color: var(--mantine-primary-color-filled);
-}
-
-h3 {
-	margin: 0;
 }

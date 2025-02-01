@@ -1,5 +1,5 @@
 import { Card, Image, Text, Title } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@tanstack/react-router";
 import type { ChampionReduced } from "../../model/GameDataReduced.ts";
 import {
 	capitalizeFirstLetter,
@@ -12,11 +12,10 @@ interface ChampionCardProps {
 }
 
 export function ChampionReducedCard({ champion }: ChampionCardProps) {
-	const navigate = useNavigate();
+	const navigate = useNavigate({});
 	const goToChampionDetail = () => {
-		navigate(`/champions/${champion.id}`);
+		void navigate({ to: `/champions/${champion.id}` });
 	};
-
 	return (
 		<Card
 			withBorder
