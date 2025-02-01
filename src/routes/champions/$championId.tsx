@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import type { Champion } from "../../model/GameData.ts";
+import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
 
 export const Route = createFileRoute("/champions/$championId")({
 	component: ChampionPage,
@@ -43,6 +44,7 @@ export function ChampionPage() {
 			<Flex direction={"column"} gap={"md"}>
 				<ChampionHeader champion={query.data} />
 				<ChampionAbilitiesTabs champion={query.data} />
+				<ChampionSkins champion={query.data} />
 			</Flex>
 		</>
 	);
