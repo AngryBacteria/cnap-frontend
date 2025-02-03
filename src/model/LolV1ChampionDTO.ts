@@ -121,7 +121,7 @@ export interface LolV1ChampionSpell {
 	maxLevel: number;
 }
 
-export interface Champion {
+export interface LolV1ChampionDTO {
 	id: number;
 	name: string;
 	alias: string;
@@ -141,7 +141,7 @@ export interface Champion {
 	uncenteredSplashPath: string;
 }
 
-export interface ChampionReduced {
+export interface ChampionReducedDTO {
 	id: number;
 	name: string;
 	alias: string;

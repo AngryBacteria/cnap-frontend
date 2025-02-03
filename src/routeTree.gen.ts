@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SummonersIndexImport } from './routes/summoners/index'
 import { Route as ChampionsIndexImport } from './routes/champions/index'
 import { Route as ChampionsChampionAliasImport } from './routes/champions/$championAlias'
 
@@ -20,6 +21,12 @@ import { Route as ChampionsChampionAliasImport } from './routes/champions/$champ
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SummonersIndexRoute = SummonersIndexImport.update({
+  id: '/summoners/',
+  path: '/summoners/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChampionsIndexImport
       parentRoute: typeof rootRoute
     }
+    '/summoners/': {
+      id: '/summoners/'
+      path: '/summoners'
+      fullPath: '/summoners'
+      preLoaderRoute: typeof SummonersIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -69,12 +83,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/champions/$championAlias': typeof ChampionsChampionAliasRoute
   '/champions': typeof ChampionsIndexRoute
+  '/summoners': typeof SummonersIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/champions/$championAlias': typeof ChampionsChampionAliasRoute
   '/champions': typeof ChampionsIndexRoute
+  '/summoners': typeof SummonersIndexRoute
 }
 
 export interface FileRoutesById {
@@ -82,14 +98,20 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/champions/$championAlias': typeof ChampionsChampionAliasRoute
   '/champions/': typeof ChampionsIndexRoute
+  '/summoners/': typeof SummonersIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/champions/$championAlias' | '/champions'
+  fullPaths: '/' | '/champions/$championAlias' | '/champions' | '/summoners'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/champions/$championAlias' | '/champions'
-  id: '__root__' | '/' | '/champions/$championAlias' | '/champions/'
+  to: '/' | '/champions/$championAlias' | '/champions' | '/summoners'
+  id:
+    | '__root__'
+    | '/'
+    | '/champions/$championAlias'
+    | '/champions/'
+    | '/summoners/'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,12 +119,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChampionsChampionAliasRoute: typeof ChampionsChampionAliasRoute
   ChampionsIndexRoute: typeof ChampionsIndexRoute
+  SummonersIndexRoute: typeof SummonersIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChampionsChampionAliasRoute: ChampionsChampionAliasRoute,
   ChampionsIndexRoute: ChampionsIndexRoute,
+  SummonersIndexRoute: SummonersIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +141,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/champions/$championAlias",
-        "/champions/"
+        "/champions/",
+        "/summoners/"
       ]
     },
     "/": {
@@ -128,6 +153,9 @@ export const routeTree = rootRoute
     },
     "/champions/": {
       "filePath": "champions/index.tsx"
+    },
+    "/summoners/": {
+      "filePath": "summoners/index.tsx"
     }
   }
 }

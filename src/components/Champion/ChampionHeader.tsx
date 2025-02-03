@@ -1,9 +1,9 @@
 import { Badge, Card, Flex, Grid, Image, Text, Title } from "@mantine/core";
-import type { Champion } from "../../model/LolV1Champion.ts";
+import type { LolV1ChampionDTO } from "../../model/LolV1ChampionDTO.ts";
 import { ChampionAttributeRadar } from "./ChampionAttributeRadar.tsx";
 
 interface Props {
-	champion: Champion;
+	champion: LolV1ChampionDTO;
 }
 
 export function ChampionHeader({ champion }: Props) {

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ChampionReducedCard } from "../../components/ChampionReducedCard/ChampionReducedCard.tsx";
-import type { ChampionReduced } from "../../model/LolV1Champion.ts";
+import type { ChampionReducedDTO } from "../../model/LolV1ChampionDTO.ts";
 import styles from "./index.module.css";
 
 export const Route = createFileRoute("/champions/")({
@@ -23,7 +23,7 @@ export function ChampionsPage() {
 				throw new Error("Failed to load champion data");
 			}
 
-			const data = (await response.json()) as ChampionReduced[];
+			const data = (await response.json()) as ChampionReducedDTO[];
 			if (data && data.length > 0) {
 				return data;
 			}

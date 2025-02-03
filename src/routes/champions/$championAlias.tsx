@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
-import type { Champion } from "../../model/LolV1Champion.ts";
+import type { LolV1ChampionDTO } from "../../model/LolV1ChampionDTO.ts";
 
 export const Route = createFileRoute("/champions/$championAlias")({
 	component: ChampionPage,
@@ -23,7 +23,7 @@ export function ChampionPage() {
 				throw new Error("Failed to load champion data");
 			}
 
-			return (await response.json()) as Champion;
+			return (await response.json()) as LolV1ChampionDTO;
 		},
 	});
 

@@ -1,9 +1,9 @@
 import { RadarChart } from "@mantine/charts";
 import { useMemo } from "react";
-import type { Champion } from "../../model/LolV1Champion.ts";
+import type { LolV1ChampionDTO } from "../../model/LolV1ChampionDTO.ts";
 
 interface Props {
-	champion: Champion;
+	champion: LolV1ChampionDTO;
 }
 
 export function ChampionAttributeRadar({ champion }: Props) {

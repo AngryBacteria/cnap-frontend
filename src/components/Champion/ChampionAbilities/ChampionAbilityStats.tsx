@@ -1,5 +1,5 @@
 import { Flex, Text } from "@mantine/core";
-import type { Spell } from "../../../model/LolV1Champion.ts";
+import type { Spell } from "../../../model/LolV1ChampionDTO.ts";
 
 interface Props {
 	championAbility: Spell;

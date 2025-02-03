@@ -1,6 +1,6 @@
 import { Card, Image, Text, Title } from "@mantine/core";
 import { useNavigate } from "@tanstack/react-router";
-import type { ChampionReduced } from "../../model/LolV1Champion.ts";
+import type { ChampionReducedDTO } from "../../model/LolV1ChampionDTO.ts";
 import {
 	capitalizeFirstLetter,
 	truncateText,
@@ -8,7 +8,7 @@ import {
 import styles from "./ChampionReducedCard.module.css";
 
 interface ChampionCardProps {
-	champion: ChampionReduced;
+	champion: ChampionReducedDTO;
 }
 
 export function ChampionReducedCard({ champion }: ChampionCardProps) {
@@ -27,7 +27,7 @@ export function ChampionReducedCard({ champion }: ChampionCardProps) {
 				<Image src={champion.uncenteredSplashPath} />
 			</Card.Section>
 
-			<section className={styles.championName}>
+			<section>
 				<Title order={2} pt={"xs"} ta={"center"}>
 					{champion.name}
 				</Title>

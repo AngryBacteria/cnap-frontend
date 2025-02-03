@@ -5,12 +5,12 @@ import styles from "./ChampionSkins.module.css";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import type {
-	Champion,
+	LolV1ChampionDTO,
 	LolV1ChampionSkin,
-} from "../../../model/LolV1Champion.ts";
+} from "../../../model/LolV1ChampionDTO.ts";
 
 interface Props {
-	champion: Champion;
+	champion: LolV1ChampionDTO;
 }
 export function ChampionSkins({ champion }: Props) {
 	const [opened, { open, close }] = useDisclosure(false);

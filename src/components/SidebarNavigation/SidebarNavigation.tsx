@@ -1,5 +1,5 @@
 import { Divider } from "@mantine/core";
-import { IconHelmet, IconHome } from "@tabler/icons-react";
+import { IconHelmet, IconHome, IconUser } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import styles from "./SidebarNavigation.module.css";
 
@@ -24,6 +24,15 @@ export function SidebarNavigation({ onNavigate }: Props) {
 			>
 				<IconHelmet />
 				<span>Champions</span>
+			</Link>
+
+			<Link
+				to={"/summoners"}
+				className={styles.navigationItem}
+				onClick={onNavigate}
+			>
+				<IconUser />
+				<span>Summoners</span>
 			</Link>
 		</section>
 	);
