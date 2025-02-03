@@ -19,6 +19,12 @@ export const Route = createRootRoute({
 		const computedColorScheme = useComputedColorScheme("dark");
 		const { setColorScheme } = useMantineColorScheme();
 
+		function onNavigate() {
+			if (mobileOpened) {
+				toggleMobile();
+			}
+		}
+
 		return (
 			<>
 				<AppShell
@@ -61,7 +67,7 @@ export const Route = createRootRoute({
 						</Group>
 					</AppShell.Header>
 					<AppShell.Navbar p="md">
-						<SidebarNavigation />
+						<SidebarNavigation onNavigate={onNavigate} />
 					</AppShell.Navbar>
 					<AppShell.Main>
 						<Outlet />

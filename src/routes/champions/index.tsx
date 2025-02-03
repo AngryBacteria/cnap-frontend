@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ChampionReducedCard } from "../../components/ChampionReducedCard/ChampionReducedCard.tsx";
-import type { ChampionReduced } from "../../model/GameDataReduced.ts";
+import type { ChampionReduced } from "../../model/LolV1Champion.ts";
 import styles from "./index.module.css";
 
 export const Route = createFileRoute("/champions/")({

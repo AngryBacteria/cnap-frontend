@@ -1,5 +1,5 @@
 import { Flex, Image, Text, Title } from "@mantine/core";
-import type { Passive, Spell } from "../../../model/GameData.ts";
+import type { Passive, Spell } from "../../../model/LolV1Champion.ts";
 
 interface Props {
 	championAbility: Passive | Spell;

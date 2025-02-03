@@ -35,6 +35,17 @@ export interface LolV1ChampionSkinChroma {
 	rarities: LolV1ChampionSkinChromaRarity[];
 }
 
+export enum SkinRarity {
+	kMythic = 0,
+	kNoRarity = 1,
+	kEpic = 2,
+	kTranscendent = 3,
+	kExalted = 4,
+	kRare = 5,
+	kUltimate = 6,
+	kLegendary = 7,
+}
+
 export interface LolV1ChampionSkin {
 	id: number;
 	isBase: boolean;
@@ -45,7 +56,7 @@ export interface LolV1ChampionSkin {
 	loadScreenPath: string;
 	loadScreenVintagePath?: string;
 	skinType: string;
-	rarity: string;
+	rarity: SkinRarity;
 	isLegacy: boolean;
 	splashVideoPath: string | null;
 	collectionSplashVideoPath: string | null;
@@ -127,5 +138,14 @@ export interface Champion {
 	skins: LolV1ChampionSkin[];
 	passive: LolV1ChampionPassive;
 	spells: LolV1ChampionSpell[];
+	uncenteredSplashPath: string;
+}
+
+export interface ChampionReduced {
+	id: number;
+	name: string;
+	alias: string;
+	title: string;
+	shortBio: string;
 	uncenteredSplashPath: string;
 }

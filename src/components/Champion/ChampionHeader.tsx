@@ -1,5 +1,5 @@
 import { Badge, Card, Flex, Grid, Image, Text, Title } from "@mantine/core";
-import type { Champion } from "../../model/GameData.ts";
+import type { Champion } from "../../model/LolV1Champion.ts";
 import { ChampionAttributeRadar } from "./ChampionAttributeRadar.tsx";
 
 interface Props {

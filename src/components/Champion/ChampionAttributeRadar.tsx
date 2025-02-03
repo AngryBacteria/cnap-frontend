@@ -1,22 +1,28 @@
 import { RadarChart } from "@mantine/charts";
 import { useMemo } from "react";
-import type { Champion } from "../../model/GameData.ts";
+import type { Champion } from "../../model/LolV1Champion.ts";
 
 interface Props {
 	champion: Champion;
 }
 
-//TODO add difficulty from tacticalInfo
 export function ChampionAttributeRadar({ champion }: Props) {
 	const chartData = useMemo(() => {
-		return Object.entries(champion.playstyleInfo)
-			.map(([key, value]) => {
+		const output = Object.entries(champion.playstyleInfo).map(
+			([key, value]) => {
 				return {
 					attribute: key,
 					value: value as number,
 				};
-			})
-			.filter((data) => data.attribute !== "abilityReliance");
+			},
+		);
+
+		output.push({
+			attribute: "difficulty",
+			value: champion.tacticalInfo.difficulty,
+		});
+
+		return output;
 	}, [champion]);
 
 	return (

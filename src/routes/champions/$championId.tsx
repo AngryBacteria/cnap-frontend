@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
-import type { Champion } from "../../model/GameData.ts";
 import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
+import type { Champion } from "../../model/LolV1Champion.ts";
 
 export const Route = createFileRoute("/champions/$championId")({
 	component: ChampionPage,

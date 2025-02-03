@@ -1,5 +1,5 @@
 import { Card, Flex, Tabs } from "@mantine/core";
-import type { Champion } from "../../../model/GameData.ts";
+import type { Champion } from "../../../model/LolV1Champion.ts";
 import { capitalizeFirstLetter } from "../../../utils/GeneralUtil.ts";
 import { ChampionAbility } from "./ChampionAbility.tsx";
 import { ChampionAbilityStats } from "./ChampionAbilityStats.tsx";
