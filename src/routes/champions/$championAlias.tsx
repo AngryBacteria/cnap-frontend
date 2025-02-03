@@ -6,18 +6,18 @@ import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
 import type { Champion } from "../../model/LolV1Champion.ts";
 
-export const Route = createFileRoute("/champions/$championId")({
+export const Route = createFileRoute("/champions/$championAlias")({
 	component: ChampionPage,
 });
 
 export function ChampionPage() {
-	const { championId } = Route.useParams();
+	const { championAlias } = Route.useParams();
 
 	const query = useQuery({
-		queryKey: ["champion", championId],
+		queryKey: ["champion", championAlias],
 		queryFn: async () => {
 			const response = await fetch(
-				`http://localhost:8000/static/champions/${championId}`,
+				`http://localhost:8000/static/champions/${championAlias}`,
 			);
 			if (!response.ok) {
 				throw new Error("Failed to load champion data");
@@ -34,7 +34,7 @@ export function ChampionPage() {
 	if (query.status === "error") {
 		return (
 			<Alert title={"No champions found"} variant={"light"}>
-				The Champion with ID {championId} does not exist.
+				The Champion with Name: {championAlias} does not exist.
 			</Alert>
 		);
 	}
