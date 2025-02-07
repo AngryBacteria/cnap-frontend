@@ -17,7 +17,7 @@ export function ChampionPage() {
 		queryKey: ["champion", championAlias],
 		queryFn: async () => {
 			const response = await fetch(
-				`http://localhost:8000/static/champions/${championAlias}`,
+				`http://localhost:8000/champions/${championAlias}`,
 			);
 			if (!response.ok) {
 				throw new Error("Failed to load champion data");
