@@ -1,22 +1,22 @@
 export interface MatchDTO {
-	_id: ID;
 	metadata: Metadata;
 	info: Info;
 }
 
-export interface ID {
-	$oid: string;
+export interface MatchDTOSingle {
+	metadata: Metadata;
+	info: InfoSingle;
 }
 
 export interface Info {
 	endOfGameResult: string;
-	gameCreation: Game;
+	gameCreation: number;
 	gameDuration: number;
-	gameEndTimestamp: Game;
-	gameId: Game;
+	gameEndTimestamp: number;
+	gameId: number;
 	gameMode: string;
 	gameName: string;
-	gameStartTimestamp: Game;
+	gameStartTimestamp: number;
 	gameType: string;
 	gameVersion: string;
 	mapId: number;
@@ -27,8 +27,23 @@ export interface Info {
 	tournamentCode: string;
 }
 
-export interface Game {
-	$numberLong: string;
+export interface InfoSingle {
+	endOfGameResult: string;
+	gameCreation: number;
+	gameDuration: number;
+	gameEndTimestamp: number;
+	gameId: number;
+	gameMode: string;
+	gameName: string;
+	gameStartTimestamp: number;
+	gameType: string;
+	gameVersion: string;
+	mapId: number;
+	participants: Participant;
+	platformId: string;
+	queueId: number;
+	teams: Team[];
+	tournamentCode: string;
 }
 
 export interface Participant {

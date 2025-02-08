@@ -1,26 +1,32 @@
-import { Card, Flex, HoverCard, Image, Text, Tooltip } from "@mantine/core";
+import { Card, Flex, Image, Text, Tooltip } from "@mantine/core";
 import { useMemo } from "react";
-import type { MatchDTO } from "../../model/MatchDTO";
+import type { ItemDTO } from "../../model/ItemDTO";
+import type { MatchDTOSingle } from "../../model/MatchDTO";
+import type { QueueDTO } from "../../model/QueueDTO";
+import type { SummonerSpellDTO } from "../../model/SummonerSpellDTO";
 import styles from "./MatchBannerSummary.module.css";
 
 interface Props {
-	match: MatchDTO;
+	match: MatchDTOSingle;
+	queues: QueueDTO[];
+	summonerSpells: SummonerSpellDTO[];
+	items: ItemDTO[];
 }
 
-// TODO: Lane info
-// TODO: Queue info
-// TODO: Summoner spells
-// TODO: Item build
-// TODO API request
 // TODO check cs if correct
 
-export function MatchBannerSummary({ match }: Props) {
-	const participant = match.info.participants[0];
+export function MatchBannerSummary({
+	match,
+	queues,
+	summonerSpells,
+	items,
+}: Props) {
+	const participant = match.info.participants;
 
 	const championImage = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${participant.championId}.png`;
 
 	const formattedDate = new Intl.DateTimeFormat("en-US").format(
-		new Date(Number.parseInt(match.info.gameCreation.$numberLong)),
+		new Date(match.info.gameCreation),
 	);
 
 	const formattedTimeAgo = useMemo(() => {
@@ -29,21 +35,42 @@ export function MatchBannerSummary({ match }: Props) {
 			style: "long",
 		});
 
-		const diffTime = Math.abs(
-			Number.parseInt(match.info.gameCreation.$numberLong) -
-				new Date().getTime(),
-		);
+		const diffTime = Math.abs(match.info.gameCreation - new Date().getTime());
 		const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
 		return rtf.format(-diffDays, "days");
-	}, [match.info.gameCreation.$numberLong]);
+	}, [match.info.gameCreation]);
 
 	const formattedGameDuration = `${Math.round(match.info.gameDuration / 60)} minutes`;
 
-	const kda = (participant.kills + participant.assists) / participant.deaths;
+	const kda = Math.round(
+		(participant.kills + participant.assists) / participant.deaths,
+	);
 
 	const csPerMinute = Math.round(
 		participant.totalMinionsKilled / Math.round(match.info.gameDuration / 60),
+	);
+
+	const queue = queues.find((q) => q.queueId === match.info.queueId);
+
+	function getItems() {
+		return [
+			participant.item0,
+			participant.item1,
+			participant.item2,
+			participant.item3,
+			participant.item4,
+			participant.item5,
+		]
+			.map((itemId) => items.find((item) => item.id === itemId))
+			.filter((item) => item !== undefined);
+	}
+
+	const summonerSpell1 = summonerSpells.find(
+		(s) => s.id === participant.summoner1Id,
+	);
+	const summonerSpell2 = summonerSpells.find(
+		(s) => s.id === participant.summoner2Id,
 	);
 
 	return (
@@ -56,7 +83,10 @@ export function MatchBannerSummary({ match }: Props) {
 			>
 				<Card.Section withBorder inheritPadding py="4px">
 					<Flex direction={"row"} gap={"md"}>
-						<Text>NORMAL DRAFT</Text>
+						<Text>
+							{queue?.description.replace("games", "").trim() ||
+								"Unknown Queue"}
+						</Text>
 
 						<Tooltip
 							label={formattedDate}
@@ -78,17 +108,24 @@ export function MatchBannerSummary({ match }: Props) {
 						align={"center"}
 						wrap={"wrap"}
 					>
-						<Tooltip
-							label={participant.championName}
-							color="teal"
-							position="bottom"
-							transitionProps={{ transition: "fade-up", duration: 300 }}
-						>
-							<Image src={championImage} h={50} w={50} />
-						</Tooltip>
+						<Flex direction={"row"} justify={"center"} align={"center"}>
+							<Tooltip
+								label={participant.championName}
+								color="teal"
+								position="bottom"
+								transitionProps={{ transition: "fade-up", duration: 300 }}
+							>
+								<Image src={championImage} h={50} w={50} />
+							</Tooltip>
+
+							<Flex direction={"column"}>
+								<Image src={summonerSpell1?.iconPath} h={25} w={25} />
+								<Image src={summonerSpell2?.iconPath} h={25} w={25} />
+							</Flex>
+						</Flex>
 
 						<Flex direction={"column"} justify={"center"} align={"center"}>
-							<Text>{participant.summonerName}</Text>
+							<Text>{participant.riotIdGameName}</Text>
 							<Text c="dimmed">#{participant.riotIdTagline}</Text>
 						</Flex>
 
@@ -120,37 +157,10 @@ export function MatchBannerSummary({ match }: Props) {
 							</Tooltip>
 						</Flex>
 
-						<Flex direction={"row"} wrap={"wrap"} gap={"xs"}>
-							<Image
-								src={"https://cdn.bynogame.com/asd/1689428653606.webp"}
-								h={25}
-								w={25}
-							/>
-							<Image
-								src={"https://cdn.bynogame.com/asd/1689428653606.webp"}
-								h={25}
-								w={25}
-							/>
-							<Image
-								src={"https://cdn.bynogame.com/asd/1689428653606.webp"}
-								h={25}
-								w={25}
-							/>
-							<Image
-								src={"https://cdn.bynogame.com/asd/1689428653606.webp"}
-								h={25}
-								w={25}
-							/>
-							<Image
-								src={"https://cdn.bynogame.com/asd/1689428653606.webp"}
-								h={25}
-								w={25}
-							/>
-							<Image
-								src={"https://cdn.bynogame.com/asd/1689428653606.webp"}
-								h={25}
-								w={25}
-							/>
+						<Flex direction={"row"} wrap={"wrap"} gap={"5px"}>
+							{getItems().map((item) => (
+								<Image src={item?.iconPath} h={25} w={25} key={item?.id} />
+							))}
 						</Flex>
 					</Flex>
 				</Card.Section>

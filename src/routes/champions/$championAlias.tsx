@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
+import { MatchBannerSummaryLoader } from "../../components/Match/MatchBannerSummaryLoader.tsx";
 import type { LolV1ChampionDTO } from "../../model/LolV1ChampionDTO.ts";
 
 export const Route = createFileRoute("/champions/$championAlias")({
@@ -17,7 +18,7 @@ export function ChampionPage() {
 		queryKey: ["champion", championAlias],
 		queryFn: async () => {
 			const response = await fetch(
-				`http://localhost:8000/champions/${championAlias}`,
+				`http://localhost:8000/champion/${championAlias}`,
 			);
 			if (!response.ok) {
 				throw new Error("Failed to load champion data");
@@ -45,6 +46,8 @@ export function ChampionPage() {
 				<ChampionHeader champion={query.data} />
 				<ChampionAbilitiesTabs champion={query.data} />
 				<ChampionSkins champion={query.data} />
+
+				<MatchBannerSummaryLoader championId={query.data.id} />
 			</Flex>
 		</>
 	);
