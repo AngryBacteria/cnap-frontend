@@ -1,11 +1,10 @@
 import { Alert, Flex, Loader } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
 import { MatchBannerSummaryLoader } from "../../components/Match/MatchBannerSummaryLoader.tsx";
-import type { LolV1ChampionDTO } from "../../model/LolV1ChampionDTO.ts";
+import { useChampion } from "../../hooks/api/useChampion.ts";
 
 export const Route = createFileRoute("/champions/$championAlias")({
 	component: ChampionPage,
@@ -14,19 +13,7 @@ export const Route = createFileRoute("/champions/$championAlias")({
 export function ChampionPage() {
 	const { championAlias } = Route.useParams();
 
-	const query = useQuery({
-		queryKey: ["champion", championAlias],
-		queryFn: async () => {
-			const response = await fetch(
-				`http://localhost:8000/champion/${championAlias}`,
-			);
-			if (!response.ok) {
-				throw new Error("Failed to load champion data");
-			}
-
-			return (await response.json()) as LolV1ChampionDTO;
-		},
-	});
+	const query = useChampion(championAlias);
 
 	if (query.status === "pending") {
 		return <Loader color={"teal"} />;

@@ -1,9 +1,8 @@
 import { Alert, Flex, Loader, TextInput, Title } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SummonerCard } from "../../components/Summoner/SummonerCard.tsx";
-import type { SummonerDTO } from "../../model/SummonerDTO.ts";
+import { useSummoners } from "../../hooks/api/useSummoners.ts";
 import styles from "./index.module.css";
 
 export const Route = createFileRoute("/summoners/")({
@@ -13,17 +12,7 @@ export const Route = createFileRoute("/summoners/")({
 function SummonersPage() {
 	const [nameSearch, setNameSearch] = useState("");
 
-	const query = useQuery({
-		queryKey: ["summoners"],
-		queryFn: async () => {
-			const response = await fetch("http://localhost:8000/summoners");
-			if (!response.ok) {
-				throw new Error("Failed to load summoners data");
-			}
-
-			return (await response.json()) as SummonerDTO[];
-		},
-	});
+	const query = useSummoners();
 
 	if (query.status === "pending") {
 		return <Loader color={"teal"} />;

@@ -1,9 +1,8 @@
 import { Alert, Loader, TextInput, Title } from "@mantine/core";
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { ChampionReducedCard } from "../../components/ChampionReducedCard/ChampionReducedCard.tsx";
-import type { ChampionReducedDTO } from "../../model/LolV1ChampionDTO.ts";
+import { useChampions } from "../../hooks/api/useChampions.ts";
 import styles from "./index.module.css";
 
 export const Route = createFileRoute("/champions/")({
@@ -13,20 +12,7 @@ export const Route = createFileRoute("/champions/")({
 export function ChampionsPage() {
 	const [nameSearch, setNameSearch] = useState<string>("");
 
-	const query = useQuery({
-		queryKey: ["champions"],
-		queryFn: async () => {
-			const response = await fetch("http://localhost:8000/champions/reduced");
-			if (!response.ok) {
-				throw new Error("Failed to load champion data");
-			}
-
-			const data = (await response.json()) as ChampionReducedDTO[];
-			if (data && data.length > 0) {
-				return data;
-			}
-		},
-	});
+	const query = useChampions();
 
 	/**
 	 * Filter the champions based on the name search
