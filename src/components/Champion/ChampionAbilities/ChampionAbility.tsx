@@ -1,8 +1,11 @@
 import { Flex, Image, Text, Title } from "@mantine/core";
-import type { Passive, Spell } from "../../../model/LolV1ChampionDTO.ts";
+import type {
+	LolV1ChampionPassive,
+	LolV1ChampionSpell,
+} from "../../../model/Api.ts";
 
 interface Props {
-	championAbility: Passive | Spell;
+	championAbility: LolV1ChampionPassive | LolV1ChampionSpell;
 }
 
 export function ChampionAbility({ championAbility }: Props) {

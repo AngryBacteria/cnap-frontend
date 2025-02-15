@@ -3,11 +3,20 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
-import { MatchBannerSummaryLoader } from "../../components/Match/MatchBannerSummaryLoader.tsx";
+import { MatchBannerSummaryLoader } from "../../components/Match/MatchBannerSummary/MatchBannerSummaryLoader.tsx";
 import { useChampion } from "../../hooks/api/useChampion.ts";
+
+type ChampionSearch = {
+	page: number;
+};
 
 export const Route = createFileRoute("/champions/$championAlias")({
 	component: ChampionPage,
+	validateSearch: (search: Record<string, unknown>): ChampionSearch => {
+		return {
+			page: Number(search?.page ?? 1),
+		};
+	},
 });
 
 export function ChampionPage() {

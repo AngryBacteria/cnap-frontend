@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import type { MatchDTOSingle } from "../../model/MatchDTO";
+import type { MatchV5SingleDTO } from "../../model/Api";
 
 export interface ChampionMatchesAPIResponse {
 	page: number;
 	maxPage: number;
-	data: MatchDTOSingle[];
+	data: MatchV5SingleDTO[];
 }
 
 export const useChampionMatches = (championId: number, page = 1) => {

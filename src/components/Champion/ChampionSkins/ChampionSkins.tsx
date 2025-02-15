@@ -4,13 +4,10 @@ import styles from "./ChampionSkins.module.css";
 
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
-import type {
-	LolV1ChampionDTO,
-	LolV1ChampionSkin,
-} from "../../../model/LolV1ChampionDTO.ts";
+import type { ChampionDTO, LolV1ChampionSkin } from "../../../model/Api";
 
 interface Props {
-	champion: LolV1ChampionDTO;
+	champion: ChampionDTO;
 }
 export function ChampionSkins({ champion }: Props) {
 	const [opened, { open, close }] = useDisclosure(false);

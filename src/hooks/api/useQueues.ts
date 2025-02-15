@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-
-import type { QueueDTO } from "../../model/QueueDTO";
+import type { QueueDTO } from "../../model/Api";
 
 export const useQueues = () => {
 	const queuesQuery = useQuery({

@@ -1,6 +1,6 @@
 import { Card, Image, Text, Title } from "@mantine/core";
 import { useNavigate } from "@tanstack/react-router";
-import type { ChampionReducedDTO } from "../../model/LolV1ChampionDTO.ts";
+import type { ChampionReducedDTO } from "../../model/Api.ts";
 import {
 	capitalizeFirstLetter,
 	truncateText,

@@ -1,9 +1,9 @@
 import { Card, Flex, Image, Title } from "@mantine/core";
-import type { SummonerDTO } from "../../model/SummonerDTO.ts";
+import type { SummonerDBDTO } from "../../model/Api";
 import styles from "./SummonerCard.module.css";
 
 interface Props {
-	summoner: SummonerDTO;
+	summoner: SummonerDBDTO;
 }
 
 export function SummonerCard({ summoner }: Props) {

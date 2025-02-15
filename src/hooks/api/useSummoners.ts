@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { SummonerDTO } from "../../model/SummonerDTO";
+import type { SummonerDBDTO } from "../../model/Api";
 
 export const useSummoners = () => {
 	const query = useQuery({
@@ -11,7 +11,7 @@ export const useSummoners = () => {
 				throw new Error("Failed to load summoners data");
 			}
 
-			return (await response.json()) as SummonerDTO[];
+			return (await response.json()) as SummonerDBDTO[];
 		},
 	});
 

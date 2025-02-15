@@ -1,11 +1,11 @@
 import { Card, Flex, Tabs } from "@mantine/core";
-import type { LolV1ChampionDTO } from "../../../model/LolV1ChampionDTO.ts";
+import type { ChampionDTO } from "../../../model/Api.ts";
 import { capitalizeFirstLetter } from "../../../utils/GeneralUtil.ts";
 import { ChampionAbility } from "./ChampionAbility.tsx";
 import { ChampionAbilityStats } from "./ChampionAbilityStats.tsx";
 
 interface Props {
-	champion: LolV1ChampionDTO;
+	champion: ChampionDTO;
 }
 
 export function ChampionAbilitiesTabs({ champion }: Props) {

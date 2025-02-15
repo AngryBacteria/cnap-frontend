@@ -1,19 +1,27 @@
-import { Card, Flex, Image, Text, Tooltip } from "@mantine/core";
+import {
+	Card,
+	Flex,
+	HoverCard,
+	Image,
+	Text,
+	Title,
+	Tooltip,
+} from "@mantine/core";
 import { useMemo } from "react";
-import type { ItemDTO } from "../../model/ItemDTO";
-import type { MatchDTOSingle } from "../../model/MatchDTO";
-import type { QueueDTO } from "../../model/QueueDTO";
-import type { SummonerSpellDTO } from "../../model/SummonerSpellDTO";
+import type {
+	ItemDTO,
+	MatchV5SingleDTO,
+	QueueDTO,
+	SummonerSpellDTO,
+} from "../../../model/Api";
 import styles from "./MatchBannerSummary.module.css";
 
 interface Props {
-	match: MatchDTOSingle;
+	match: MatchV5SingleDTO;
 	queues: QueueDTO[];
 	summonerSpells: SummonerSpellDTO[];
 	items: ItemDTO[];
 }
-
-// TODO item modal/tooltip whatever
 
 export function MatchBannerSummary({
 	match,
@@ -25,9 +33,14 @@ export function MatchBannerSummary({
 
 	const championImage = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/${participant.championId}.png`;
 
-	const formattedDate = new Intl.DateTimeFormat("en-US").format(
-		new Date(match.info.gameCreation),
-	);
+	const formattedDate = new Intl.DateTimeFormat("en-US", {
+		hour: "numeric",
+		minute: "numeric",
+		day: "numeric",
+		month: "numeric",
+		year: "numeric",
+		hour12: false,
+	}).format(new Date(match.info.gameCreation));
 
 	const formattedTimeAgo = useMemo(() => {
 		const rtf = new Intl.RelativeTimeFormat("en", {
@@ -54,7 +67,7 @@ export function MatchBannerSummary({
 
 	const queue = queues.find((q) => q.queueId === match.info.queueId);
 
-	function getItems() {
+	const itemsFiltered = useMemo(() => {
 		return [
 			participant.item0,
 			participant.item1,
@@ -62,8 +75,70 @@ export function MatchBannerSummary({
 			participant.item3,
 			participant.item4,
 			participant.item5,
-		].map((itemId) => items.find((item) => item.id === itemId));
-	}
+		]
+			.map((itemId) => items.find((item) => item.id === itemId))
+			.map((item) => {
+				if (!item) {
+					return item;
+				}
+
+				// If main text available, parse it, else return empty string
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(item.description, "text/html");
+				const mainText = doc.querySelector("mainText");
+				if (!mainText) {
+					return { ...item, description: "" };
+				}
+
+				// If stats element available, parse it, else return empty string
+				const statsElement = mainText.querySelector("stats");
+				if (!statsElement) {
+					return { ...item, description: "" };
+				}
+
+				// Add stats to description
+				let outputDescription = "";
+				const statLines = statsElement.innerHTML.split("<br>").filter(Boolean);
+				for (const line of statLines) {
+					const value =
+						line.match(/<attention>(.*?)<\/attention>/)?.[1]?.trim() || "";
+					const name = line.replace(/<attention>.*?<\/attention>/, "").trim();
+
+					outputDescription += `${name}: ${value}\n`;
+				}
+				outputDescription += "\n";
+
+				// Add active/passive to description
+				const abilities = mainText.querySelectorAll("active, passive");
+				for (const ability of abilities) {
+					const abilityName = ability.textContent?.trim();
+					if (!abilityName) {
+						continue;
+					}
+					outputDescription += `${abilityName}:\n`;
+
+					const abilityTexts = [];
+					let currentNode = ability.nextSibling;
+					while (currentNode) {
+						if (
+							currentNode.nodeName.toLowerCase() === "passive" ||
+							currentNode.nodeName.toLowerCase() === "active"
+						) {
+							break;
+						}
+
+						if (currentNode.textContent?.trim()) {
+							abilityTexts.push(currentNode.textContent.trim());
+						}
+						currentNode = currentNode.nextSibling;
+					}
+					outputDescription += abilityTexts.join(" ");
+					outputDescription += "\n\n";
+				}
+
+				return { ...item, description: outputDescription.trim() };
+			});
+	}, [participant, items]);
 
 	const summonerSpell1 = summonerSpells.find(
 		(s) => s.id === participant.summoner1Id,
@@ -83,7 +158,7 @@ export function MatchBannerSummary({
 				<Card.Section withBorder inheritPadding py="4px">
 					<Flex direction={"row"} gap={"md"}>
 						<Text>
-							{queue?.description.replace("games", "").trim() ||
+							{queue?.description?.replace("games", "").trim() ||
 								"Unknown Queue"}
 						</Text>
 
@@ -176,15 +251,27 @@ export function MatchBannerSummary({
 						</Flex>
 
 						<Flex direction={"row"} wrap={"wrap"} gap={"5px"}>
-							{getItems().map((item, index) =>
+							{itemsFiltered.map((item, index) =>
 								item ? (
-									<Image
-										src={item.iconPath}
-										h={30}
-										w={30}
-										key={item.id}
-										radius="5px"
-									/>
+									<HoverCard
+										transitionProps={{ transition: "fade-up", duration: 300 }}
+										shadow="md"
+										width={300}
+										// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+										key={index}
+									>
+										<HoverCard.Target>
+											<Image src={item.iconPath} h={30} w={30} radius="5px" />
+										</HoverCard.Target>
+										<HoverCard.Dropdown>
+											<Title order={5}>{item.name}</Title>
+											{item.description && (
+												<Text className={styles.itemDescription}>
+													{item.description}
+												</Text>
+											)}
+										</HoverCard.Dropdown>
+									</HoverCard>
 								) : (
 									<div
 										key={`empty-item-${

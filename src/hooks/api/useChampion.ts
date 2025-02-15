@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { LolV1ChampionDTO } from "../../model/LolV1ChampionDTO";
+import type { ChampionDTO } from "../../model/Api";
 
 export const useChampion = (championAlias: string) => {
 	const query = useQuery({
@@ -12,7 +12,7 @@ export const useChampion = (championAlias: string) => {
 				throw new Error("Failed to load champion data");
 			}
 
-			return (await response.json()) as LolV1ChampionDTO;
+			return (await response.json()) as ChampionDTO;
 		},
 	});
 

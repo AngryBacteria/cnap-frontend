@@ -12,3 +12,7 @@
 	background-color: var(--mantine-color-body);
 	border-radius: 5px;
 }
+
+.itemDescription {
+	white-space: pre-wrap;
+}

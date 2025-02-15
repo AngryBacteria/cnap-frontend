@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ChampionReducedDTO } from "../../model/LolV1ChampionDTO";
+import type { ChampionReducedDTO } from "../../model/Api";
 
 export const useChampions = () => {
 	const query = useQuery({

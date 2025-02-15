@@ -1,8 +1,8 @@
 import { Flex, Text } from "@mantine/core";
-import type { Spell } from "../../../model/LolV1ChampionDTO.ts";
+import type { LolV1ChampionSpell } from "../../../model/Api";
 
 interface Props {
-	championAbility: Spell;
+	championAbility: LolV1ChampionSpell;
 }
 
 export function ChampionAbilityStats({ championAbility }: Props) {

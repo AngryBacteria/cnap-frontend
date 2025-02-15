@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { SummonerSpellDTO } from "../../model/SummonerSpellDTO";
+import type { SummonerSpellDTO } from "../../model/Api";
 
 export const useSummonerSpells = () => {
 	const summonerSpellsQuery = useQuery({

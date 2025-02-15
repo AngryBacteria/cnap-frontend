@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ItemDTO } from "../../model/ItemDTO";
+import type { ItemDTO } from "../../model/Api";
 
 export const useItems = () => {
 	const itemQuery = useQuery({
