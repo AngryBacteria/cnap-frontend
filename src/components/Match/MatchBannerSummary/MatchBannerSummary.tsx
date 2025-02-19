@@ -1,12 +1,4 @@
-import {
-	Card,
-	Flex,
-	HoverCard,
-	Image,
-	Text,
-	Title,
-	Tooltip,
-} from "@mantine/core";
+import { Card, Flex, Image, Text, Tooltip } from "@mantine/core";
 import { useMemo } from "react";
 import type {
 	ItemDTO,
@@ -15,6 +7,7 @@ import type {
 	SummonerSpellDTO,
 } from "../../../model/Api";
 import styles from "./MatchBannerSummary.module.css";
+import { LeagueItemGrid } from "../LeagueItemGrid/LeagueItemGrid";
 
 interface Props {
 	match: MatchV5SingleDTO;
@@ -56,9 +49,12 @@ export function MatchBannerSummary({
 
 	const formattedGameDuration = `${Math.round(match.info.gameDuration / 60)} minutes`;
 
-	const kda = Math.round(
-		(participant.kills + participant.assists) / participant.deaths,
-	);
+	const kda =
+		participant.deaths === 0
+			? participant.kills + participant.assists
+			: Math.round(
+					(participant.kills + participant.assists) / participant.deaths,
+				);
 
 	const csPerMinute = Math.round(
 		(participant.totalMinionsKilled + participant.neutralMinionsKilled) /
@@ -66,79 +62,6 @@ export function MatchBannerSummary({
 	);
 
 	const queue = queues.find((q) => q.queueId === match.info.queueId);
-
-	const itemsFiltered = useMemo(() => {
-		return [
-			participant.item0,
-			participant.item1,
-			participant.item2,
-			participant.item3,
-			participant.item4,
-			participant.item5,
-		]
-			.map((itemId) => items.find((item) => item.id === itemId))
-			.map((item) => {
-				if (!item) {
-					return item;
-				}
-
-				// If main text available, parse it, else return empty string
-				const parser = new DOMParser();
-				const doc = parser.parseFromString(item.description, "text/html");
-				const mainText = doc.querySelector("mainText");
-				if (!mainText) {
-					return { ...item, description: "" };
-				}
-
-				// If stats element available, parse it, else return empty string
-				const statsElement = mainText.querySelector("stats");
-				if (!statsElement) {
-					return { ...item, description: "" };
-				}
-
-				// Add stats to description
-				let outputDescription = "";
-				const statLines = statsElement.innerHTML.split("<br>").filter(Boolean);
-				for (const line of statLines) {
-					const value =
-						line.match(/<attention>(.*?)<\/attention>/)?.[1]?.trim() || "";
-					const name = line.replace(/<attention>.*?<\/attention>/, "").trim();
-
-					outputDescription += `${name}: ${value}\n`;
-				}
-				outputDescription += "\n";
-
-				// Add active/passive to description
-				const abilities = mainText.querySelectorAll("active, passive");
-				for (const ability of abilities) {
-					const abilityName = ability.textContent?.trim();
-					if (!abilityName) {
-						continue;
-					}
-					outputDescription += `${abilityName}:\n`;
-
-					const abilityTexts = [];
-					let currentNode = ability.nextSibling;
-					while (currentNode) {
-						if (
-							currentNode.nodeName.toLowerCase() === "passive" ||
-							currentNode.nodeName.toLowerCase() === "active"
-						) {
-							break;
-						}
-
-						if (currentNode.textContent?.trim()) {
-							abilityTexts.push(currentNode.textContent.trim());
-						}
-						currentNode = currentNode.nextSibling;
-					}
-					outputDescription += abilityTexts.join(" ");
-					outputDescription += "\n\n";
-				}
-
-				return { ...item, description: outputDescription.trim() };
-			});
-	}, [participant, items]);
 
 	const summonerSpell1 = summonerSpells.find(
 		(s) => s.id === participant.summoner1Id,
@@ -250,39 +173,7 @@ export function MatchBannerSummary({
 							</Tooltip>
 						</Flex>
 
-						<Flex direction={"row"} wrap={"wrap"} gap={"5px"}>
-							{itemsFiltered.map((item, index) =>
-								item ? (
-									<HoverCard
-										transitionProps={{ transition: "fade-up", duration: 300 }}
-										shadow="md"
-										width={300}
-										// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-										key={index}
-									>
-										<HoverCard.Target>
-											<Image src={item.iconPath} h={30} w={30} radius="5px" />
-										</HoverCard.Target>
-										<HoverCard.Dropdown>
-											<Title order={5}>{item.name}</Title>
-											{item.description && (
-												<Text className={styles.itemDescription}>
-													{item.description}
-												</Text>
-											)}
-										</HoverCard.Dropdown>
-									</HoverCard>
-								) : (
-									<div
-										key={`empty-item-${
-											// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-											index
-										}`}
-										className={styles.emptyItem}
-									/>
-								),
-							)}
-						</Flex>
+						<LeagueItemGrid participant={participant} items={items} />
 					</Flex>
 				</Card.Section>
 			</Card>

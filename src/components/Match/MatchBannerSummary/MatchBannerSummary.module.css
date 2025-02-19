@@ -5,14 +5,3 @@
 .lostCard {
 	border-left: 8px solid var(--mantine-color-red-7) !important;
 }
-
-.emptyItem {
-	width: 30px;
-	height: 30px;
-	background-color: var(--mantine-color-body);
-	border-radius: 5px;
-}
-
-.itemDescription {
-	white-space: pre-wrap;
-}

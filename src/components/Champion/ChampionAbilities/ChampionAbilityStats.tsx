@@ -30,12 +30,6 @@ export function ChampionAbilityStats({ championAbility }: Props) {
 					Cost: None
 				</Text>
 			)}
-
-			{championAbility.range[0] && (
-				<Text fw={700} c={"dimmed"}>
-					Range: {championAbility.range[0]}
-				</Text>
-			)}
 		</Flex>
 	);
 }

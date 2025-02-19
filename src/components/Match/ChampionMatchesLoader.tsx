@@ -1,16 +1,17 @@
 import { Alert, Loader, Pagination, Title } from "@mantine/core";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useChampionMatches } from "../../../hooks/api/useChampionMatches";
-import { useItems } from "../../../hooks/api/useItems";
-import { useQueues } from "../../../hooks/api/useQueues";
-import { useSummonerSpells } from "../../../hooks/api/useSummonerSpells";
-import { MatchBannerSummary } from "./MatchBannerSummary";
+import { useChampionMatches } from "../../hooks/api/useChampionMatches";
+import { useItems } from "../../hooks/api/useItems";
+import { useQueues } from "../../hooks/api/useQueues";
+import { useSummonerSpells } from "../../hooks/api/useSummonerSpells";
+import { MatchBannerSummary } from "./MatchBannerSummary/MatchBannerSummary";
+import { QueueSelector } from "./QueueSelector/QueueSelector";
 
 export interface Props {
 	championId: number;
 }
 
-export function MatchBannerSummaryLoader({ championId }: Props) {
+export function ChampionMatchesLoader({ championId }: Props) {
 	const { page } = useSearch({ from: "/champions/$championAlias" });
 	const navigate = useNavigate({ from: "/champions/$championAlias" });
 	const handlePageChange = (newPage: number) => {
@@ -41,9 +42,15 @@ export function MatchBannerSummaryLoader({ championId }: Props) {
 	) {
 		return <Alert title={"Error loading champion matches"} variant={"light"} />;
 	}
+
+	//TODO: add a filter for the queue
+
 	return (
 		<>
 			<Title order={2}>Matches from CnAP Players on this champion</Title>
+
+			<QueueSelector />
+
 			{championMatchesQuery.data.data.map((match) => (
 				<MatchBannerSummary
 					key={match.info.gameId}

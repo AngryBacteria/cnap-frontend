@@ -20,7 +20,7 @@ export function ChampionAbility({ championAbility }: Props) {
 						</Flex>
 					</Flex>
 
-					<Text>{championAbility.description}</Text>
+					<Text>{championAbility.description.replace(/<[^>]*>/g, "")}</Text>
 				</Flex>
 			</section>
 		</section>
