@@ -6,8 +6,8 @@ import type {
 	QueueDTO,
 	SummonerSpellDTO,
 } from "../../../model/Api";
-import styles from "./MatchBannerSummary.module.css";
 import { LeagueItemGrid } from "../LeagueItemGrid/LeagueItemGrid";
+import styles from "./MatchBannerSummary.module.css";
 
 interface Props {
 	match: MatchV5SingleDTO;

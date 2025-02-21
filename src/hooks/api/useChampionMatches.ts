@@ -7,12 +7,31 @@ export interface ChampionMatchesAPIResponse {
 	data: MatchV5SingleDTO[];
 }
 
-export const useChampionMatches = (championId: number, page = 1) => {
+export const useChampionMatches = (
+	championId: number,
+	page: number,
+	queue_id?: string | null,
+	only_summoners_in_db = true,
+) => {
 	const championMatchesQuery = useQuery({
-		queryKey: ["matchesChampion", championId, page],
+		queryKey: [
+			"matchesChampion",
+			championId,
+			page,
+			queue_id,
+			only_summoners_in_db,
+		],
 		queryFn: async () => {
+			const params = new URLSearchParams({
+				only_summoners_in_db: only_summoners_in_db.toString(),
+				page: page.toString(),
+			});
+			if (queue_id) {
+				params.append("queue_id", queue_id);
+			}
+
 			const response = await fetch(
-				`http://localhost:8000/matches/champion/${championId}?page=${page}`,
+				`http://localhost:8000/matches/champion/${championId}?${params.toString()}`,
 			);
 			if (!response.ok) {
 				throw new Error("Failed to load champion matches data");

@@ -3,8 +3,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ChampionAbilitiesTabs } from "../../components/Champion/ChampionAbilities/ChampionAbilitiesTabs.tsx";
 import { ChampionHeader } from "../../components/Champion/ChampionHeader.tsx";
 import { ChampionSkins } from "../../components/Champion/ChampionSkins/ChampionSkins.tsx";
-import { useChampion } from "../../hooks/api/useChampion.ts";
 import { ChampionMatchesLoader } from "../../components/Match/ChampionMatchesLoader.tsx";
+import { useChampion } from "../../hooks/api/useChampion.ts";
 
 type ChampionSearch = {
 	page: number;

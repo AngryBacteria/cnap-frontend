@@ -1,6 +1,6 @@
+import { Flex, HoverCard, Image, Space, Text, Title } from "@mantine/core";
 import { useMemo } from "react";
 import type { ItemDTO, Participant } from "../../../model/Api";
-import { Flex, HoverCard, Image, Space, Text, Title } from "@mantine/core";
 import styles from "./LeagueItemGrid.module.css";
 
 interface Props {
