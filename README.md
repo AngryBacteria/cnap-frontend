@@ -1,43 +1,7 @@
-# cnap-frontend (cnap-frontend)
+# Repository Deprecated
 
-frontend for the cnap project
+This repository is no longer maintained and has been deprecated. After multiple framework rewrites, managing the different versions became increasingly challenging.
 
-## Install the dependencies
+The project has been migrated to a new mono-repository structure for better organization and maintenance:
 
-```bash
-yarn
-# or
-npm install
-```
-
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-
-```bash
-quasar dev
-```
-
-### Lint the files
-
-```bash
-yarn lint
-# or
-npm run lint
-```
-
-### Format the files
-
-```bash
-yarn format
-# or
-npm run format
-```
-
-### Build the app for production
-
-```bash
-quasar build
-```
-
-### Customize the configuration
-
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
+[**→ New Project Repository**](https://github.com/AngryBacteria/cnap)
